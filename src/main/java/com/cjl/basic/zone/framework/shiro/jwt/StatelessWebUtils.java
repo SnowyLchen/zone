@@ -2,7 +2,6 @@ package com.cjl.basic.zone.framework.shiro.jwt;
 
 import com.cjl.basic.zone.common.utils.ServletUtils;
 import com.cjl.basic.zone.framework.shiro.StatelessConstants;
-import com.sun.istack.internal.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -56,7 +55,7 @@ public class StatelessWebUtils {
      * @param servletRequest request
      * @return Cookie[]
      */
-    public static Cookie[] getCookiesV(@NotNull ServletRequest servletRequest) {
+    public static Cookie[] getCookiesV(@NonNull ServletRequest servletRequest) {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String cookie = request.getHeader("cookie");
         if (cookie == null) {
@@ -72,7 +71,7 @@ public class StatelessWebUtils {
     }
 
 
-    public static Cookie[] getCookies(@NotNull ServletRequest servletRequest) {
+    public static Cookie[] getCookies(@NonNull ServletRequest servletRequest) {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         return request.getCookies();
     }
@@ -83,7 +82,7 @@ public class StatelessWebUtils {
      * @param servletRequest request
      * @return token字符串
      */
-    public static String getToken(@NotNull ServletRequest servletRequest) {
+    public static String getToken(@NonNull ServletRequest servletRequest) {
         Cookie cookie = getCookieByName(servletRequest, StatelessConstants.ACCESS_TOKEN);
         if (cookie != null) {
             return cookie.getValue();
@@ -98,7 +97,7 @@ public class StatelessWebUtils {
      * @param response ServletResponse
      * @param token    新的token
      */
-    public static void updateCookiesForToken(@NotNull ServletRequest request, @NotNull ServletResponse response, @NotNull String token) {
+    public static void updateCookiesForToken(@NonNull ServletRequest request, @NonNull ServletResponse response, @NonNull String token) {
         addCookiesForToken(response, token);
     }
 
@@ -107,7 +106,7 @@ public class StatelessWebUtils {
      *
      * @param token 新的token
      */
-    public static void updateCookiesForToken(@NotNull String token) {
+    public static void updateCookiesForToken(@NonNull String token) {
         updateCookiesForToken(null, ServletUtils.getResponse(), token);
     }
 
@@ -117,7 +116,7 @@ public class StatelessWebUtils {
      * @param response ServletResponse
      * @param token    新的token
      */
-    public static void addCookiesForToken(@NotNull ServletResponse response, @NotNull String token) {
+    public static void addCookiesForToken(@NonNull ServletResponse response, @NonNull String token) {
         Cookie cookie = new Cookie(StatelessConstants.ACCESS_TOKEN, token);
         cookie.setPath(path);
         cookie.setHttpOnly(httpOnly);
@@ -130,7 +129,7 @@ public class StatelessWebUtils {
      *
      * @return 登录名
      */
-    public static String getLoginNameByToken(@NotNull ServletRequest request) {
+    public static String getLoginNameByToken(@NonNull ServletRequest request) {
         String token = getToken(request);
         if (token == null) {
             return null;
@@ -144,7 +143,7 @@ public class StatelessWebUtils {
      * @param request  request
      * @param response response
      */
-    public static void clearCookies(@NotNull ServletRequest request, @NotNull ServletResponse response) {
+    public static void clearCookies(@NonNull ServletRequest request, @NonNull ServletResponse response) {
         HttpServletRequest servletRequest = (HttpServletRequest) request;
         HttpServletResponse servletResponse = (HttpServletResponse) response;
         Cookie[] cookies = servletRequest.getCookies();
@@ -164,7 +163,7 @@ public class StatelessWebUtils {
      * @param request request
      * @return 如果是则返回true
      */
-    public static boolean isAjaxRequest(@NotNull ServletRequest request) {
+    public static boolean isAjaxRequest(@NonNull ServletRequest request) {
         HttpServletRequest servletRequest = (HttpServletRequest) request;
         return XML_HTTP_REQUEST.equals(servletRequest.getHeader(X_REQUESTED_WITH));
     }

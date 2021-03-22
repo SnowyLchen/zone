@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cjl.basic.zone.project.dict.mapper.DictDataMapper">
+
+    <resultMap type="com.cjl.basic.zone.project.dict.domain.DictData" id="DictDataResult">
+        <id property="dictCode" column="dict_code"/>
+        <result property="dictSort" column="dict_sort"/>
+        <result property="dictLabel" column="dict_label"/>
+        <result property="dictValue" column="dict_value"/>
+        <result property="dictType" column="dict_type"/>
+        <result property="cssClass" column="css_class"/>
+        <result property="listClass" column="list_class"/>
+        <result property="isDefault" column="is_default"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+
+    <sql id="selectDictDataVo">
+        select dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, remark 
+		from mfrs_dict_data
+    </sql>
+
+    <select id="selectDictDataList" parameterType="com.cjl.basic.zone.project.dict.domain.DictData"
+            resultMap="DictDataResult">
+        <include refid="selectDictDataVo"/>
+        where del_flag = '0'
+        <if test="dictType != null and dictType != ''">
+            AND dict_type = #{dictType}
+        </if>
+        <if test="dictLabel != null and dictLabel != ''">
+            AND dict_label like concat('%', #{dictLabel}, '%')
+        </if>
+        <if test="status != null and status != ''">
+            AND status = #{status}
+        </if>
+    </select>
+
+    <select id="selectDictDataByType" parameterType="com.cjl.basic.zone.project.dict.domain.DictData"
+            resultMap="DictDataResult">
+        <include refid="selectDictDataVo"/>
+        where dict_type = #{dictType} and del_flag = '0' and status='0' order by dict_sort asc
+    </select>
+
+    <select id="selectDictLabel" resultType="String">
+		select dict_label from mfrs_dict_data
+		where dict_type = #{dictType} and dict_value = #{dictValue}  and del_flag = '0'
+	</select>
+
+    <select id="selectDictDataById" parameterType="Long" resultMap="DictDataResult">
+        <include refid="selectDictDataVo"/>
+        where dict_code = #{dictCode}
+    </select>
+
+    <select id="countDictDataByType" resultType="Integer">
+	    select count(1) from mfrs_dict_data where dict_type=#{dictType}  and del_flag = '0'
+	</select>
+
+
+    <update id="updateDictData" parameterType="com.cjl.basic.zone.project.dict.domain.DictData">
+        update mfrs_dict_data
+        <set>
+            <if test="dictSort != null">dict_sort = #{dictSort},</if>
+            <if test="dictLabel != null">dict_label = #{dictLabel},</if>
+            <if test="dictValue != null">dict_value = #{dictValue},</if>
+            <if test="dictType != null ">dict_type = #{dictType},</if>
+            <if test="cssClass != null ">css_class = #{cssClass},</if>
+            <if test="listClass != null ">list_class = #{listClass},</if>
+            <if test="isDefault != null ">is_default = #{isDefault},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null ">remark = #{remark},</if>
+            <if test="updateBy != null ">update_by = #{updateBy},</if>
+            <if test="delFlag != null ">del_flag = #{delFlag},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </set>
+        where dict_code = #{dictCode}
+    </update>
+
+
+    <update id="updateDictDataType" parameterType="String">
+ 		update mfrs_dict_data set dict_type = #{newDictType} where dict_type = #{oldDictType}
+	</update>
+
+    <insert id="insertDictData" parameterType="com.cjl.basic.zone.project.dict.domain.DictData" keyProperty="dictCode">
+        insert into mfrs_dict_data
+        <trim prefix="(" suffixOverrides="," suffix=")">
+            <if test="dictSort != null and dictSort != ''">dict_sort,</if>
+            <if test="dictLabel != null and dictLabel != ''">dict_label,</if>
+            <if test="dictValue != null and dictValue != ''">dict_value,</if>
+            <if test="dictType != null and dictType != ''">dict_type,</if>
+            <if test="cssClass != null and cssClass != ''">css_class,</if>
+            <if test="listClass != null and listClass != ''">list_class,</if>
+            <if test="isDefault != null and isDefault != ''">is_default,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffixOverrides="," suffix=")">
+            <if test="dictSort != null and dictSort != ''">#{dictSort},</if>
+            <if test="dictLabel != null and dictLabel != ''">#{dictLabel},</if>
+            <if test="dictValue != null and dictValue != ''">#{dictValue},</if>
+            <if test="dictType != null and dictType != ''">#{dictType},</if>
+            <if test="cssClass != null and cssClass != ''">#{cssClass},</if>
+            <if test="listClass != null and listClass != ''">#{listClass},</if>
+            <if test="isDefault != null and isDefault != ''">#{isDefault},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+        </trim>
+    </insert>
+
+</mapper> 

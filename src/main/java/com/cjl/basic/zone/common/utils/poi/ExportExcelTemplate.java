@@ -5,13 +5,13 @@ import com.cjl.basic.zone.common.utils.poi.xss.XssStyleHandler;
 import com.cjl.basic.zone.framework.aspectj.lang.annotation.Excel;
 import com.cjl.basic.zone.framework.web.domain.AjaxResult;
 import com.cjl.basic.zone.utils.StringUtils;
-import com.sun.istack.internal.NotNull;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.poi.hssf.usermodel.DVConstraint;
 import org.apache.poi.hssf.usermodel.HSSFDataValidation;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.usermodel.*;
+import org.springframework.lang.NonNull;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -248,7 +248,7 @@ public class ExportExcelTemplate<T> {
      *
      * @return
      */
-    @NotNull
+    @NonNull
     private List<Field> getFields(Field[] allFields) {
         List<Field> fields = new ArrayList<>();
         // 得到所有field并存放到一个list中.

@@ -17,6 +17,7 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.servlet.Filter;
 import java.util.LinkedHashMap;
@@ -117,10 +118,10 @@ public class ShiroConfig {
         return securityManager;
     }
 //
-//    @Bean
-//    public ShiroRedisCacheManager shiroRedisCacheManager(RedisTemplate redisTemplate, @Value("${application.cache.prefix}") String prefix) {
-//        return new ShiroRedisCacheManager(redisTemplate, prefix);
-//    }
+    @Bean
+    public ShiroRedisCacheManager shiroRedisCacheManager(RedisTemplate redisTemplate, @Value("${application.cache.prefix}") String prefix) {
+        return new ShiroRedisCacheManager(redisTemplate, prefix);
+    }
 
     /**
      * 不创建session
