@@ -1,8 +1,22 @@
 package com.cjl.basic.zone.project.user.controller;
 
+import com.cjl.basic.zone.common.exception.user.*;
+import com.cjl.basic.zone.common.utils.ModelMapUtils;
+import com.cjl.basic.zone.common.utils.security.PermissionUtils;
+import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.framework.web.controller.BaseController;
+import com.cjl.basic.zone.framework.web.domain.AjaxResult;
+import com.cjl.basic.zone.project.user.service.LoginService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 登录验证
@@ -14,32 +28,35 @@ public class LoginController extends BaseController {
     @Value("${spring.profiles.active}")
     private String profile;
 
-//    @GetMapping("/login")
-//    public String login(HttpServletRequest request, ModelMap modelMap) {
-//        ModelMapUtils.addAndReplaceEmoji(modelMap, "isPrivate", !PermissionUtils.isPrivate(profile));
-//        // 判断token是否过期，如果没有过期，则直接跳转到index，否则跳转到login
-//        return ShiroAuthenticateUtils.isAuthenticated() ? "redirect:/index" : "login";
-//    }
-//
-//    @ResponseBody
-//    @GetMapping("/loginzg")
-//    public AjaxResult loginzg(HttpServletRequest request, ModelMap modelMap) {
-//        // 判断token是否过期，如果没有过期，则直接跳转到index，否则跳转到login
-//        if (!ShiroAuthenticateUtils.isAuthenticated()) {
-//            return AjaxResult.error(401, "登录过期");
-//        }
-//        return AjaxResult.success("登录成功");
-//    }
-//
-//    @PostMapping("/login")
-//    @ResponseBody
-//    public AjaxResult ajaxLogin(HttpServletResponse response, String username, String password, String validateCode) {
-//        try {
-//            return AjaxResult.success(loginService.login(username, password, response));
-//        } catch (UserPasswordNotMatchException | UserNotExistsException | UserBlockedException | NoRoleException | UserPasswordRetryLimitExceedException e) {
-//            return error(e.getMessage());
-//        }
-//    }
+    @Autowired
+    private LoginService loginService;
+
+    @GetMapping("/login")
+    public String login(HttpServletRequest request, ModelMap modelMap) {
+        ModelMapUtils.addAndReplaceEmoji(modelMap, "isPrivate", !PermissionUtils.isPrivate(profile));
+        // 判断token是否过期，如果没有过期，则直接跳转到index，否则跳转到login
+        return ShiroAuthenticateUtils.isAuthenticated() ? "redirect:/index" : "login";
+    }
+
+    @ResponseBody
+    @GetMapping("/loginzg")
+    public AjaxResult loginzg(HttpServletRequest request, ModelMap modelMap) {
+        // 判断token是否过期，如果没有过期，则直接跳转到index，否则跳转到login
+        if (!ShiroAuthenticateUtils.isAuthenticated()) {
+            return AjaxResult.error(401, "登录过期");
+        }
+        return AjaxResult.success("登录成功");
+    }
+
+    @PostMapping("/login")
+    @ResponseBody
+    public AjaxResult ajaxLogin(HttpServletResponse response, String username, String password, String validateCode) {
+        try {
+            return AjaxResult.success(loginService.login(username, password, response));
+        } catch (UserPasswordNotMatchException | UserNotExistsException | UserBlockedException | NoRoleException | UserPasswordRetryLimitExceedException e) {
+            return error(e.getMessage());
+        }
+    }
 //
 //    @PostMapping("/toForm")
 //    @ResponseBody
