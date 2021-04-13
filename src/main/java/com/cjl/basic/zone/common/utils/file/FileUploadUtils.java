@@ -3,7 +3,7 @@ package com.cjl.basic.zone.common.utils.file;
 import com.cjl.basic.zone.common.exception.file.FileNameLengthLimitExceededException;
 import com.cjl.basic.zone.framework.config.ZoneConfig;
 import org.apache.shiro.crypto.hash.Md5Hash;
-import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
+import org.apache.tomcat.util.http.fileupload.FileUploadBase;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -90,7 +90,7 @@ public class FileUploadUtils {
      * @throws IOException                          比如读写文件出错时
      */
     public static final String upload(String baseDir, MultipartFile file, String extension)
-            throws FileSizeLimitExceededException, IOException, FileNameLengthLimitExceededException {
+            throws FileUploadBase.FileSizeLimitExceededException, IOException, FileNameLengthLimitExceededException {
 
         int fileNamelength = file.getOriginalFilename().length();
         if (fileNamelength > FileUploadUtils.DEFAULT_FILE_NAME_LENGTH) {
@@ -135,10 +135,10 @@ public class FileUploadUtils {
      * @return
      * @throws FileSizeLimitExceededException 如果超出最大大小
      */
-    public static final void assertAllowed(MultipartFile file) throws FileSizeLimitExceededException {
+    public static final void assertAllowed(MultipartFile file) throws FileUploadBase.FileSizeLimitExceededException {
         long size = file.getSize();
         if (DEFAULT_MAX_SIZE != -1 && size > DEFAULT_MAX_SIZE) {
-            throw new FileSizeLimitExceededException("not allowed upload upload", size, DEFAULT_MAX_SIZE);
+            throw new FileUploadBase.FileSizeLimitExceededException("not allowed upload upload", size, DEFAULT_MAX_SIZE);
         }
     }
 }

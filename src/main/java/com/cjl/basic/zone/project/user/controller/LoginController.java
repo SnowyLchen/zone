@@ -7,6 +7,10 @@ import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.framework.web.controller.BaseController;
 import com.cjl.basic.zone.framework.web.domain.AjaxResult;
 import com.cjl.basic.zone.project.user.service.LoginService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -23,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author wangsen
  */
+@Api(tags = "登录接口")
 @Controller
 public class LoginController extends BaseController {
     @Value("${spring.profiles.active}")
@@ -50,6 +55,11 @@ public class LoginController extends BaseController {
 
     @PostMapping("/login")
     @ResponseBody
+    @ApiOperation(value = "智控登录接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "username", value = "用户名"),
+            @ApiImplicitParam(name = "password", value = "密码")
+    })
     public AjaxResult ajaxLogin(HttpServletResponse response, String username, String password, String validateCode) {
         try {
             return AjaxResult.success(loginService.login(username, password, response));

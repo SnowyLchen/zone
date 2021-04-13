@@ -8,6 +8,8 @@ import com.cjl.basic.zone.common.utils.MessageUtils;
 import com.cjl.basic.zone.common.utils.StringUtils;
 import com.cjl.basic.zone.framework.manager.AsyncManager;
 import com.cjl.basic.zone.framework.manager.factory.AsyncFactory;
+import com.cjl.basic.zone.framework.shiro.jwt.JwtUtil;
+import com.cjl.basic.zone.framework.shiro.jwt.StatelessWebUtils;
 import com.cjl.basic.zone.project.user.domain.User;
 import org.springframework.stereotype.Component;
 
@@ -88,10 +90,11 @@ public class LoginService {
 //
 //        // 10.jwt认证，写入缓存
 //        final String token = JwtUtil.sign(u.getLoginName());
+        final String token = JwtUtil.sign("cjl");
 //        SecurityUtils.getSubject().login(new StatelessToken(token, true));
 //
 //        // 写入cookie
-//        StatelessWebUtils.addCookiesForToken(response, token);
+        StatelessWebUtils.addCookiesForToken(response, token);
 //
 //        // 12、记录登录信息
 //        recordLoginInfo(u);

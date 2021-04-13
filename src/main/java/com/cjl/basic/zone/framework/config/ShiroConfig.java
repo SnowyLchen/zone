@@ -77,7 +77,14 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/statement", "anon");
         // 系统权限列表
 //        filterChainDefinitionMap.putAll(SpringUtils.getBean(IMenuService.class).selectPermsAll());
-
+        // swagger
+        filterChainDefinitionMap.put("/swagger-ui.html", "anon");
+        filterChainDefinitionMap.put("/swagger/**/*", "anon");
+        filterChainDefinitionMap.put("/swagger-resources", "anon");
+        filterChainDefinitionMap.put("/swagger-resources/configuration/security", "anon");
+        filterChainDefinitionMap.put("/swagger-resources/configuration/ui", "anon");
+        filterChainDefinitionMap.put("/v2/api-docs", "anon");
+        filterChainDefinitionMap.put("/webjars/springfox-swagger-ui/**", "anon");
         Map<String, Filter> filters = new LinkedHashMap<>();
         filters.put("stateless", new StatelessFilter());
         filters.put("statelessLogout", new StatelessLogoutFilter());
@@ -117,7 +124,8 @@ public class ShiroConfig {
 
         return securityManager;
     }
-//
+
+    //
     @Bean
     public ShiroRedisCacheManager shiroRedisCacheManager(RedisTemplate redisTemplate, @Value("${application.cache.prefix}") String prefix) {
         return new ShiroRedisCacheManager(redisTemplate, prefix);
