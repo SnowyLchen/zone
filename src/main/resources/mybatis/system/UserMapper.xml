@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cjl.basic.zone.project.user.mapper.UserMapper">
+
+    <resultMap id="UserResultMap" type="com.cjl.basic.zone.project.user.domain.User">
+        <id column="account_id" jdbcType="INTEGER" property="accountId"/>
+        <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="phonenumber" jdbcType="VARCHAR" property="phonenumber"/>
+        <result column="sex" jdbcType="CHAR" property="sex"/>
+        <result column="avatar" jdbcType="INTEGER" property="avatar"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="salt" jdbcType="VARCHAR" property="salt"/>
+        <result column="status" jdbcType="CHAR" property="status"/>
+        <result column="login_ip" jdbcType="VARCHAR" property="loginIp"/>
+        <result column="login_date" jdbcType="TIMESTAMP" property="loginTime"/>
+        <result column="del_flag" jdbcType="CHAR" property="delFlag"/>
+    </resultMap>
+
+    <sql id="selectUserVo2">
+        select account_id,
+               dept_id,
+               login_name,
+               user_name,
+               user_type,
+               email,
+               phonenumber,
+               sex,
+               avatar,
+               password,
+               salt,
+               status,
+               login_ip,
+               login_date,
+               remark,
+               mfrs_id,
+               del_flag,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               data_scope,
+               birthday,
+               QQ,
+               position_id,
+               technical_level_id,
+               idcar_number,
+               nation,
+               native_place,
+               contract_time,
+               emergency_contact,
+               emergency_contact_phone,
+               certificate,
+               quit_time
+        from mfrs_account
+    </sql>
+    <sql id="UserVo">
+         select zu.account_id,
+                zu.username,
+                zu.avatar,
+                zu.sex,
+                zu.password,
+                zu.email,
+                zu.homeUrl,
+                zu.screen_name,
+                zu.login_time,
+                zu.activated,
+                zu.logged,
+                zu.salt,
+                zu.group_name,
+                zu.login_name
+        from z_users zu
+    </sql>
+    <sql id="selectUserVo">
+        select u.account_id,
+               u.mfrs_id,
+               u.login_name,
+               u.user_name,
+               u.email,
+               u.phonenumber,
+               u.sex,
+               u.avatar,
+               u.password,
+               u.salt,
+               u.status,
+               u.del_flag,
+               u.login_ip,
+               u.login_date,
+               u.create_time,
+               u.remark,
+               u.user_type,
+               d.dept_id,
+               d.parent_id,
+               d.dept_name,
+               d.order_num,
+               d.status                                as dept_status,
+               r.role_id,
+               r.role_name,
+               r.role_key,
+               r.role_sort,
+               u.data_scope,
+               r.status                                as role_status,
+               u.birthday,
+               u.QQ,
+               u.position_id,
+               u.technical_level_id,
+               u.idcar_number,
+               u.nation,
+               u.native_place,
+               u.contract_time,
+               u.emergency_contact,
+               u.emergency_contact_phone,
+               u.certificate,
+               group_concat(r.role_name separator '/') as role_arr
+        from mfrs_account u
+                 left join mfrs_dept d on u.dept_id = d.dept_id and d.del_flag = 0
+                 left join mfrs_user_role ur on u.account_id = ur.account_id
+                 left join mfrs_role r on r.role_id = ur.role_id and r.del_flag = 0
+    </sql>
+    <update id="deleteUserByIds">
+        update mfrs_account
+        set del_flag   = 1,
+            update_by=#{updateBy},
+            update_time=#{date}
+        where find_in_set(account_id, #{ids,jdbcType=VARCHAR})
+    </update>
+    <delete id="deleteuser">
+        delete
+        from mfrs_account
+        where find_in_set(account_id, #{ids,jdbcType=VARCHAR})
+    </delete>
+
+    <select id="selectUserList2" resultMap="UserResultMap">
+        <include refid="selectUserVo2"/>
+        <where>
+            <if test="accountId != null">
+                and account_id = #{accountId,jdbcType=INTEGER}
+            </if>
+            <if test="deptId != null">
+                and dept_id = #{deptId,jdbcType=INTEGER}
+            </if>
+            <if test="loginName != null">
+                and login_name = #{loginName,jdbcType=VARCHAR}
+            </if>
+            <if test="userName != null">
+                and user_name = #{userName,jdbcType=VARCHAR}
+            </if>
+            <if test="userType != null">
+                and user_type = #{userType,jdbcType=VARCHAR}
+            </if>
+            <if test="email != null">
+                and email = #{email,jdbcType=VARCHAR}
+            </if>
+            <if test="phonenumber != null">
+                and phonenumber = #{phonenumber,jdbcType=VARCHAR}
+            </if>
+            <if test="sex != null">
+                and sex = #{sex,jdbcType=CHAR}
+            </if>
+            <if test="avatar != null">
+                and avatar = #{avatar,jdbcType=INTEGER}
+            </if>
+            <if test="password != null">
+                and `password` = #{password,jdbcType=VARCHAR}
+            </if>
+            <if test="salt != null">
+                and salt = #{salt,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and `status` = #{status,jdbcType=CHAR}
+            </if>
+            <if test="loginIp != null">
+                and login_ip = #{loginIp,jdbcType=VARCHAR}
+            </if>
+            <if test="loginDate != null">
+                and login_date = #{loginDate,jdbcType=TIMESTAMP}
+            </if>
+            <if test="remark != null">
+                and remark = #{remark,jdbcType=VARCHAR}
+            </if>
+            <if test="mfrsId != null">
+                and mfrs_id = #{mfrsId,jdbcType=INTEGER}
+            </if>
+            <if test="createBy != null">
+                and create_by = #{createBy,jdbcType=VARCHAR}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="updateBy != null">
+                and update_by = #{updateBy,jdbcType=VARCHAR}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="dataScope != null">
+                and data_scope = #{dataScope,jdbcType=INTEGER}
+            </if>
+            <if test="birthday != null">
+                and birthday = #{birthday,jdbcType=TIMESTAMP}
+            </if>
+            <if test="qq != null">
+                and QQ = #{qq,jdbcType=VARCHAR}
+            </if>
+            <if test="positionId != null">
+                and position_id = #{positionId,jdbcType=INTEGER}
+            </if>
+            <if test="technicalLevelId != null">
+                and technical_level_id = #{technicalLevelId,jdbcType=INTEGER}
+            </if>
+            <if test="idcarNumber != null">
+                and idcar_number = #{idcarNumber,jdbcType=VARCHAR}
+            </if>
+            <if test="nation != null">
+                and nation = #{nation,jdbcType=VARCHAR}
+            </if>
+            <if test="nativePlace != null">
+                and native_place = #{nativePlace,jdbcType=VARCHAR}
+            </if>
+            <if test="contractTime != null">
+                and contract_time = #{contractTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="emergencyContact != null">
+                and emergency_contact = #{emergencyContact,jdbcType=VARCHAR}
+            </if>
+            <if test="emergencyContactPhone != null">
+                and emergency_contact_phone = #{emergencyContactPhone,jdbcType=VARCHAR}
+            </if>
+            <if test="certificate != null">
+                and certificate = #{certificate,jdbcType=VARCHAR}
+            </if>
+            <if test="quitTime != null">
+                and quit_time = #{quitTime,jdbcType=TIMESTAMP}
+            </if>
+            and del_flag = 0
+        </where>
+    </select>
+
+    <select id="selectUserById2" resultMap="UserResultMap">
+        <include refid="selectUserVo2"/>
+        <where>
+            and account_id = #{accountId,jdbcType=INTEGER}
+            and del_flag = 0
+        </where>
+    </select>
+    <select id="selectUserDeptRoleByUserName" resultMap="UserResultMap">
+        <include refid="UserVo"/>
+        <where>
+            and (zu.login_name = #{userName,jdbcType=VARCHAR} or zu.phonenumber = #{userName,jdbcType=VARCHAR}) and
+            zu.del_flag = 0
+        </where>
+    </select>
+
+    <select id="checkLoginNameUnique" resultType="integer">
+        select count(*)
+        from mfrs_login_info
+        where status != 2
+          and login_name = #{loginName,jdbcType=VARCHAR}
+    </select>
+
+    <select id="checkPhoneUnique" resultType="integer">
+        select count(*)
+        from mfrs_account
+        where phonenumber = #{phonenumber}
+          and del_flag = 0
+          and status != 2
+    </select>
+
+    <update id="updateUser" parameterType="com.cjl.basic.zone.project.user.domain.User">
+        update mfrs_account
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deptId != null  ">dept_id = #{deptId},</if>
+            <if test="loginName != null  and loginName != ''  ">login_name = #{loginName},</if>
+            <if test="userName != null  and userName != ''  ">user_name = #{userName},</if>
+            <if test="userType != null  and userType != ''  ">user_type = #{userType},</if>
+            <if test="email != null ">email = #{email},</if>
+            <if test="phonenumber != null  and phonenumber != ''  ">phonenumber = #{phonenumber},</if>
+            <if test="sex != null  and sex != ''  ">sex = #{sex},</if>
+            <if test="avatar != null  ">avatar = #{avatar},</if>
+            <if test="password != null  and password != ''  ">password = #{password},</if>
+            <if test="salt != null  and salt != ''  ">salt = #{salt},</if>
+            <if test="status != null  and status != ''  ">status = #{status},</if>
+            <if test="loginIp != null  and loginIp != ''  ">login_ip = #{loginIp},</if>
+            <if test="loginDate != null  ">login_date = #{loginDate},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+            <if test="mfrsId != null  ">mfrs_id = #{mfrsId},</if>
+            <if test="delFlag != null  and delFlag != ''  ">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+            <if test="dataScope != null  ">data_scope = #{dataScope},</if>
+            <if test="birthday != null  ">birthday = #{birthday},</if>
+            <if test="qq != null  ">QQ = #{qq},</if>
+            <if test="positionId != null  ">position_id = #{positionId},</if>
+            <if test="technicalLevelId != null  ">technical_level_id = #{technicalLevelId},</if>
+            <if test="idcarNumber != null   ">idcar_number = #{idcarNumber},</if>
+            <if test="nation != null   ">nation = #{nation},</if>
+            <if test="nativePlace != null   ">native_place = #{nativePlace},</if>
+            <if test="contractTime != null  ">contract_time = #{contractTime},</if>
+            <if test="emergencyContact != null    ">emergency_contact = #{emergencyContact},</if>
+            <if test="emergencyContactPhone != null  ">emergency_contact_phone = #{emergencyContactPhone},</if>
+            <if test="certificate != null  and certificate != ''  ">certificate = #{certificate},</if>
+        </trim>
+        <where>
+            1=1
+            <if test="accountId != null and accountId !='' ">and account_id=#{accountId}</if>
+            <if test="loginName != null and loginName !='' ">and login_name=#{loginName}</if>
+        </where>
+    </update>
+
+    <update id="updateUserSelf" parameterType="com.cjl.basic.zone.project.user.domain.User">
+        update mfrs_account
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="loginIp != null  and loginIp != ''  ">login_ip = #{loginIp},</if>
+            <if test="loginDate != null  ">login_date = #{loginDate},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+            <if test="mfrsId != null  ">mfrs_id = #{mfrsId},</if>
+            <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+            birthday = #{birthday},
+            <if test="qq != null  ">QQ = #{qq},</if>
+            <if test="email != null ">email = #{email},</if>
+            <if test="sex != null  and sex != ''  ">sex = #{sex},</if>
+            <if test="password != null  and password != ''  ">password = #{password},</if>
+            <if test="salt != null  and salt != ''  ">salt = #{salt},</if>
+            <if test="status != null  and status != ''  ">status = #{status},</if>
+        </trim>
+        where account_id = #{accountId}
+    </update>
+
+
+    <insert id="insertUser" parameterType="com.cjl.basic.zone.project.user.domain.User" useGeneratedKeys="true"
+            keyProperty="accountId">
+        insert into mfrs_account
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="accountId != null  ">account_id,</if>
+            <if test="deptId != null  ">dept_id,</if>
+            <if test="loginName != null  and loginName != ''  ">login_name,</if>
+            <if test="userName != null  and userName != ''  ">user_name,</if>
+            <if test="userType != null  and userType != ''  ">user_type,</if>
+            <if test="email != null ">email,</if>
+            <if test="phonenumber != null  and phonenumber != ''  ">phonenumber,</if>
+            <if test="sex != null  and sex != ''  ">sex,</if>
+            <if test="avatar != null  ">avatar,</if>
+            <if test="password != null  and password != ''  ">password,</if>
+            <if test="salt != null  and salt != ''  ">salt,</if>
+            <if test="status != null  and status != ''  ">status,</if>
+            <if test="loginIp != null  and loginIp != ''  ">login_ip,</if>
+            <if test="loginDate != null  ">login_date,</if>
+            <if test="remark != null  and remark != ''  ">remark,</if>
+            <if test="mfrsId != null  ">mfrs_id,</if>
+            <if test="delFlag != null  and delFlag != ''  ">del_flag,</if>
+            <if test="createBy != null  and createBy != ''  ">create_by,</if>
+            <if test="createTime != null  ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+            <if test="updateTime != null  ">update_time,</if>
+            <if test="dataScope != null  ">data_scope,</if>
+            <if test="birthday != null  ">birthday,</if>
+            <if test="qq != null  ">QQ,</if>
+            <if test="positionId != null  ">position_id,</if>
+            <if test="technicalLevelId != null  ">technical_level_id,</if>
+            <if test="idcarNumber != null  and idcarNumber != ''  ">idcar_number,</if>
+            <if test="nation != null  and nation != ''  ">nation,</if>
+            <if test="nativePlace != null  and nativePlace != ''  ">native_place,</if>
+            <if test="contractTime != null  ">contract_time,</if>
+            <if test="emergencyContact != null  and emergencyContact != ''  ">emergency_contact,</if>
+            <if test="emergencyContactPhone != null  and emergencyContactPhone != ''  ">emergency_contact_phone,</if>
+            <if test="certificate != null  and certificate != ''  ">certificate,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="accountId != null  ">#{accountId},</if>
+            <if test="deptId != null  ">#{deptId},</if>
+            <if test="loginName != null  and loginName != ''  ">#{loginName},</if>
+            <if test="userName != null  and userName != ''  ">#{userName},</if>
+            <if test="userType != null  and userType != ''  ">#{userType},</if>
+            <if test="email != null  and email != ''  ">#{email},</if>
+            <if test="phonenumber != null  and phonenumber != ''  ">#{phonenumber},</if>
+            <if test="sex != null  and sex != ''  ">#{sex},</if>
+            <if test="avatar != null  ">#{avatar},</if>
+            <if test="password != null  and password != ''  ">#{password},</if>
+            <if test="salt != null  and salt != ''  ">#{salt},</if>
+            <if test="status != null  and status != ''  ">#{status},</if>
+            <if test="loginIp != null  and loginIp != ''  ">#{loginIp},</if>
+            <if test="loginDate != null  ">#{loginDate},</if>
+            <if test="remark != null  and remark != ''  ">#{remark},</if>
+            <if test="mfrsId != null  ">#{mfrsId},</if>
+            <if test="delFlag != null  and delFlag != ''  ">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+            <if test="createTime != null  ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
+            <if test="updateTime != null  ">#{updateTime},</if>
+            <if test="dataScope != null  ">#{dataScope},</if>
+            <if test="birthday != null   and birthday != ''">#{birthday},</if>
+            <if test="qq != null  and QQ != ''  ">#{qq},</if>
+            <if test="positionId != null  ">#{positionId},</if>
+            <if test="technicalLevelId != null  ">#{technicalLevelId},</if>
+            <if test="idcarNumber != null  and idcarNumber != ''  ">#{idcarNumber},</if>
+            <if test="nation != null  and nation != ''  ">#{nation},</if>
+            <if test="nativePlace != null  and nativePlace != ''  ">#{nativePlace},</if>
+            <if test="contractTime != null  ">#{contractTime},</if>
+            <if test="emergencyContact != null  and emergencyContact != ''  ">#{emergencyContact},</if>
+            <if test="emergencyContactPhone != null  and emergencyContactPhone != ''  ">#{emergencyContactPhone},</if>
+            <if test="certificate != null  and certificate != ''  ">#{certificate},</if>
+        </trim>
+    </insert>
+
+    <select id="checkResetPwdUnique" resultMap="UserResultMap">
+        select login_name,password,salt from mfrs_account
+        <where>
+            del_flag = '0'
+            <if test="accountId != null and accountId !='' ">and account_id=#{accountId}</if>
+        </where>
+    </select>
+
+    <select id="hasSuperAdmin" resultType="integer">
+        select count(*)
+        from mfrs_account
+        where 2 >= user_type
+          and find_in_set(account_id, #{ids})
+    </select>
+    <select id="checkLoginNameUniqueInMfrs" resultType="java.lang.Integer">
+        select count(*)
+        from mfrs_account
+        where status = 2
+          and del_flag = 0
+          and login_name = #{loginName}
+          and mfrs_id = #{mfrsId}
+    </select>
+
+    <select id="selectUserByPhoneNumber" resultMap="UserResultMap">
+        <include refid="selectUserVo2"/>
+        <where>
+            and phonenumber = #{userName,jdbcType=VARCHAR} and del_flag = 0 and status != 2
+        </where>
+    </select>
+
+    <select id="selectUserDeptRoleByAccountId" resultMap="UserResultMap">
+        <include refid="UserVo"/>
+        <where>
+            and zu.account_id = #{accountId,jdbcType=VARCHAR} and zu.status != 2
+        </where>
+    </select>
+</mapper>

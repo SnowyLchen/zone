@@ -25,27 +25,6 @@ public class UserConstants {
     public static final String USER_TYPE_ADMIN_NAME = "管理员";
 
     /**
-     * 外勤角色
-     */
-    public static final String USER_TYPE_OUTWORK = "12";
-    public static final String USER_TYPE_OUTWORK_TYPE = "a001";
-    public static final String USER_TYPE_OUTWORK_NAME = "销售";
-
-    /**
-     * 内勤角色
-     */
-    public static final String USER_TYPE_INWORK = "15";
-    public static final String USER_TYPE_INWORK_TYPE = "neiqin";
-    public static final String USER_TYPE_INWORK_NAME = "内勤";
-
-
-    /**
-     * 普通用户
-     */
-    public static final String USER_TYPE_COMMON = "3";
-
-
-    /**
      * 游客角色
      */
     public static final Long USER_TYPE_VISITOR = -2L;

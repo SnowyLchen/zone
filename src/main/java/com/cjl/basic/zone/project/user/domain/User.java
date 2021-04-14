@@ -6,7 +6,7 @@ import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import java.util.Date;
 
 /**
- * mfrs_account
+ * User
  *
  * @author
  */
@@ -17,11 +17,6 @@ public class User extends BaseEntity {
     private Integer accountId;
 
     /**
-     * 部门ID
-     */
-    private Integer deptId;
-
-    /**
      * 登录账号
      */
     private String loginName;
@@ -30,11 +25,6 @@ public class User extends BaseEntity {
      * 真实姓名
      */
     private String userName;
-
-    /**
-     * 1:超级管理员 2:普通管理员 3普通用户
-     */
-    private String userType;
 
     /**
      * 用户邮箱
@@ -79,77 +69,17 @@ public class User extends BaseEntity {
     /**
      * 最后登陆时间
      */
-    private Date loginDate;
+    private Date loginTime;
 
-    /**
-     * 所在企业ID
-     */
-    private Integer mfrsId;
+    private String groupName;
 
-    /**
-     * 数据范围（1：全部数据权限 2：自定数据权限）
-     */
-    private Integer dataScope;
+    public String getGroupName() {
+        return groupName;
+    }
 
-    /**
-     * 生日
-     */
-    private Date birthday;
-
-    /**
-     * QQ
-     */
-    private String qq;
-
-    /**
-     * 岗位id
-     */
-    private Integer positionId;
-
-    /**
-     * 技术等级id
-     */
-    private Integer technicalLevelId;
-
-    /**
-     * 身份证号
-     */
-    private String idcarNumber;
-
-    /**
-     * 民族
-     */
-    private String nation;
-
-    /**
-     * 籍贯
-     */
-    private String nativePlace;
-
-    /**
-     * 合同时间
-     */
-    private Date contractTime;
-
-    /**
-     * 紧急联系人
-     */
-    private String emergencyContact;
-
-    /**
-     * 紧急联系方式
-     */
-    private String emergencyContactPhone;
-
-    /**
-     * 资质证书
-     */
-    private String certificate;
-
-    /**
-     * 离职时间
-     */
-    private Date quitTime;
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
 
     /**
      * 生成随机盐
@@ -177,14 +107,6 @@ public class User extends BaseEntity {
         this.accountId = accountId;
     }
 
-    public Integer getDeptId() {
-        return deptId;
-    }
-
-    public void setDeptId(Integer deptId) {
-        this.deptId = deptId;
-    }
-
     public String getLoginName() {
         return loginName;
     }
@@ -199,14 +121,6 @@ public class User extends BaseEntity {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getUserType() {
-        return userType;
-    }
-
-    public void setUserType(String userType) {
-        this.userType = userType;
     }
 
     public String getEmail() {
@@ -273,123 +187,11 @@ public class User extends BaseEntity {
         this.loginIp = loginIp;
     }
 
-    public Date getLoginDate() {
-        return loginDate;
+    public Date getLoginTime() {
+        return loginTime;
     }
 
-    public void setLoginDate(Date loginDate) {
-        this.loginDate = loginDate;
-    }
-
-    public Integer getMfrsId() {
-        return mfrsId;
-    }
-
-    public void setMfrsId(Integer mfrsId) {
-        this.mfrsId = mfrsId;
-    }
-
-    public Integer getDataScope() {
-        return dataScope;
-    }
-
-    public void setDataScope(Integer dataScope) {
-        this.dataScope = dataScope;
-    }
-
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
-
-    public String getQq() {
-        return qq;
-    }
-
-    public void setQq(String qq) {
-        this.qq = qq;
-    }
-
-    public Integer getPositionId() {
-        return positionId;
-    }
-
-    public void setPositionId(Integer positionId) {
-        this.positionId = positionId;
-    }
-
-    public Integer getTechnicalLevelId() {
-        return technicalLevelId;
-    }
-
-    public void setTechnicalLevelId(Integer technicalLevelId) {
-        this.technicalLevelId = technicalLevelId;
-    }
-
-    public String getIdcarNumber() {
-        return idcarNumber;
-    }
-
-    public void setIdcarNumber(String idcarNumber) {
-        this.idcarNumber = idcarNumber;
-    }
-
-    public String getNation() {
-        return nation;
-    }
-
-    public void setNation(String nation) {
-        this.nation = nation;
-    }
-
-    public String getNativePlace() {
-        return nativePlace;
-    }
-
-    public void setNativePlace(String nativePlace) {
-        this.nativePlace = nativePlace;
-    }
-
-    public Date getContractTime() {
-        return contractTime;
-    }
-
-    public void setContractTime(Date contractTime) {
-        this.contractTime = contractTime;
-    }
-
-    public String getEmergencyContact() {
-        return emergencyContact;
-    }
-
-    public void setEmergencyContact(String emergencyContact) {
-        this.emergencyContact = emergencyContact;
-    }
-
-    public String getEmergencyContactPhone() {
-        return emergencyContactPhone;
-    }
-
-    public void setEmergencyContactPhone(String emergencyContactPhone) {
-        this.emergencyContactPhone = emergencyContactPhone;
-    }
-
-    public String getCertificate() {
-        return certificate;
-    }
-
-    public void setCertificate(String certificate) {
-        this.certificate = certificate;
-    }
-
-    public Date getQuitTime() {
-        return quitTime;
-    }
-
-    public void setQuitTime(Date quitTime) {
-        this.quitTime = quitTime;
+    public void setLoginTime(Date loginTime) {
+        this.loginTime = loginTime;
     }
 }

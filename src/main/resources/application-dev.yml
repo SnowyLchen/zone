@@ -17,7 +17,7 @@ uustop:
 # 开发环境配置
 server:
   # 服务端口
-  port: 8022
+  port: 8000
   servlet:
     # 项目contextPath
     context-path: /
@@ -64,7 +64,7 @@ spring:
     druid:
       # 主库数据源
       master:
-        url: jdbc:mysql://39.102.117.87/hdzhny_mfrs?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://localhost/tale?useUnicode=true&characterEncoding=utf8
         username: root
         password: YZgP3oX2
       # 从库数据源

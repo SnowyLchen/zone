@@ -6,6 +6,8 @@ import com.cjl.basic.zone.common.utils.LogUtils;
 import com.cjl.basic.zone.common.utils.ServletUtils;
 import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.common.utils.spring.SpringUtils;
+import com.cjl.basic.zone.project.loginLog.domain.LoginLog;
+import com.cjl.basic.zone.project.loginLog.service.LogServiceImpl;
 import com.cjl.basic.zone.project.operlog.domain.OperLog;
 import com.cjl.basic.zone.project.operlog.service.IOperLogService;
 import com.cjl.basic.zone.project.user.domain.Logininfor;
@@ -52,7 +54,7 @@ public class AsyncFactory {
      * @param args     列表
      * @return 任务task
      */
-    public static TimerTask recordLogininfor(final String username, final String mfrsId, final String status, final String message, final Object... args) {
+    public static TimerTask recordLogininfor(final String username,final Integer accountId, final String status, final String message, final Object... args) {
         final UserAgent userAgent = UserAgent.parseUserAgentString(ServletUtils.getRequest().getHeader("User-Agent"));
         final String ip = ShiroAuthenticateUtils.getIp();
         return new TimerTask() {
@@ -71,23 +73,24 @@ public class AsyncFactory {
                 // 获取客户端浏览器
                 String browser = userAgent.getBrowser().getName();
                 // 封装对象
-                Logininfor logininfor = new Logininfor();
-                logininfor.setLoginName(username);
-                logininfor.setIpaddr(ip);
-                logininfor.setLoginLocation(AddressUtils.getRealAddressByIP(ip));
-                logininfor.setBrowser(browser);
-                logininfor.setOs(os);
-                logininfor.setMsg(message);
-                logininfor.setMfrsId(mfrsId);
+                LoginLog log=new LoginLog();
+                log.setLoginName(username);
+                log.setIp(ip);
+                log.setAccountId(accountId);
+                log.setLoginLocation(AddressUtils.getRealAddressByIP(ip));
+                log.setBrowser(browser);
+                log.setOs(os);
+                log.setData(message);
+                log.setAction("login");
                 // 日志状态
                 if (Constants.LOGIN_SUCCESS.equals(status) || Constants.LOGOUT.equals(status)) {
-                    logininfor.setStatus(Constants.SUCCESS);
+                    log.setStatus(Constants.SUCCESS);
                 } else if (Constants.LOGIN_FAIL.equals(status)) {
-                    logininfor.setStatus(Constants.FAIL);
+                    log.setStatus(Constants.FAIL);
                 }
                 // 插入数据
                 try {
-//                    SpringUtils.getBean(LogininforServiceImpl.class).insertLogininfor(logininfor);
+                    SpringUtils.getBean(LogServiceImpl.class).addLog(log);
                 } catch (Exception e) {
                     mfrs_user_logger.error("写入一直异常", e);
                 }

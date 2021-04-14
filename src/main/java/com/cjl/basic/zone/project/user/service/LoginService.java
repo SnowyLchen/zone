@@ -2,6 +2,7 @@ package com.cjl.basic.zone.project.user.service;
 
 import com.cjl.basic.zone.common.constant.Constants;
 import com.cjl.basic.zone.common.constant.UserConstants;
+import com.cjl.basic.zone.common.exception.user.UserBlockedException;
 import com.cjl.basic.zone.common.exception.user.UserNotExistsException;
 import com.cjl.basic.zone.common.exception.user.UserPasswordNotMatchException;
 import com.cjl.basic.zone.common.utils.MessageUtils;
@@ -9,10 +10,15 @@ import com.cjl.basic.zone.common.utils.StringUtils;
 import com.cjl.basic.zone.framework.manager.AsyncManager;
 import com.cjl.basic.zone.framework.manager.factory.AsyncFactory;
 import com.cjl.basic.zone.framework.shiro.jwt.JwtUtil;
+import com.cjl.basic.zone.framework.shiro.jwt.StatelessToken;
 import com.cjl.basic.zone.framework.shiro.jwt.StatelessWebUtils;
+import com.cjl.basic.zone.framework.shiro.service.PasswordService;
 import com.cjl.basic.zone.project.user.domain.User;
+import com.cjl.basic.zone.project.user.domain.UserStatus;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -20,6 +26,10 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Component
 public class LoginService {
+    @Resource
+    private IUserService userService;
+    @Resource
+    private PasswordService passwordService;
 
     /**
      * [登录接口]
@@ -30,7 +40,7 @@ public class LoginService {
      * @author xiaojie
      * @date 2020/10/9 16:55
      */
-    public User login(String username, String password, HttpServletResponse response) {
+    public Boolean login(String username, String password, HttpServletResponse response) {
 
         //1、判断账号名或密码是否为空 空则抛出异常错误
         if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
@@ -51,57 +61,31 @@ public class LoginService {
         }
 
         //4、查询用户
-//        UserDeptRole u = userService.loginGetUser(username);
+        User u = userService.loginGetUser(username);
 
         //5、查询用户是否存在
-//        if (u == null) {
-//            AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, null, Constants.LOGIN_FAIL, MessageUtils.message("user.not.exists")));
-//            throw new UserNotExistsException();
-//        }
-//        try {
-//            u.getDept().setParentName(userService.selectcompany(u.getDept()).getDeptName());
-//        } catch (Exception e) {
-//
-//        }
-//        String mfrsId = null == u.getMfrsId() ? null : String.valueOf(u.getMfrsId());
-//
+        if (u == null) {
+            AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, null, Constants.LOGIN_FAIL, MessageUtils.message("user.not.exists")));
+            throw new UserNotExistsException();
+        }
 //        //6、判断用户是否禁用
-//        if (UserStatus.DISABLE.getCode().equals(u.getStatus())) {
-//            AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, mfrsId, Constants.LOGIN_FAIL, MessageUtils.message("user.blocked", u.getRemark())));
-//            throw new UserBlockedException(u.getRemark());
-//        }
-//
-//        //7、判断用户是否离职
-//        if (UserStatus.QUIT.getCode().equals(u.getStatus())) {
-//            throw new UserBlockedException("用户已离职");
-//        }
-//
+        if (UserStatus.DISABLE.getCode().equals(u.getStatus())) {
+            AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, u.getAccountId(), Constants.LOGIN_FAIL, MessageUtils.message("user.blocked", u.getRemark())));
+            throw new UserBlockedException(u.getRemark());
+        }
+
 //        // 8、校验密码
-//        passwordService.validate(u, password);
-//
-//        Long accountId = u.getAccountId().longValue();
-//
-//        // 9、查询角色信息和菜单
-//        Set<String> roles = roleService.selectRoleKeys(accountId);
-//        Set<String> menus = menuService.selectPermsByAccountId(accountId);
-//        if (null == roles || null == menus || (menus.size() == 0 && !username.equals("admin"))) {
-//            throw new NoRoleException("权限不足，请联系管理员。");
-//        }
-//
+        passwordService.validate(u, password);
+
 //        // 10.jwt认证，写入缓存
-//        final String token = JwtUtil.sign(u.getLoginName());
-        final String token = JwtUtil.sign("cjl");
-//        SecurityUtils.getSubject().login(new StatelessToken(token, true));
+        final String token = JwtUtil.sign(u.getLoginName());
+        SecurityUtils.getSubject().login(new StatelessToken(token, true));
 //
 //        // 写入cookie
         StatelessWebUtils.addCookiesForToken(response, token);
-//
-//        // 12、记录登录信息
-//        recordLoginInfo(u);
-//
 //        // 13、写入登录日志
-//        AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, mfrsId, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
+        AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, u.getAccountId(), Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
 
-        return new User();
+        return true;
     }
 }

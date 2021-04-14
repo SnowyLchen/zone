@@ -6,9 +6,9 @@ import com.cjl.basic.zone.framework.shiro.StatelessConstants;
 import com.cjl.basic.zone.framework.shiro.jwt.JwtUtil;
 import com.cjl.basic.zone.framework.shiro.jwt.StatelessToken;
 import com.cjl.basic.zone.framework.shiro.jwt.StatelessWebUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
+import com.cjl.basic.zone.project.user.domain.User;
+import com.cjl.basic.zone.project.user.service.IUserService;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -16,6 +16,8 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * 无状态的Realm
@@ -28,8 +30,8 @@ public class StatelessRealm extends AuthorizingRealm {
 //    private IMenuService menuService;
 //    @Autowired
 //    private IRoleService roleService;
-//    @Autowired
-//    private IUserService userService;
+    @Autowired
+    private IUserService userService;
     @Autowired
     private SpringRedisUtil kvSpringRedisUtil;
 
@@ -43,8 +45,8 @@ public class StatelessRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-//        final User user = (User) principalCollection.getPrimaryPrincipal();
-//        final Long accountId = user.getAccountId().longValue();
+        final User user = (User) principalCollection.getPrimaryPrincipal();
+        final Long accountId = user.getAccountId().longValue();
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
 //        if (user.isAdmin()) {
 //            authorizationInfo.addRole("admin");
@@ -68,41 +70,41 @@ public class StatelessRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         final StatelessToken statelessToken = (StatelessToken) authenticationToken;
-//        String token = (String) statelessToken.getCredentials();
-//        User user;
-//        if (statelessToken.isLoginHandle()) {
-//            user = userService.loginGetUser(JwtUtil.getLoginNameByToken(token));
+        String token = (String) statelessToken.getCredentials();
+        User user;
+        if (statelessToken.isLoginHandle()) {
+            user = userService.loginGetUser(JwtUtil.getLoginNameByToken(token));
 //             写入刷新token,缓存存在30天
-//            kvSpringRedisUtil.set(getWRefreshKey(token), token, TimeUnit.DAYS.toSeconds(30));
-//        } else {
-//            if (token == null) {
-//                throw new UnknownAccountException(StatelessConstants.JWT_EXPIRE_MSG);
-//            }
-//
-//             如果刷新token失效，则直接踢下线。这个token用于强制废除access_token
-//            final String refreshToken = (String) kvSpringRedisUtil.get(getRRefreshKey(token));
-//            if (refreshToken == null) {
-//                throw new UnknownAccountException(StatelessConstants.JWT_EXPIRE_MSG);
-//            }
-//
-        // 如果token已过期，则颁发一个新的token
-        // 此处可能存在一个安全漏洞，老的token过期后还可以使用一次
-//            if (!JwtUtil.verify(token)) {
-//                final String loginName = JwtUtil.getLoginNameByToken(refreshToken);
-//                String newToken = JwtUtil.sign(loginName);
-//                // 更新刷新refreshToken的key
-//                kvSpringRedisUtil.rename(getRRefreshKey(token), getWRefreshKey(newToken));
-//                // 重置token
-//                token = newToken;
-//                // 续签token
-//                StatelessWebUtils.updateCookiesForToken(token);
-//            }
-//
-//            user = userService.loginGetUser(JwtUtil.getLoginNameByToken(token));
-//        }
+            kvSpringRedisUtil.set(getWRefreshKey(token), token, TimeUnit.DAYS.toSeconds(30));
+        } else {
+            if (token == null) {
+                throw new UnknownAccountException(StatelessConstants.JWT_EXPIRE_MSG);
+            }
 
-//        return new SimpleAuthenticationInfo(user, token, getName());
-        return null;
+//             如果刷新token失效，则直接踢下线。这个token用于强制废除access_token
+            final String refreshToken = (String) kvSpringRedisUtil.get(getRRefreshKey(token));
+            if (refreshToken == null) {
+                throw new UnknownAccountException(StatelessConstants.JWT_EXPIRE_MSG);
+            }
+
+//
+            // 如果token已过期，则颁发一个新的token
+            // 此处可能存在一个安全漏洞，老的token过期后还可以使用一次
+            if (!JwtUtil.verify(token)) {
+                final String loginName = JwtUtil.getLoginNameByToken(refreshToken);
+                String newToken = JwtUtil.sign(loginName);
+                // 更新刷新refreshToken的key
+                kvSpringRedisUtil.rename(getRRefreshKey(token), getWRefreshKey(newToken));
+                // 重置token
+                token = newToken;
+                // 续签token
+                StatelessWebUtils.updateCookiesForToken(token);
+            }
+
+            user = userService.loginGetUser(JwtUtil.getLoginNameByToken(token));
+        }
+
+        return new SimpleAuthenticationInfo(user, token, getName());
     }
 
     /**

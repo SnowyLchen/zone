@@ -2,15 +2,21 @@ package com.cjl.basic.zone.common.utils.security;
 
 import com.cjl.basic.zone.common.utils.IpUtils;
 import com.cjl.basic.zone.common.utils.ServletUtils;
+import com.cjl.basic.zone.common.utils.SpringRedisUtil;
+import com.cjl.basic.zone.common.utils.spring.SpringUtils;
 import com.cjl.basic.zone.framework.shiro.StatelessConstants;
 import com.cjl.basic.zone.framework.shiro.cache.ShiroRedisCache;
 import com.cjl.basic.zone.framework.shiro.cache.ShiroRedisCacheManager;
 import com.cjl.basic.zone.framework.shiro.jwt.JwtUtil;
 import com.cjl.basic.zone.framework.shiro.jwt.StatelessWebUtils;
+import com.cjl.basic.zone.project.user.domain.User;
+import com.cjl.basic.zone.project.user.service.IUserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.stream.Collectors;
 
 /**
  * shiro 工具类
@@ -97,21 +103,20 @@ public class ShiroAuthenticateUtils {
         shiroRedisCache.remove(loginName + "*");
     }
 
-//    /**
-//     * 清除所有缓存
-//     *
-//     * @param accoutIds 用户ids
-//     */
-//    public static void clearByAccountIds(Integer... accoutIds) {
-//        for (Integer accoutId : accoutIds) {
-//            String loginName = SpringUtils.getBean(IUserService.class)
-//                    .selectUserByIdDel(accoutId.longValue())
-//                    .getLoginName();
-//            if (loginName != null) {
-//                clear(loginName);
-//            }
-//        }
-//    }
+    /**
+     * 清除所有缓存
+     *
+     * @param accoutIds 用户ids
+     */
+    public static void clearByAccountIds(Integer... accoutIds) {
+        for (Integer accoutId : accoutIds) {
+            String loginName = SpringUtils.getBean(IUserService.class).selectUserById(accoutId.longValue())
+                    .getLoginName();
+            if (loginName != null) {
+                clear(loginName);
+            }
+        }
+    }
 
 //    /**
 //     * 清除所有缓存
@@ -151,36 +156,36 @@ public class ShiroAuthenticateUtils {
     }
 
 
-//    /**
-//     * 通过Token 获取用户信息
-//     *
-//     * @return User
-//     */
-//    public static User getUserByToken() {
-//        return (User) getSubject().getPrincipal();
-//    }
+    /**
+     * 通过Token 获取用户信息
+     *
+     * @return User
+     */
+    public static User getUserByToken() {
+        return (User) getSubject().getPrincipal();
+    }
 
-//    /**
-//     * 获取当前账号ID
-//     *
-//     * @return 账号ID
-//     */
-//    public static Integer getAccountId() {
-//        return Math.toIntExact(getUserByToken().getAccountId());
-//    }
-//
-//    /**
-//     * 获取当前登录账号
-//     *
-//     * @return 账号
-//     */
-//    public static String getLoginName() {
-//        if (getUserByToken() == null) {
-//            return "";
-//        }
-//        return getUserByToken().getLoginName();
-//    }
-//
+    /**
+     * 获取当前账号ID
+     *
+     * @return 账号ID
+     */
+    public static Integer getAccountId() {
+        return Math.toIntExact(getUserByToken().getAccountId());
+    }
+
+    /**
+     * 获取当前登录账号
+     *
+     * @return 账号
+     */
+    public static String getLoginName() {
+        if (getUserByToken() == null) {
+            return "";
+        }
+        return getUserByToken().getLoginName();
+    }
+
 //    /**
 //     * 获取企业
 //     */

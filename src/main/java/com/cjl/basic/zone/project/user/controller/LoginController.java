@@ -18,6 +18,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 登录验证
  *
- * @author wangsen
+ * @author chen
  */
 @Api(tags = "登录接口")
 @Controller
@@ -37,6 +38,7 @@ public class LoginController extends BaseController {
     private LoginService loginService;
 
     @GetMapping("/login")
+    @ApiIgnore
     public String login(HttpServletRequest request, ModelMap modelMap) {
         ModelMapUtils.addAndReplaceEmoji(modelMap, "isPrivate", !PermissionUtils.isPrivate(profile));
         // 判断token是否过期，如果没有过期，则直接跳转到index，否则跳转到login
@@ -45,6 +47,7 @@ public class LoginController extends BaseController {
 
     @ResponseBody
     @GetMapping("/loginzg")
+    @ApiIgnore
     public AjaxResult loginzg(HttpServletRequest request, ModelMap modelMap) {
         // 判断token是否过期，如果没有过期，则直接跳转到index，否则跳转到login
         if (!ShiroAuthenticateUtils.isAuthenticated()) {
@@ -55,10 +58,10 @@ public class LoginController extends BaseController {
 
     @PostMapping("/login")
     @ResponseBody
-    @ApiOperation(value = "智控登录接口")
+    @ApiOperation(value = "登录接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "username", value = "用户名"),
-            @ApiImplicitParam(name = "password", value = "密码")
+            @ApiImplicitParam(name = "username", value = "用户名", defaultValue = "admin", required = true),
+            @ApiImplicitParam(name = "password", value = "密码", defaultValue = "123456", required = true)
     })
     public AjaxResult ajaxLogin(HttpServletResponse response, String username, String password, String validateCode) {
         try {
