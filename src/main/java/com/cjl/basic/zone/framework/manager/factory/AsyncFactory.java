@@ -24,7 +24,7 @@ import java.util.TimerTask;
  * @author liuhulu
  */
 public class AsyncFactory {
-    private static final Logger mfrs_user_logger = LoggerFactory.getLogger("sys-user");
+    private static final Logger user_logger = LoggerFactory.getLogger("sys-user");
 
     /**
      * 操作日志记录
@@ -38,7 +38,7 @@ public class AsyncFactory {
             public void run() {
                 // todo 定时器有问题
                 // 开始执行操作日志
-                mfrs_user_logger.debug("开始记录执行操作日志，时间：【{}】，方法: 【{}】", DateUtils.getDate(), operLog.getMethod());
+                user_logger.debug("开始记录执行操作日志，时间：【{}】，方法: 【{}】", DateUtils.getDate(), operLog.getMethod());
                 operLog.setOperLocation(AddressUtils.getRealAddressByIP(operLog.getOperIp()));
                 SpringUtils.getBean(IOperLogService.class).insertOperlog(operLog);
             }
@@ -67,7 +67,7 @@ public class AsyncFactory {
                 s.append(LogUtils.getBlock(status));
                 s.append(LogUtils.getBlock(message));
                 // 打印信息到日志
-                mfrs_user_logger.info(s.toString(), args);
+                user_logger.info(s.toString(), args);
                 // 获取客户端操作系统
                 String os = userAgent.getOperatingSystem().getName();
                 // 获取客户端浏览器
@@ -81,7 +81,7 @@ public class AsyncFactory {
                 log.setBrowser(browser);
                 log.setOs(os);
                 log.setData(message);
-                log.setAction("login");
+                log.setAction("登录");
                 // 日志状态
                 if (Constants.LOGIN_SUCCESS.equals(status) || Constants.LOGOUT.equals(status)) {
                     log.setStatus(Constants.SUCCESS);
@@ -92,7 +92,7 @@ public class AsyncFactory {
                 try {
                     SpringUtils.getBean(LogServiceImpl.class).addLog(log);
                 } catch (Exception e) {
-                    mfrs_user_logger.error("写入一直异常", e);
+                    user_logger.error("写入异常", e);
                 }
             }
         };

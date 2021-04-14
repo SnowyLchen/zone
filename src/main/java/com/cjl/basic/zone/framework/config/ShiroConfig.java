@@ -70,11 +70,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/druid/**", "anon");
         filterChainDefinitionMap.put("/captcha/captchaImage**", "anon");
         // 不需要拦截的访问
-        filterChainDefinitionMap.put("/monitor/druid*/**", "anon");
         filterChainDefinitionMap.put("/login", "anon");
-        filterChainDefinitionMap.put("/loginzg", "anon");
         filterChainDefinitionMap.put("/register", "anon");
-        filterChainDefinitionMap.put("/statement", "anon");
         // 系统权限列表
 //        filterChainDefinitionMap.putAll(SpringUtils.getBean(IMenuService.class).selectPermsAll());
         // swagger

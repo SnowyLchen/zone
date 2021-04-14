@@ -38,7 +38,7 @@ public class StatelessConstants {
     /**
      * JWT作者
      */
-    public static final String JWT_IS_UER = "www.hdzhenergy.cn";
+    public static final String JWT_IS_UER = "cjl";
 
     /**
      * JWT默认字段，最初是阶段JWT中只保留该默认字段，不存放敏感信息

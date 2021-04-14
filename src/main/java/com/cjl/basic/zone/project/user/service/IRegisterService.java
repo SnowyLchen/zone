@@ -1,9 +1,6 @@
 package com.cjl.basic.zone.project.user.service;
 
-import com.cjl.basic.zone.project.user.domain.LoginInfo;
 import com.cjl.basic.zone.project.user.domain.User;
-
-import java.util.List;
 
 /**
  * 注册 业务层

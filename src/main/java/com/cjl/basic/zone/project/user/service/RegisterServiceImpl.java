@@ -2,13 +2,15 @@ package com.cjl.basic.zone.project.user.service;
 
 import com.cjl.basic.zone.common.constant.UserConstants;
 import com.cjl.basic.zone.common.utils.InsertOrUpdateUtils;
+import com.cjl.basic.zone.common.utils.ServletUtils;
 import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.framework.shiro.service.PasswordService;
-import com.cjl.basic.zone.project.user.domain.LoginInfo;
+import com.cjl.basic.zone.project.loginLog.domain.LoginLog;
+import com.cjl.basic.zone.project.loginLog.mapper.LoginLogMapper;
 import com.cjl.basic.zone.project.user.domain.User;
 import com.cjl.basic.zone.project.user.domain.UserStatus;
-import com.cjl.basic.zone.project.user.mapper.LoginInfoMapper;
 import com.cjl.basic.zone.utils.dateutils.DateUtils;
+import eu.bitwalker.useragentutils.UserAgent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,14 +30,13 @@ public class RegisterServiceImpl implements IRegisterService {
     @Autowired
     private IUserService userService;
     @Resource
-    private LoginInfoMapper loginInfoMapper;
+    private LoginLogMapper loginInfoMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int registerUser(User user) {
-        User u = addDefaultUserInfo(user);
+        addDefaultUserInfo(user);
         addAccountToLoginInfoTable(user.getLoginName());
-//        List<MfrsSettings> mfrsSettingsList = userService.trySettings(user.getAccountId());
         return 1;
     }
 
@@ -70,13 +71,18 @@ public class RegisterServiceImpl implements IRegisterService {
      * @param loginName 账号名
      */
     public void addAccountToLoginInfoTable(String loginName) {
-        LoginInfo loginInfo = new LoginInfo();
+        final UserAgent userAgent = UserAgent.parseUserAgentString(ServletUtils.getRequest().getHeader("User-Agent"));
+        LoginLog loginInfo = new LoginLog();
         loginInfo.setStatus(UserStatus.OK.getCode());
         loginInfo.setLoginName(loginName);
-        loginInfo.setUpdateBy(loginName);
-        loginInfo.setUpdateTime(DateUtils.getNowDate());
-        loginInfo.setCreateBy(loginName);
-        loginInfo.setCreateTime(DateUtils.getNowDate());
-        InsertOrUpdateUtils.requireGreaterThanI(loginInfoMapper.insertSelective(loginInfo), "新增账号信息失败");
+        loginInfo.setIp(ShiroAuthenticateUtils.getIp());
+        // 获取客户端操作系统
+        String os = userAgent.getOperatingSystem().getName();
+        // 获取客户端浏览器
+        String browser = userAgent.getBrowser().getName();
+        loginInfo.setOs(os);
+        loginInfo.setBrowser(browser);
+        loginInfo.setAction("注册");
+        InsertOrUpdateUtils.requireGreaterThanI(loginInfoMapper.addLog(loginInfo), "新增账号信息失败");
     }
 }

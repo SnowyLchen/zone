@@ -45,17 +45,6 @@ public class LoginController extends BaseController {
         return ShiroAuthenticateUtils.isAuthenticated() ? "redirect:/index" : "login";
     }
 
-    @ResponseBody
-    @GetMapping("/loginzg")
-    @ApiIgnore
-    public AjaxResult loginzg(HttpServletRequest request, ModelMap modelMap) {
-        // 判断token是否过期，如果没有过期，则直接跳转到index，否则跳转到login
-        if (!ShiroAuthenticateUtils.isAuthenticated()) {
-            return AjaxResult.error(401, "登录过期");
-        }
-        return AjaxResult.success("登录成功");
-    }
-
     @PostMapping("/login")
     @ResponseBody
     @ApiOperation(value = "登录接口")

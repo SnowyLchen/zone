@@ -192,9 +192,9 @@ public class UserServiceImpl implements IUserService {
     @Transactional(rollbackFor = Exception.class)
     public User insertUserForRegister(User u) {
         // 初始化一般用户时为禁用状态，需要企业管理员企业该账号才能正常使用
-//        if (u.getUserType() == null) {
-//            u.setUserType(UserConstants.USER_TYPE_COMMON);
-//        }
+        if (u.getGroupName() == null) {
+            u.setGroupName(UserConstants.USER_TYPE_ADMIN_NAME);
+        }
         if (u.getPassword() == null) {
             // 随机生成密码加密盐
             u.randomSalt();

@@ -336,77 +336,101 @@
 
 
     <insert id="insertUser" parameterType="com.cjl.basic.zone.project.user.domain.User" useGeneratedKeys="true"
-            keyProperty="accountId">
-        insert into mfrs_account
+            keyProperty="accountId" keyColumn="account_id">
+        insert into z_users
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="accountId != null  ">account_id,</if>
-            <if test="deptId != null  ">dept_id,</if>
-            <if test="loginName != null  and loginName != ''  ">login_name,</if>
-            <if test="userName != null  and userName != ''  ">user_name,</if>
-            <if test="userType != null  and userType != ''  ">user_type,</if>
-            <if test="email != null ">email,</if>
-            <if test="phonenumber != null  and phonenumber != ''  ">phonenumber,</if>
-            <if test="sex != null  and sex != ''  ">sex,</if>
-            <if test="avatar != null  ">avatar,</if>
-            <if test="password != null  and password != ''  ">password,</if>
-            <if test="salt != null  and salt != ''  ">salt,</if>
-            <if test="status != null  and status != ''  ">status,</if>
-            <if test="loginIp != null  and loginIp != ''  ">login_ip,</if>
-            <if test="loginDate != null  ">login_date,</if>
-            <if test="remark != null  and remark != ''  ">remark,</if>
-            <if test="mfrsId != null  ">mfrs_id,</if>
-            <if test="delFlag != null  and delFlag != ''  ">del_flag,</if>
-            <if test="createBy != null  and createBy != ''  ">create_by,</if>
-            <if test="createTime != null  ">create_time,</if>
-            <if test="updateBy != null  and updateBy != ''  ">update_by,</if>
-            <if test="updateTime != null  ">update_time,</if>
-            <if test="dataScope != null  ">data_scope,</if>
-            <if test="birthday != null  ">birthday,</if>
-            <if test="qq != null  ">QQ,</if>
-            <if test="positionId != null  ">position_id,</if>
-            <if test="technicalLevelId != null  ">technical_level_id,</if>
-            <if test="idcarNumber != null  and idcarNumber != ''  ">idcar_number,</if>
-            <if test="nation != null  and nation != ''  ">nation,</if>
-            <if test="nativePlace != null  and nativePlace != ''  ">native_place,</if>
-            <if test="contractTime != null  ">contract_time,</if>
-            <if test="emergencyContact != null  and emergencyContact != ''  ">emergency_contact,</if>
-            <if test="emergencyContactPhone != null  and emergencyContactPhone != ''  ">emergency_contact_phone,</if>
-            <if test="certificate != null  and certificate != ''  ">certificate,</if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="password != null">
+                `password`,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="homeurl != null">
+                homeUrl,
+            </if>
+            <if test="screenName != null">
+                screen_name,
+            </if>
+            <if test="loginTime != null">
+                login_time,
+            </if>
+            <if test="activated != null">
+                activated,
+            </if>
+            <if test="logged != null">
+                logged,
+            </if>
+            <if test="groupName != null">
+                group_name,
+            </if>
+            <if test="loginName != null">
+                login_name,
+            </if>
+            <if test="phonenumber != null">
+                phonenumber,
+            </if>
+            <if test="delFlag != null">
+                del_flag,
+            </if>
+            <if test="sex != null">
+                sex,
+            </if>
+            <if test="avatar != null">
+                avatar,
+            </if>
+            <if test="salt != null">
+                salt,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="accountId != null  ">#{accountId},</if>
-            <if test="deptId != null  ">#{deptId},</if>
-            <if test="loginName != null  and loginName != ''  ">#{loginName},</if>
-            <if test="userName != null  and userName != ''  ">#{userName},</if>
-            <if test="userType != null  and userType != ''  ">#{userType},</if>
-            <if test="email != null  and email != ''  ">#{email},</if>
-            <if test="phonenumber != null  and phonenumber != ''  ">#{phonenumber},</if>
-            <if test="sex != null  and sex != ''  ">#{sex},</if>
-            <if test="avatar != null  ">#{avatar},</if>
-            <if test="password != null  and password != ''  ">#{password},</if>
-            <if test="salt != null  and salt != ''  ">#{salt},</if>
-            <if test="status != null  and status != ''  ">#{status},</if>
-            <if test="loginIp != null  and loginIp != ''  ">#{loginIp},</if>
-            <if test="loginDate != null  ">#{loginDate},</if>
-            <if test="remark != null  and remark != ''  ">#{remark},</if>
-            <if test="mfrsId != null  ">#{mfrsId},</if>
-            <if test="delFlag != null  and delFlag != ''  ">#{delFlag},</if>
-            <if test="createBy != null  and createBy != ''  ">#{createBy},</if>
-            <if test="createTime != null  ">#{createTime},</if>
-            <if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
-            <if test="updateTime != null  ">#{updateTime},</if>
-            <if test="dataScope != null  ">#{dataScope},</if>
-            <if test="birthday != null   and birthday != ''">#{birthday},</if>
-            <if test="qq != null  and QQ != ''  ">#{qq},</if>
-            <if test="positionId != null  ">#{positionId},</if>
-            <if test="technicalLevelId != null  ">#{technicalLevelId},</if>
-            <if test="idcarNumber != null  and idcarNumber != ''  ">#{idcarNumber},</if>
-            <if test="nation != null  and nation != ''  ">#{nation},</if>
-            <if test="nativePlace != null  and nativePlace != ''  ">#{nativePlace},</if>
-            <if test="contractTime != null  ">#{contractTime},</if>
-            <if test="emergencyContact != null  and emergencyContact != ''  ">#{emergencyContact},</if>
-            <if test="emergencyContactPhone != null  and emergencyContactPhone != ''  ">#{emergencyContactPhone},</if>
-            <if test="certificate != null  and certificate != ''  ">#{certificate},</if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="homeurl != null">
+                #{homeurl,jdbcType=VARCHAR},
+            </if>
+            <if test="screenName != null">
+                #{screenName,jdbcType=VARCHAR},
+            </if>
+            <if test="loginTime != null">
+                #{loginTime,jdbcType=INTEGER},
+            </if>
+            <if test="activated != null">
+                #{activated,jdbcType=INTEGER},
+            </if>
+            <if test="logged != null">
+                #{logged,jdbcType=INTEGER},
+            </if>
+            <if test="groupName != null">
+                #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="loginName != null">
+                #{loginName,jdbcType=VARCHAR},
+            </if>
+            <if test="phonenumber != null">
+                #{phonenumber,jdbcType=INTEGER},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                #{sex,jdbcType=VARCHAR},
+            </if>
+            <if test="avatar != null">
+                #{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="salt != null">
+                #{salt,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
 
