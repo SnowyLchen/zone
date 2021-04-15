@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author hd_zhu
+ * @author chen
  */
 public class JwtUtil {
     private static Logger logger = LoggerFactory.getLogger(JwtUtil.class);

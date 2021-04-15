@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * 获取基本的用户信息
  * 添加在线踢人，清理权限等Api
  *
- * @author hd_zhu
+ * @author chen
  */
 @Component
 public class ShiroAuthenticateUtils {

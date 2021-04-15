@@ -30,8 +30,6 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private PasswordService passwordService;
-    @Autowired
-    private IRegisterService registerService;
 
     @Resource
     private UserMapper userMapper;
@@ -43,7 +41,6 @@ public class UserServiceImpl implements IUserService {
         user.setUserName(user.getUserName());
         user.setPhonenumber(user.getPhonenumber());
         user.setAccountId(ShiroAuthenticateUtils.getAccountId());
-//        return userMapper.selectUserDeptList(user);
         return new ArrayList<>();
     }
 
@@ -241,6 +238,11 @@ public class UserServiceImpl implements IUserService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteUser(String toString) {
         userMapper.deleteuser(toString);
+    }
+
+    @Override
+    public User checkRegisterExist(User user) {
+        return userMapper.checkRegisterExist(user);
     }
 
     @Override

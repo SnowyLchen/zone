@@ -54,13 +54,4 @@ public class IndexController extends BaseController {
         mmap.put("version", zoneConfig.getVersion());
         return "main";
     }
-
-    /**
-     * 首页面板
-     */
-    @GetMapping("/addPanelBox")
-    public String addPanelBox(ModelMap mmap) {
-        mmap.put("version", zoneConfig.getVersion());
-        return "addPanlBox";
-    }
 }

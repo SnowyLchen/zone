@@ -28,7 +28,7 @@ import java.util.TimeZone;
 /**
  * RestTemplate Spring配置类
  *
- * @author hd_zhu
+ * @author chen
  */
 @Configuration
 @ConditionalOnClass({RestTemplate.class, HttpClient.class, JSON.class})

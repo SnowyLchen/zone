@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author hd_zhu
+ * @author chen
  */
 public class ShiroRedisCache implements Cache<String, Object> {
 

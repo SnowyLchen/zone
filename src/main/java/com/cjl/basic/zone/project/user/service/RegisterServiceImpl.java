@@ -1,6 +1,7 @@
 package com.cjl.basic.zone.project.user.service;
 
 import com.cjl.basic.zone.common.constant.UserConstants;
+import com.cjl.basic.zone.common.exception.user.UserRegisterExistsException;
 import com.cjl.basic.zone.common.utils.InsertOrUpdateUtils;
 import com.cjl.basic.zone.common.utils.ServletUtils;
 import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
@@ -9,6 +10,7 @@ import com.cjl.basic.zone.project.loginLog.domain.LoginLog;
 import com.cjl.basic.zone.project.loginLog.mapper.LoginLogMapper;
 import com.cjl.basic.zone.project.user.domain.User;
 import com.cjl.basic.zone.project.user.domain.UserStatus;
+import com.cjl.basic.zone.utils.StringUtils;
 import com.cjl.basic.zone.utils.dateutils.DateUtils;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,7 @@ import javax.annotation.Resource;
 /**
  * 注册业务层处理
  *
- * @author hd_zhu
+ * @author chen
  */
 @Service("register")
 public class RegisterServiceImpl implements IRegisterService {
@@ -35,6 +37,11 @@ public class RegisterServiceImpl implements IRegisterService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int registerUser(User user) {
+        // 查询用户是否已经注册
+        User u = userService.checkRegisterExist(user);
+        if (!StringUtils.isNull(u)) {
+            throw new UserRegisterExistsException();
+        }
         addDefaultUserInfo(user);
         addAccountToLoginInfoTable(user.getLoginName());
         return 1;

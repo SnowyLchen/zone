@@ -7,7 +7,7 @@ import java.io.UnsupportedEncodingException;
  * <p>
  * 注：只支持GB2312字符集中的汉字
  *
- * @author hd_zhu
+ * @author chen
  */
 public class ChineseInitial {
     private final static int[] areaCode = {1601, 1637, 1833, 2078, 2274,

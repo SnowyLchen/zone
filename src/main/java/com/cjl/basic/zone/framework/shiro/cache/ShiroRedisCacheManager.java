@@ -5,7 +5,7 @@ import org.apache.shiro.cache.CacheManager;
 import org.springframework.data.redis.core.RedisTemplate;
 
 /**
- * @author hd_zhu
+ * @author chen
  */
 public class ShiroRedisCacheManager implements CacheManager {
 

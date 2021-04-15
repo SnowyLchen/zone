@@ -1,7 +1,7 @@
 package com.cjl.basic.zone.framework.shiro;
 
 /**
- * @author hd_zhu
+ * @author chen
  */
 public class ShiroUser {
     private String refreshToken;

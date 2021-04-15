@@ -136,4 +136,10 @@ public interface UserMapper {
 
     void deleteuser(String toString);
 
+    /**
+     * 查询用户是否已经注册
+     * @param user
+     * @return
+     */
+    User checkRegisterExist(User user);
 }

@@ -19,7 +19,7 @@ import javax.servlet.ServletResponse;
 /**
  * 退出过滤器
  *
- * @author hd_zhu
+ * @author chen
  */
 public class StatelessLogoutFilter extends LogoutFilter {
     private static final Logger logger = LoggerFactory.getLogger(StatelessLogoutFilter.class);

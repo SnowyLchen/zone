@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 /**
  * httpClient封装
  *
- * @author hd_zhu
+ * @author chen
  */
 @Component
 public class SpringHttpClient {

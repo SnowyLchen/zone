@@ -3,7 +3,7 @@ package com.cjl.basic.zone.common.exception.base;
 /**
  * 缓存同步时发生异常
  *
- * @author hd_zhu
+ * @author chen
  */
 public class CacheSyncException extends RuntimeException {
     public CacheSyncException() {

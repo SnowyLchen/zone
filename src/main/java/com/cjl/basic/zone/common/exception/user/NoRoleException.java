@@ -5,7 +5,7 @@ import org.apache.shiro.authc.AuthenticationException;
 /**
  * 无角色异常
  *
- * @author hd_zhu
+ * @author chen
  */
 public class NoRoleException extends AuthenticationException {
 

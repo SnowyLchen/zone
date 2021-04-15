@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * @author hd_zhu
+ * @author chen
  */
 @Configuration
 public class JsonConfig {

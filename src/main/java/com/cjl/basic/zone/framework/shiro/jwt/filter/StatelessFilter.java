@@ -24,7 +24,7 @@ import java.text.MessageFormat;
 /**
  * 无状态过滤器，这里由jwt实现
  *
- * @author hd_zhu
+ * @author chen
  */
 public class StatelessFilter extends AccessControlFilter {
     private Logger logger = LoggerFactory.getLogger(StatelessFilter.class);

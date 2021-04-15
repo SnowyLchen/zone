@@ -1,7 +1,7 @@
 package com.cjl.basic.zone.common.utils.http;
 
 /**
- * @author hd_zhu
+ * @author chen
  */
 public class NoHttpResponseBodyException extends Exception {
     private static final long serialVersionUID = -7658940387386078766L;

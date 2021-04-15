@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 应用数据缓存
  *
- * @author hd_zhu
+ * @author chen
  */
 public abstract class Cache<T> {
     /**

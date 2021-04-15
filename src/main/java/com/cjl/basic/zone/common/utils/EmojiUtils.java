@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 /**
  * Emoji工具类
  *
- * @author hd_zhu
+ * @author chen
  */
 public class EmojiUtils {
 

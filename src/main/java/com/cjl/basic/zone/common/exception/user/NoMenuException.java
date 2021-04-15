@@ -4,7 +4,7 @@ import org.apache.shiro.authc.AuthenticationException;
 
 /**
  * 无菜单异常
- * @author hd_zhu
+ * @author chen
  */
 public class NoMenuException extends AuthenticationException {
 

@@ -5,7 +5,7 @@ import com.cjl.basic.zone.project.user.domain.User;
 /**
  * 注册 业务层
  *
- * @author hd_zhu
+ * @author chen
  */
 public interface IRegisterService {
 

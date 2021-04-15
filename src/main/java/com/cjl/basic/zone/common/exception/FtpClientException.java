@@ -6,7 +6,7 @@ import com.cjl.basic.zone.common.support.FTPClientCodeEnums;
 /**
  * FTP客户端异常
  *
- * @author hd_zhu
+ * @author chen
  */
 public class FtpClientException extends RuntimeException {
     /**

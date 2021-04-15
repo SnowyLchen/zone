@@ -5,7 +5,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 /**
  * 无状态token
  *
- * @author hd_zhu
+ * @author chen
  */
 public class StatelessToken implements AuthenticationToken {
 

@@ -7,7 +7,7 @@ import org.apache.shiro.web.mgt.DefaultWebSubjectFactory;
 /**
  * 无状态SubjectFactory
  *
- * @author hd_zhu
+ * @author chen
  */
 public class StatelessWebSubjectFactory extends DefaultWebSubjectFactory {
 

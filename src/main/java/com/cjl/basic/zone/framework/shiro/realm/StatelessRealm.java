@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 无状态的Realm
  *
- * @author hd_zhu
+ * @author chen
  */
 public class StatelessRealm extends AuthorizingRealm {
     private static final Logger logger = LoggerFactory.getLogger(StatelessRealm.class);

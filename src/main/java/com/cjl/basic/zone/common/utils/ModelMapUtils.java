@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * @author hd_zhu
+ * @author chen
  */
 public class ModelMapUtils {
 

@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * 新增或修改数据的工具类
  *
- * @author hd_zhu
+ * @author chen
  */
 public class InsertOrUpdateUtils {
 

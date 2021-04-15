@@ -21,7 +21,7 @@ import springfox.documentation.annotations.ApiIgnore;
 /**
  * 注册
  *
- * @author hd_zhu
+ * @author chen
  */
 @Controller
 @Api(tags = "注册接口")

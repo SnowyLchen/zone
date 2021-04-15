@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * 参数拦截器
  *
- * @author hd_zhu
+ * @author chen
  */
 public class SpringClientHttpRequestInterceptor implements ClientHttpRequestInterceptor {
 
