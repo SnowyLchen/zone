@@ -22,7 +22,6 @@ $(function() {
     });
 
     //    if(storageLoad('SelcetColor')){
-
     //     }else{
     //       storageSave(saveSelectColor);
     //     }
@@ -36,12 +35,9 @@ var pageData = {
     // ===============================================
     'index': function indexData() {
         $('#example-r').DataTable({
-
-            bInfo: false, //页脚信息
+            bInfo: true, //页脚信息
             dom: 'ti'
         });
-
-
         // ==========================
         // 百度图表A http://echarts.baidu.com/
         // ==========================
@@ -89,7 +85,6 @@ var pageData = {
                 }
             }]
         };
-
         echartsA.setOption(option);
     },
     // ===============================================
@@ -309,9 +304,7 @@ var pageData = {
     }
 }
 
-
 // 风格切换
-
 $('.tpl-skiner-toggle').on('click', function() {
     $('.tpl-skiner').toggleClass('active');
 })
@@ -324,16 +317,8 @@ $('.tpl-skiner-content-bar').find('span').on('click', function() {
 
 })
 
-
-
-
 // 侧边菜单开关
-
-
 function autoLeftNav() {
-
-
-
     $('.tpl-header-switch-button').on('click', function() {
         if ($('.left-sidebar').is('.active')) {
             if ($(window).width() > 1024) {

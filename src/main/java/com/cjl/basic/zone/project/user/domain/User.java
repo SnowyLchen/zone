@@ -70,8 +70,31 @@ public class User extends BaseEntity {
      * 最后登陆时间
      */
     private Date loginTime;
-
+    /**
+     * 用户类型
+     */
     private String groupName;
+    /**
+     *
+     */
+    private String homeurl;
+    private String activated;
+
+    public String getActivated() {
+        return activated;
+    }
+
+    public void setActivated(String activated) {
+        this.activated = activated;
+    }
+
+    public String getHomeurl() {
+        return homeurl;
+    }
+
+    public void setHomeurl(String homeurl) {
+        this.homeurl = homeurl;
+    }
 
     public String getGroupName() {
         return groupName;

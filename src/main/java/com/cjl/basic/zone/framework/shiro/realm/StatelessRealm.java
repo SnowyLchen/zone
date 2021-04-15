@@ -48,10 +48,10 @@ public class StatelessRealm extends AuthorizingRealm {
         final User user = (User) principalCollection.getPrimaryPrincipal();
         final Long accountId = user.getAccountId().longValue();
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-//        if (user.isAdmin()) {
-//            authorizationInfo.addRole("admin");
-//            authorizationInfo.addStringPermission("*:*:*");
-//        } else {
+        if (user.isAdmin()) {
+            authorizationInfo.addRole("admin");
+            authorizationInfo.addStringPermission("*:*:*");
+        } else {
 //            Set<String> roles = roleService.selectRoleKeys(accountId);
 //            roles.stream().filter(s -> s.contains("zg_role"))
 //                    .findAny()
@@ -59,7 +59,7 @@ public class StatelessRealm extends AuthorizingRealm {
 //                    .ifPresent(roles::add);
 //            authorizationInfo.setRoles(roles);
 //            authorizationInfo.setStringPermissions(menuService.selectPermsByAccountId(accountId));
-//        }
+        }
 //        logger.info("开启授权信息，写入用户权限。");
         return authorizationInfo;
     }

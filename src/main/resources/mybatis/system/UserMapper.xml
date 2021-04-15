@@ -59,16 +59,14 @@
     </sql>
     <sql id="UserVo">
          select zu.account_id,
-                zu.username,
+                zu.user_name,
                 zu.avatar,
                 zu.sex,
                 zu.password,
                 zu.email,
                 zu.homeUrl,
-                zu.screen_name,
                 zu.login_time,
                 zu.activated,
-                zu.logged,
                 zu.salt,
                 zu.group_name,
                 zu.login_name
@@ -339,8 +337,8 @@
             keyProperty="accountId" keyColumn="account_id">
         insert into z_users
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="username != null">
-                username,
+            <if test="userName != null">
+                user_name,
             </if>
             <if test="password != null">
                 `password`,
@@ -351,17 +349,11 @@
             <if test="homeurl != null">
                 homeUrl,
             </if>
-            <if test="screenName != null">
-                screen_name,
-            </if>
             <if test="loginTime != null">
                 login_time,
             </if>
             <if test="activated != null">
                 activated,
-            </if>
-            <if test="logged != null">
-                logged,
             </if>
             <if test="groupName != null">
                 group_name,
@@ -386,8 +378,8 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="username != null">
-                #{username,jdbcType=VARCHAR},
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
             </if>
             <if test="password != null">
                 #{password,jdbcType=VARCHAR},
@@ -398,17 +390,11 @@
             <if test="homeurl != null">
                 #{homeurl,jdbcType=VARCHAR},
             </if>
-            <if test="screenName != null">
-                #{screenName,jdbcType=VARCHAR},
-            </if>
             <if test="loginTime != null">
                 #{loginTime,jdbcType=INTEGER},
             </if>
             <if test="activated != null">
                 #{activated,jdbcType=INTEGER},
-            </if>
-            <if test="logged != null">
-                #{logged,jdbcType=INTEGER},
             </if>
             <if test="groupName != null">
                 #{groupName,jdbcType=VARCHAR},

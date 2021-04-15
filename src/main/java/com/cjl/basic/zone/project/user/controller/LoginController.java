@@ -50,7 +50,7 @@ public class LoginController extends BaseController {
     @ApiOperation(value = "登录接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", value = "用户名", defaultValue = "admin", required = true),
-            @ApiImplicitParam(name = "password", value = "密码", defaultValue = "123456", required = true)
+            @ApiImplicitParam(name = "password", value = "密码", defaultValue = "admin1234", required = true)
     })
     public AjaxResult ajaxLogin(HttpServletResponse response, String username, String password, String validateCode) {
         try {

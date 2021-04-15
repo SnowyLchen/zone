@@ -40,7 +40,7 @@ public class LoginService {
      * @author xiaojie
      * @date 2020/10/9 16:55
      */
-    public Boolean login(String username, String password, HttpServletResponse response) {
+    public User login(String username, String password, HttpServletResponse response) {
 
         //1、判断账号名或密码是否为空 空则抛出异常错误
         if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
@@ -86,6 +86,6 @@ public class LoginService {
 //        // 13、写入登录日志
         AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, u.getAccountId(), Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
 
-        return true;
+        return u;
     }
 }

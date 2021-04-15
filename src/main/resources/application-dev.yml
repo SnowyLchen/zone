@@ -66,7 +66,7 @@ spring:
       master:
         url: jdbc:mysql://localhost/tale?useUnicode=true&characterEncoding=utf8
         username: root
-        password: YZgP3oX2
+        password: cjl19980112
       # 从库数据源
       slave:
         # 从数据源开关/默认关闭
@@ -115,7 +115,7 @@ spring:
       # 热部署开关
       enabled: true
   redis:
-    host: 39.102.117.87
+    host: 192.168.1.194
     port: 6379
     timeout: 3000
     password: 123456
