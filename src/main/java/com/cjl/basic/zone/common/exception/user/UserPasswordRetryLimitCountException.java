@@ -3,7 +3,7 @@ package com.cjl.basic.zone.common.exception.user;
 /**
  * 用户错误记数异常类
  * 
- * @author wangsen
+ * @author chen
  */
 public class UserPasswordRetryLimitCountException extends UserException
 {

@@ -3,7 +3,7 @@ package com.cjl.basic.zone.framework.aspectj.lang.enums;
 /**
  * 数据源
  * 
- * @author wangsen
+ * @author chen
  */
 public enum DataSourceType
 {

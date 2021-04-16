@@ -20,7 +20,7 @@ import java.util.*;
 /**
  * Excel相关处理
  *
- * @author wangsen
+ * @author chen
  */
 public class ExcelUtil<T> {
     private static final Logger log = LoggerFactory.getLogger(ExcelUtil.class);

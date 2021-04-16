@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * permission 工具类
  *
- * @author wangsen
+ * @author chen
  */
 public class PermissionUtils {
 

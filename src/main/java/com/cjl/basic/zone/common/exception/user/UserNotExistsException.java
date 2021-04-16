@@ -3,7 +3,7 @@ package com.cjl.basic.zone.common.exception.user;
 /**
  * 用户不存在异常类
  * 
- * @author wangsen
+ * @author chen
  */
 public class UserNotExistsException extends UserException
 {

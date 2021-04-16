@@ -3,7 +3,7 @@ package com.cjl.basic.zone.common.exception.user;
 /**
  * 验证码错误异常类
  * 
- * @author wangsen
+ * @author chen
  */
 public class CaptchaException extends UserException
 {

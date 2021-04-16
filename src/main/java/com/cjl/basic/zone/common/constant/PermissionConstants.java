@@ -3,7 +3,7 @@ package com.cjl.basic.zone.common.constant;
 /**
  * 权限通用常量
  * 
- * @author wangsen
+ * @author chen
  */
 public class PermissionConstants
 {

@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  * 系统访问记录表 logininfor
  *
- * @author wangsen
+ * @author chen
  */
 public class Logininfor extends BaseEntity {
     private static final long serialVersionUID = 1L;

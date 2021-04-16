@@ -3,7 +3,7 @@ package com.cjl.basic.zone.common.constant;
 /**
  * Shiro通用常量
  * 
- * @author wangsen
+ * @author chen
  */
 public interface ShiroConstants
 {

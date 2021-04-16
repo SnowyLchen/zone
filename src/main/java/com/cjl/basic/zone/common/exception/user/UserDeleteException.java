@@ -3,7 +3,7 @@ package com.cjl.basic.zone.common.exception.user;
 /**
  * 用户账号已被删除
  * 
- * @author wangsen
+ * @author chen
  */
 public class UserDeleteException extends UserException
 {

@@ -13,7 +13,7 @@ import java.util.Locale;
 /**
  * 资源文件配置加载
  * 
- * @author wangsen
+ * @author chen
  */
 @Configuration
 public class I18nConfig implements WebMvcConfigurer

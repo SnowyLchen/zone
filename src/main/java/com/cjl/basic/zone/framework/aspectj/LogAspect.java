@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * 操作日志记录处理
  *
- * @author wangsen
+ * @author chen
  */
 @Aspect
 @Component

@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 时间工具类
  *
- * @author wangsen
+ * @author chen
  */
 public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 

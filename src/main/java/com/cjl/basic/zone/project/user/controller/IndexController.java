@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 首页 业务处理
  *
- * @author wangsen
+ * @author chen
  */
 @Controller
 public class IndexController extends BaseController {

@@ -3,7 +3,7 @@ package com.cjl.basic.zone.framework.aspectj.lang.enums;
 /**
  * 操作状态
  * 
- * @author wangsen
+ * @author chen
  *
  */
 public enum BusinessStatus

@@ -3,7 +3,7 @@ package com.cjl.basic.zone.framework.aspectj.lang.enums;
 /**
  * 操作人类别
  * 
- * @author wangsen
+ * @author chen
  *
  */
 public enum OperatorType

@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 /**
  * 获取地址类
  *
- * @author wangsen
+ * @author chen
  */
 @Component
 public class AddressUtils {

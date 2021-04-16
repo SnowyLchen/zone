@@ -3,7 +3,7 @@ package com.cjl.basic.zone.common.exception.user;
 /**
  * 用户已注册异常类
  *
- * @author wangsen
+ * @author chen
  */
 public class UserRegisterExistsException extends UserException
 {

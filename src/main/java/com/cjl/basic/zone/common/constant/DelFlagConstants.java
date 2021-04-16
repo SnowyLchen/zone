@@ -3,7 +3,7 @@ package com.cjl.basic.zone.common.constant;
 /**
  * 通用常量信息
  *
- * @author wangsen
+ * @author chen
  */
 public class DelFlagConstants {
     /**

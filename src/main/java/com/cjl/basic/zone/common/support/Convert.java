@@ -14,7 +14,7 @@ import java.util.Set;
 /**
  * 类型转换器
  *
- * @author wangsen
+ * @author chen
  */
 public class Convert {
     /**

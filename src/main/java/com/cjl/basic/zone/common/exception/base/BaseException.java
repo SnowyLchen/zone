@@ -6,7 +6,7 @@ import org.springframework.util.StringUtils;
 /**
  * 基础异常
  *
- * @author wangsen
+ * @author chen
  */
 public class BaseException extends RuntimeException {
     private static final long serialVersionUID = 1L;

@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 /**
  * Bean 工具类
  * 
- * @author wangsen
+ * @author chen
  */
 public class BeanUtils
 {

@@ -3,7 +3,7 @@ package com.cjl.basic.zone.common.exception.job;
 /**
  * 计划策略异常
  * 
- * @author wangsen
+ * @author chen
  */
 public class TaskException extends Exception
 {

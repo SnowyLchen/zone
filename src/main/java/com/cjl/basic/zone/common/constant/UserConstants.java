@@ -3,7 +3,7 @@ package com.cjl.basic.zone.common.constant;
 /**
  * 用户常量信息
  *
- * @author wangsen
+ * @author chen
  */
 public class UserConstants {
 

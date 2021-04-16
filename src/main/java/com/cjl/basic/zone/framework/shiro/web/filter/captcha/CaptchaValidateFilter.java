@@ -12,7 +12,7 @@ package com.cjl.basic.zone.framework.shiro.web.filter.captcha;//package com.uust
 ///**
 // * 验证码过滤器
 // *
-// * @author wangsen
+// * @author chen
 // */
 //public class CaptchaValidateFilter extends AccessControlFilter
 //{

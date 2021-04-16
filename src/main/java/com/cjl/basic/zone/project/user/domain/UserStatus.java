@@ -3,7 +3,7 @@ package com.cjl.basic.zone.project.user.domain;
 /**
  * 用户状态
  *
- * @author wangsen
+ * @author chen
  *
  */
 public enum UserStatus

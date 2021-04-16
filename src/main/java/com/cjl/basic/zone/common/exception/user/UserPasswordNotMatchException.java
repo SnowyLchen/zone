@@ -3,7 +3,7 @@ package com.cjl.basic.zone.common.exception.user;
 /**
  * 用户密码不正确或不符合规范异常类
  * 
- * @author wangsen
+ * @author chen
  */
 public class UserPasswordNotMatchException extends UserException
 {

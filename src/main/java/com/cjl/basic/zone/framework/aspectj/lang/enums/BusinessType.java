@@ -3,7 +3,7 @@ package com.cjl.basic.zone.framework.aspectj.lang.enums;
 /**
  * 业务操作类型
  * 
- * @author wangsen
+ * @author chen
  *
  */
 public enum BusinessType

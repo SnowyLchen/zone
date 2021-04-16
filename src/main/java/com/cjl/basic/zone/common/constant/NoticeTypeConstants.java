@@ -3,7 +3,7 @@ package com.cjl.basic.zone.common.constant;
 /**
  * 公告类型
  *
- * @author wangsen
+ * @author chen
  */
 public class NoticeTypeConstants {
 

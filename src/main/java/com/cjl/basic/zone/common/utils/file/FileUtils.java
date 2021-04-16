@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 /**
  * 文件处理工具类
  *
- * @author wangsen
+ * @author chen
  */
 public class FileUtils {
     private static Pattern linePattern = Pattern.compile("_(\\w)");

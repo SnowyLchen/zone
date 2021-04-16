@@ -5,7 +5,7 @@ import com.cjl.basic.zone.utils.StringUtils;
 /**
  * 分页数据
  *
- * @author wangsen
+ * @author chen
  */
 public class PageDomain {
     /**

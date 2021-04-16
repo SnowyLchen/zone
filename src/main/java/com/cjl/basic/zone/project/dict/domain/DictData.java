@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * 字典数据表 mfrs_dict_data
  *
- * @author wangsen
+ * @author chen
  */
 public class DictData extends BaseEntity {
     private static final long serialVersionUID = 1L;
