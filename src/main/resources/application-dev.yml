@@ -32,7 +32,7 @@ server:
 # 日志配置
 logging:
   level:
-    com.uustop: debug
+    com.cjl.basic.zone: debug
     org.springframework: WARN
     org.spring.springboot.dao: debug
 
@@ -64,9 +64,9 @@ spring:
     druid:
       # 主库数据源
       master:
-        url: jdbc:mysql://localhost/tale?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://39.102.117.87/tale?useUnicode=true&characterEncoding=utf8
         username: root
-        password: cjl19980112
+        password: Cjl19980112!
       # 从库数据源
       slave:
         # 从数据源开关/默认关闭
@@ -115,7 +115,7 @@ spring:
       # 热部署开关
       enabled: true
   redis:
-    host: 192.168.1.194
+    host: 39.102.117.87
     port: 6379
     timeout: 3000
     password: 123456

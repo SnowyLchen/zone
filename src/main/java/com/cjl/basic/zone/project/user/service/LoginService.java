@@ -48,16 +48,15 @@ public class LoginService {
             throw new UserNotExistsException();
         }
 
-        //2、判断密码长度是否合法（20>=password>=5）,不合法抛出异常
-        if (password.length() < UserConstants.PASSWORD_MIN_LENGTH || password.length() > UserConstants.PASSWORD_MAX_LENGTH) {
-            AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, null, Constants.LOGIN_FAIL, MessageUtils.message("user.password.not.match")));
-            throw new UserPasswordNotMatchException();
-        }
-
-        //3、判断账户名长度是否合法（20>=username>=2），不合法抛出异常
+        //2、判断账户名长度是否合法（20>=username>=2），不合法抛出异常
         if (username.length() < UserConstants.USERNAME_MIN_LENGTH || username.length() > UserConstants.USERNAME_MAX_LENGTH) {
-            AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, null, Constants.LOGIN_FAIL, MessageUtils.message("user.password.not.match")));
-            throw new UserPasswordNotMatchException();
+            AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, null, Constants.LOGIN_FAIL, MessageUtils.message("user.username.length.not.valid")));
+            throw new UserPasswordNotMatchException("user.username.length.not.valid", 2, 20);
+        }
+        //3、判断密码长度是否合法（20>=password>=5）,不合法抛出异常
+        if (password.length() < UserConstants.PASSWORD_MIN_LENGTH || password.length() > UserConstants.PASSWORD_MAX_LENGTH) {
+            AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, null, Constants.LOGIN_FAIL, MessageUtils.message("user.password.length.not.valid")));
+            throw new UserPasswordNotMatchException("user.password.length.not.valid", 5, 20);
         }
 
         //4、查询用户
@@ -83,7 +82,7 @@ public class LoginService {
 //
 //        // 写入cookie
         StatelessWebUtils.addCookiesForToken(response, token);
-//        // 13、写入登录日志
+//        // 11、写入登录日志
         AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, u.getAccountId(), Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
 
         return u;

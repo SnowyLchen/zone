@@ -59,6 +59,8 @@ public class ShiroConfig {
         // 对静态资源设置匿名访问
         filterChainDefinitionMap.put("/favicon.ico**", "anon");
         filterChainDefinitionMap.put("/assets/**", "anon");
+        filterChainDefinitionMap.put("/admin/**", "anon");
+        filterChainDefinitionMap.put("/component/**", "anon");
         filterChainDefinitionMap.put("/adminTpl/**", "anon");
         filterChainDefinitionMap.put("/ajax/**", "anon");
         filterChainDefinitionMap.put("/css/**", "anon");

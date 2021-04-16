@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -53,5 +54,21 @@ public class IndexController extends BaseController {
     public String main(ModelMap mmap) {
         mmap.put("version", zoneConfig.getVersion());
         return "main";
+    }
+
+    /**
+     * 系统首页切换
+     */
+    @GetMapping("/console/{id}")
+    public String console(@PathVariable Integer id, ModelMap mmap) {
+        return "console/console" + id;
+    }
+
+    /**
+     * 基本资料
+     */
+    @GetMapping("/profiles")
+    public String profiles(ModelMap mmap) {
+        return "system/person";
     }
 }

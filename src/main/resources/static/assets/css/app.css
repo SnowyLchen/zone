@@ -612,6 +612,9 @@ ul.tpl-dropdown-content .tpl-dropdown-menu-messages-item .menu-messages-content 
   width: 300px;
   margin: 12% auto 0;
 }
+.theme-white .tpl-login-content{
+  border: 1px solid #e9ecf3 !important;
+}
 .tpl-login-remember-me {
   color: #B3B3B3;
   font-size: 14px;
@@ -639,7 +642,8 @@ ul.tpl-dropdown-content .tpl-dropdown-menu-messages-item .menu-messages-content 
   display: block;
 }
 .theme-white {
-  background: #e9ecf3;
+  /*background: #e9ecf3;*/
+  background: url(../img/background2.svg);
 }
 .theme-white .sidebar-nav-sub .sidebar-nav-link-logo {
   margin-left: 10px;
@@ -727,7 +731,7 @@ ul.tpl-dropdown-content .tpl-dropdown-menu-messages-item .menu-messages-content 
   padding: 6px 0;
 }
 .theme-white .tpl-login-logo {
-  background: url(../img/logoa.png) center no-repeat;
+  background: url(../img/logoc.png) center no-repeat;
 }
 .theme-white .sub-active {
   color: #23abf0!important;
