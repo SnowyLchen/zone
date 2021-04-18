@@ -188,9 +188,10 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public User insertUserForRegister(User u) {
-        // 初始化一般用户时为禁用状态，需要企业管理员企业该账号才能正常使用
+        // 初始化一般用户时为禁用状态，需要管理员该账号才能正常使用
         if (u.getGroupName() == null) {
-            u.setGroupName(UserConstants.USER_TYPE_ADMIN_NAME);
+            u.setGroupName(UserConstants.USER_TYPE_ADMIN_NAME_FLAG);
+            u.setHomeurl(UserConstants.USER_TYPE_ADMIN_URL);
         }
         if (u.getPassword() == null) {
             // 随机生成密码加密盐
@@ -198,10 +199,7 @@ public class UserServiceImpl implements IUserService {
             final String md5Password = passwordService.encryptPassword(u.getLoginName(), UserServiceImpl.DEFAULT_PASSWORD, u.getSalt());
             u.setPassword(md5Password);
         }
-        u.setUpdateBy(u.getLoginName());
-        u.setUpdateTime(DateUtils.getNowDate());
-        u.setCreateBy(u.getLoginName());
-        u.setCreateTime(DateUtils.getNowDate());
+        InsertOrUpdateUtils.addInsertAttr(u);
         InsertOrUpdateUtils.requireGreaterThanI(userMapper.insertUser(u), "新增用户失败");
         return u;
     }

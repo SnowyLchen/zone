@@ -1,6 +1,5 @@
 package com.cjl.basic.zone.project.user.controller;
 
-import com.cjl.basic.zone.common.constant.DelFlagConstants;
 import com.cjl.basic.zone.common.utils.StringUtils;
 import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.framework.config.ZoneConfig;
@@ -39,12 +38,11 @@ public class IndexController extends BaseController {
         mmap.put("copyrightYear", zoneConfig.getCopyrightYear());
         //当前用户是游客，需要获取当前的用户状态
         final String visitor = "visitor";
-        if (StringUtils.isNotEmpty(user.getGroupName()) && user.getGroupName().equals(visitor)) {
-            mmap.put("userstate", userService.loginGetUser(user.getLoginName()));
-        } else {
-            mmap.put("userstate", DelFlagConstants.PASSED);
+//            mmap.put("userstate", userService.loginGetUser(user.getLoginName()));
+        if (StringUtils.isEmpty(user.getHomeurl())) {
+            return "error/404";
         }
-        return "index";
+        return user.getHomeurl();
     }
 
     /**
@@ -59,9 +57,17 @@ public class IndexController extends BaseController {
     /**
      * 系统首页切换
      */
-    @GetMapping("/console/{id}")
-    public String console(@PathVariable Integer id, ModelMap mmap) {
-        return "console/console" + id;
+    @GetMapping("/header")
+    public String console(ModelMap mmap) {
+        return "space/header";
+    }
+
+    /**
+     * 系统首页切换
+     */
+    @GetMapping("/admin/header")
+    public String admin(ModelMap mmap) {
+        return "header";
     }
 
     /**

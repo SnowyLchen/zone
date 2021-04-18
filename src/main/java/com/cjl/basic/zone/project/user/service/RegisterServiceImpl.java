@@ -43,7 +43,7 @@ public class RegisterServiceImpl implements IRegisterService {
             throw new UserRegisterExistsException();
         }
         addDefaultUserInfo(user);
-        addAccountToLoginInfoTable(user.getLoginName());
+        addAccountToLoginInfoTable(user);
         return 1;
     }
 
@@ -53,8 +53,6 @@ public class RegisterServiceImpl implements IRegisterService {
      * @param user 注册user对象
      */
     User addDefaultUserInfo(User user) {
-        // 默认用户类型为管理员
-        user.setGroupName(UserConstants.USER_TYPE_ADMIN);
         // 生成随机的加密盐
         user.randomSalt();
         // 根据用户名和盐加密密码并初始化密码
@@ -74,14 +72,12 @@ public class RegisterServiceImpl implements IRegisterService {
 
     /**
      * 写入账号信息表
-     *
-     * @param loginName 账号名
      */
-    public void addAccountToLoginInfoTable(String loginName) {
+    public void addAccountToLoginInfoTable(User user) {
         final UserAgent userAgent = UserAgent.parseUserAgentString(ServletUtils.getRequest().getHeader("User-Agent"));
         LoginLog loginInfo = new LoginLog();
         loginInfo.setStatus(UserStatus.OK.getCode());
-        loginInfo.setLoginName(loginName);
+        loginInfo.setLoginName(user.getLoginName());
         loginInfo.setIp(ShiroAuthenticateUtils.getIp());
         // 获取客户端操作系统
         String os = userAgent.getOperatingSystem().getName();
@@ -90,6 +86,7 @@ public class RegisterServiceImpl implements IRegisterService {
         loginInfo.setOs(os);
         loginInfo.setBrowser(browser);
         loginInfo.setAction("注册");
+        loginInfo.setAccountId(user.getAccountId());
         InsertOrUpdateUtils.requireGreaterThanI(loginInfoMapper.addLog(loginInfo), "新增账号信息失败");
     }
 }

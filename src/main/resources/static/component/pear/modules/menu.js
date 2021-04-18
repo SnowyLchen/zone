@@ -10,7 +10,6 @@ layui.define(['table', 'jquery', 'element'], function(exports) {
 	};
 
 	pearMenu.prototype.render = function(opt) {
-
 		var option = {
 			elem: opt.elem,
 			async: opt.async,
@@ -44,6 +43,7 @@ layui.define(['table', 'jquery', 'element'], function(exports) {
 	pearMenu.prototype.click = function(clickEvent) {
 		var _this = this;
 		$("body").on("click", "#" + _this.option.elem + " .site-demo-active", function() {
+			debugger
 			var dom = $(this);
 			var data = {
 				menuId: dom.attr("menu-id"),
@@ -261,17 +261,41 @@ layui.define(['table', 'jquery', 'element'], function(exports) {
 		$("#" + option.control).html(control);
 		$("#" + option.control).append(controlPe);
 		$("#" + option.elem).html(menu);
-		$("#" + option.control + " .pear-nav-control").on("click", "[pear-id]", function() {
-			$("#" + option.elem).find(".pear-nav-tree").css({
-				display: 'none'
-			});
-			$("#" + option.elem).find(".pear-nav-tree[pear-id='" + $(this).attr("pear-id") + "']").css({
-				display: 'block'
-			});
-			$("#" + option.control).find(".pe-title").html($(this).attr("pear-title"));
-			$("#" + option.control).find("")
-			option.change($(this).attr("pear-id"), $(this).attr("pear-title"), $(this).attr("pear-href"))
-		})
+		menuAdminClickEvent();
+
+		/**
+		 * 后台管理菜单点击事件
+		 */
+		function menuAdminClickEvent() {
+			$("#" + option.control + " .pear-nav-control").on("click", "[pear-id]", function () {
+				$("#" + option.elem).find(".pear-nav-tree").css({
+					display: 'none'
+				});
+				$("#" + option.elem).find(".pear-nav-tree[pear-id='" + $(this).attr("pear-id") + "']").css({
+					display: 'block'
+				});
+				$("#" + option.control).find(".pe-title").html($(this).attr("pear-title"));
+				$("#" + option.control).find("")
+				option.change($(this).attr("pear-id"), $(this).attr("pear-title"), $(this).attr("pear-href"))
+			})
+		}
+
+		/**
+		 * 空间页面菜单点击事件
+		 */
+		function menuClickEvent() {
+			$("#" + option.control + " .pear-nav-control").on("click", "[pear-id]", function () {
+				$("#" + option.elem).find(".pear-nav-tree").css({
+					display: 'none'
+				});
+				$("#" + option.elem).find(".pear-nav-tree[pear-id='" + $(this).attr("pear-id") + "']").css({
+					display: 'block'
+				});
+				$("#" + option.control).find(".pe-title").html($(this).attr("pear-title"));
+				$("#" + option.control).find("")
+				option.change($(this).attr("pear-id"), $(this).attr("pear-title"), $(this).attr("pear-href"))
+			})
+		}
 	}
 
 	/** 加载子菜单 (递归)*/
@@ -322,6 +346,7 @@ layui.define(['table', 'jquery', 'element'], function(exports) {
 
 	function downShow(option) {
 		$("body #" + option.elem).on("click", "a[menu-type='0']", function() {
+			debugger
 			if (!$("#" + option.elem).is(".pear-nav-mini")) {
 				var superEle = $(this).parent();
 				var ele = $(this).next('.layui-nav-child');

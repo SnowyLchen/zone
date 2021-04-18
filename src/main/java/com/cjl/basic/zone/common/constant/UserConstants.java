@@ -17,18 +17,23 @@ public class UserConstants {
      */
     public static final String USER_TYPE_SUPER_ADMIN = "1";
     public static final String USER_TYPE_SUPER_ADMIN_NAME = "超级管理员";
+    public static final String USER_TYPE_SUPER_ADMIN_NAME_FLAG = "SAdmin";
+    public static final String USER_TYPE_SUPER_ADMIN_URL = "adminIndex";
 
     /**
      * 管理员
      */
     public static final String USER_TYPE_ADMIN = "2";
     public static final String USER_TYPE_ADMIN_NAME = "管理员";
+    public static final String USER_TYPE_ADMIN_NAME_FLAG = "Admin";
+    public static final String USER_TYPE_ADMIN_URL = "index";
 
     /**
      * 游客角色
      */
-    public static final Long USER_TYPE_VISITOR = -2L;
+    public static final String USER_TYPE_VISITOR = "-2";
     public static final String USER_TYPE_VISITOR_NAME = "游客";
+    public static final String USER_TYPE_VISITOR_NAME_FLAG = "Visitor";
 
 
     /**

@@ -130,11 +130,16 @@
         from mfrs_account
         where find_in_set(account_id, #{ids,jdbcType=VARCHAR})
     </delete>
-    <select id="checkRegisterExist" resultType="com.cjl.basic.zone.project.user.domain.User">
-    select user_name,email from z_users
-    where user_name=#{userName}
-        AND email=#{email}
-        AND del_flag=0
+    <select id="checkRegisterExist" resultMap="UserResultMap">
+        select login_time,email from z_users
+        where
+        del_flag=0
+        <if test="loginName !=null and loginName !=''">
+            AND login_name=#{loginName}
+        </if>
+        <if test="email !=null and email !=''">
+            OR email=#{email}
+        </if>
     </select>
     <select id="selectUserList2" resultMap="UserResultMap">
         <include refid="selectUserVo2"/>

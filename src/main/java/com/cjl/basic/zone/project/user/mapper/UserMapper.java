@@ -138,6 +138,7 @@ public interface UserMapper {
 
     /**
      * 查询用户是否已经注册
+     *
      * @param user
      * @return
      */

@@ -25,6 +25,7 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
             }
 
             this.render = function (initConfig) {
+                debugger
                 if (initConfig !== undefined) {
                     applyConfig(initConfig);
                 } else {
@@ -217,6 +218,7 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
         };
 
         function collaspe() {
+            debugger
             sideMenu.collaspe();
             const admin = $(".pear-admin");
             const left = $(".layui-icon-spread-left")
@@ -287,7 +289,6 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                 '<ul>\n' + bgColorHtml + '</ul>\n' +
                 '</div>\n' +
                 '</div>';
-
             layer.open({
                 type: 1,
                 offset: 'r',
