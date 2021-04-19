@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -51,6 +52,16 @@ public class IndexController extends BaseController {
     @GetMapping("/system/main")
     public String main(ModelMap mmap) {
         mmap.put("version", zoneConfig.getVersion());
+        return "main";
+    }
+
+    /**
+     * 菜单
+     */
+    @GetMapping("/system/menu")
+    @ResponseBody
+    public String menu(ModelMap mmap) {
+
         return "main";
     }
 

@@ -44,6 +44,7 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
             }
 
             this.menuRender = function (param) {
+                debugger
                 sideMenu = pearMenu.render({
                     elem: 'sideMenu',
                     async: param.menu.async !== undefined ? param.menu.async : true,
@@ -360,6 +361,7 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
         });
 
         function applyConfig(param) {
+            debugger
             config = param;
             pearAdmin.logoRender(param);
             pearAdmin.menuRender(param);

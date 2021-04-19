@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cjl.basic.zone.project.role.mapper.ZRoleMapper">
+    <resultMap id="BaseResultMap" type="com.cjl.basic.zone.project.role.domain.ZRole">
+        <id column="z_role_id" jdbcType="INTEGER" property="zRoleId"/>
+        <result column="z_role_name" jdbcType="VARCHAR" property="zRoleName"/>
+        <result column="z_role_key" jdbcType="VARCHAR" property="zRoleKey"/>
+        <result column="del_flag" jdbcType="CHAR" property="delFlag"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="status" jdbcType="CHAR" property="status"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    z_role_id, z_role_name, z_role_key, del_flag, create_by, create_time, update_by, 
+    update_time, `status`
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from z_role
+        where z_role_id = #{zRoleId,jdbcType=INTEGER}
+    </select>
+    <select id="selectRoleList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from z_role
+        where del_flag=0
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from z_role
+    where z_role_id = #{zRoleId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" keyColumn="z_role_id" keyProperty="zRoleId"
+            parameterType="com.cjl.basic.zone.project.role.domain.ZRole" useGeneratedKeys="true">
+    insert into z_role (z_role_name, z_role_key, del_flag, 
+      create_by, create_time, update_by, 
+      update_time, `status`)
+    values (#{zRoleName,jdbcType=VARCHAR}, #{zRoleKey,jdbcType=VARCHAR}, #{delFlag,jdbcType=CHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR})
+  </insert>
+    <insert id="insertSelective" keyColumn="z_role_id" keyProperty="zRoleId"
+            parameterType="com.cjl.basic.zone.project.role.domain.ZRole" useGeneratedKeys="true">
+        insert into z_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="zRoleName != null">
+                z_role_name,
+            </if>
+            <if test="zRoleKey != null">
+                z_role_key,
+            </if>
+            <if test="delFlag != null">
+                del_flag,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateBy != null">
+                update_by,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="status != null">
+                `status`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="zRoleName != null">
+                #{zRoleName,jdbcType=VARCHAR},
+            </if>
+            <if test="zRoleKey != null">
+                #{zRoleKey,jdbcType=VARCHAR},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag,jdbcType=CHAR},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=CHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.cjl.basic.zone.project.role.domain.ZRole">
+        update z_role
+        <set>
+            <if test="zRoleName != null">
+                z_role_name = #{zRoleName,jdbcType=VARCHAR},
+            </if>
+            <if test="zRoleKey != null">
+                z_role_key = #{zRoleKey,jdbcType=VARCHAR},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag,jdbcType=CHAR},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=CHAR},
+            </if>
+        </set>
+        where z_role_id = #{zRoleId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.cjl.basic.zone.project.role.domain.ZRole">
+    update z_role
+    set z_role_name = #{zRoleName,jdbcType=VARCHAR},
+      z_role_key = #{zRoleKey,jdbcType=VARCHAR},
+      del_flag = #{delFlag,jdbcType=CHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      `status` = #{status,jdbcType=CHAR}
+    where z_role_id = #{zRoleId,jdbcType=INTEGER}
+  </update>
+</mapper>
