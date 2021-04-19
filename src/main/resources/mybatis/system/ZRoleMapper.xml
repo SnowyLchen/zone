@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cjl.basic.zone.project.role.mapper.ZRoleMapper">
     <resultMap id="BaseResultMap" type="com.cjl.basic.zone.project.role.domain.ZRole">
-        <id column="z_role_id" jdbcType="INTEGER" property="zRoleId"/>
-        <result column="z_role_name" jdbcType="VARCHAR" property="zRoleName"/>
-        <result column="z_role_key" jdbcType="VARCHAR" property="zRoleKey"/>
+        <id column="z_role_id" jdbcType="INTEGER" property="roleId"/>
+        <result column="z_role_name" jdbcType="VARCHAR" property="roleName"/>
+        <result column="z_role_key" jdbcType="VARCHAR" property="roleKey"/>
         <result column="del_flag" jdbcType="CHAR" property="delFlag"/>
         <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
