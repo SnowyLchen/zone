@@ -2,6 +2,7 @@ package com.cjl.basic.zone.project.role.controller;
 
 import com.cjl.basic.zone.framework.web.controller.BaseController;
 import com.cjl.basic.zone.framework.web.domain.AjaxResult;
+import com.cjl.basic.zone.framework.web.page.TableDataInfo;
 import com.cjl.basic.zone.project.role.domain.ZRole;
 import com.cjl.basic.zone.project.role.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +34,9 @@ public class RoleController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/roleList")
-    public AjaxResult roleList(ZRole role) {
+    public TableDataInfo roleList(ZRole role) {
         startPage();
-        return AjaxResult.success(getDataTable(roleService.selectRoleList(role)));
+        return getDataTable(roleService.selectRoleList(role));
     }
 
 
@@ -52,8 +53,8 @@ public class RoleController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping("/removeRole")
-    public AjaxResult removeRole(Integer id) {
+    @RequestMapping("/removeRole/{id}")
+    public AjaxResult removeRole(@PathVariable Integer id) {
         return AjaxResult.success(roleService.removeRole(id));
     }
 

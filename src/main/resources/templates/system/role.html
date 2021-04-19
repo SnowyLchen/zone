@@ -13,17 +13,17 @@
                 <div class="layui-form-item layui-inline">
                     <label class="layui-form-label">角色名</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="realName" placeholder="" class="layui-input">
+                        <input type="text" name="roleName" placeholder="" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item layui-inline">
                     <label class="layui-form-label">角色key</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="realName" placeholder="" class="layui-input">
+                        <input type="text" name="roleKey" placeholder="" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item layui-inline">
-                    <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="user-query">
+                    <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit="" lay-filter="role-query">
                         <i class="layui-icon layui-icon-search"></i>
                         查询
                     </button>
@@ -61,15 +61,10 @@
     <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i>
     </button>
 </script>
-
-<script type="text/html" id="role-enable">
-    <input type="checkbox" name="enable" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="user-enable"
-           checked="{{ d.id == 10003 ? 'true' : 'false' }}">
-</script>
 <!-- 资 源 引 入 -->
 <div th:include="include::footer"></div>
 <script>
-    layui.use(['table', 'form', 'jquery'], function () {
+    layui.use(['table', 'form', 'jquery', 'layer'], function () {
         let table = layui.table;
         let form = layui.form;
         let $ = layui.jquery;
@@ -82,7 +77,13 @@
                 {title: '角色名', field: 'roleName', align: 'center', width: 100},
                 {title: 'Key值', field: 'roleKey', align: 'center'},
                 {title: '描述', field: 'remark', align: 'center'},
-                {title: '是否可用', field: 'status', align: 'center', templet: '#role-enable'},
+                {
+                    title: '是否启用', field: 'status', align: 'center', templet: function (d) {  //自定义显示内容
+                        var strCheck = d.status == "1" ? "checked" : "";
+                        var strDisable = d.roleId == '1' ? 'disabled' : "";
+                        return '<input type="checkbox" name="status" value="' + d.status + '" lay-filter="role-enable" ' + strDisable + ' lay-skin="switch" lay-text="启用|停用" ' + strCheck + ' roleId=' + d.roleId + '>';
+                    }
+                },
                 {title: '操作', toolbar: '#role-bar', align: 'center', width: 195}
             ]
         ]
@@ -121,12 +122,46 @@
         });
 
         form.on('submit(role-query)', function (data) {
-            table.reload('role-table', {where: data.field})
+            debugger
+            var result;
+            // table.reload('role-table', { url: '/role/roleList',where: data.field})
+            if (result != null) {
+                result.where = {};  //置空where
+            }
+            table.reload('role-table', {
+                url: '/role/roleList',
+                method: 'get',
+                where: data.field,
+                page: {
+                    curr: 1
+                },
+                done: function () {
+                    result = this;
+                }
+            });
             return false;
         });
 
         form.on('switch(role-enable)', function (obj) {
-            layer.tips(this.value + ' ' + this.name + '：' + obj.elem.checked, obj.othis);
+            var id = $(this).attr('roleId');
+            var status = '';
+            obj.elem.checked ? status = '1' : status = '0';
+            $.ajax({
+                type: 'POST',
+                url: '/role/editRole',
+                data: {roleId: id, status: status},
+                loadFlag: true,
+                success: function (data) {
+                    if (data.code == 0) {
+                        layer.msg("启用成功");
+                    } else {
+                        layer.msg("启用失败");
+                    }
+                },
+                error: function (data) {
+                    layer.msg("修改失败");
+                }
+            });
         });
 
         window.add = function () {
@@ -164,12 +199,12 @@
                 layer.close(index);
                 let loading = layer.load();
                 $.ajax({
-                    url: MODULE_PATH + "remove/" + obj.data['roleId'],
+                    url: "/role/removeRole/" + obj.data['roleId'],
                     dataType: 'json',
-                    type: 'delete',
+                    type: 'POST',
                     success: function (result) {
                         layer.close(loading);
-                        if (result.success) {
+                        if (result.code == 0) {
                             layer.msg(result.msg, {icon: 1, time: 1000}, function () {
                                 obj.del();
                             });
@@ -189,21 +224,21 @@
             }
             let ids = "";
             for (let i = 0; i < data.length; i++) {
-                ids += data[i].userId + ",";
+                ids += data[i].roleId + ",";
             }
             ids = ids.substr(0, ids.length - 1);
             layer.confirm('确定要删除这些用户', {icon: 3, title: '提示'}, function (index) {
                 layer.close(index);
                 let loading = layer.load();
                 $.ajax({
-                    url: MODULE_PATH + "batchRemove/" + ids,
+                    url: "/role/removeRole/" + ids,
                     dataType: 'json',
-                    type: 'delete',
+                    type: 'POST',
                     success: function (result) {
                         layer.close(loading);
-                        if (result.success) {
+                        if (result.code == 0) {
                             layer.msg(result.msg, {icon: 1, time: 1000}, function () {
-                                table.reload('user-table');
+                                table.reload('role-table');
                             });
                         } else {
                             layer.msg(result.msg, {icon: 2, time: 1000});

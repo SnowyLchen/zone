@@ -24,6 +24,8 @@ public class RoleServiceImpl implements IRoleService {
 
     @Override
     public int addRole(ZRole role) {
+        // 默认是停用的
+        role.setStatus("0");
         return roleMapper.insertSelective(role);
     }
 

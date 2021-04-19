@@ -56,9 +56,9 @@ public class BaseController {
     protected TableDataInfo getDataTable(List<?> list) {
         TableDataInfo rspData = new TableDataInfo();
         rspData.setCode(0);
-        rspData.setRows(list);
+        rspData.setData(list);
         PageInfo pageInfo = new PageInfo(list);
-        rspData.setTotal(pageInfo.getTotal());
+        rspData.setCount(pageInfo.getTotal());
         return rspData;
     }
 
