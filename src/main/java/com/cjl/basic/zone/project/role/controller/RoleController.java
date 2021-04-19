@@ -34,7 +34,8 @@ public class RoleController extends BaseController {
     @ResponseBody
     @RequestMapping("/roleList")
     public AjaxResult roleList(ZRole role) {
-        return AjaxResult.success(roleService.selectRoleList(role));
+        startPage();
+        return AjaxResult.success(getDataTable(roleService.selectRoleList(role)));
     }
 
 
