@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,7 +25,7 @@ import java.util.List;
  */
 @Service
 public class UserServiceImpl implements IUserService {
-    private static final String DEFAULT_PASSWORD = "admin123";
+    private static final String DEFAULT_PASSWORD = "admin123" ;
 
     @Autowired
     private PasswordService passwordService;
@@ -47,11 +46,8 @@ public class UserServiceImpl implements IUserService {
 
 
     @Override
-    public int deleteUserByIds(String ids, String loginName) throws Exception {
-        if (userMapper.hasSuperAdmin(ids) > 0) {
-            throw new Exception("不允许删除管理员用户");
-        }
-        InsertOrUpdateUtils.requireGreaterThanI(userMapper.deleteUserByIds(ids, DateUtils.getNowDate(), loginName), "删除用户失败");
+    public int deleteUserByIds(String ids) {
+        InsertOrUpdateUtils.requireGreaterThanI(userMapper.deleteUserByIds(ids, DateUtils.getNowDate(), ShiroAuthenticateUtils.getLoginName()), "删除用户失败");
         ShiroAuthenticateUtils.clearByAccountIds(Convert.toIntArray(ids));
         return 1;
     }

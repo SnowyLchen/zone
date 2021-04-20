@@ -1,8 +1,8 @@
 package com.cjl.basic.zone.project.user.controller;
 
 import com.cjl.basic.zone.framework.web.controller.BaseController;
+import com.cjl.basic.zone.framework.web.domain.AjaxResult;
 import com.cjl.basic.zone.framework.web.page.TableDataInfo;
-import com.cjl.basic.zone.project.role.domain.ZRole;
 import com.cjl.basic.zone.project.user.domain.User;
 import com.cjl.basic.zone.project.user.service.IUserService;
 import com.cjl.basic.zone.utils.StringUtils;
@@ -44,23 +44,23 @@ public class UserController extends BaseController {
         startPage();
         return getDataTable(userService.selectUserList(user));
     }
-//
-//
-//    @ResponseBody
-//    @RequestMapping("/addRole")
-//    public AjaxResult addRole(ZRole role) {
-//        return AjaxResult.success(userService.addRole(role));
-//    }
-//
-//    @ResponseBody
-//    @RequestMapping("/editRole")
-//    public AjaxResult editRole(ZRole role) {
-//        return AjaxResult.success(userService.editRole(role));
-//    }
-//
-//    @ResponseBody
-//    @RequestMapping("/removeRole/{id}")
-//    public AjaxResult removeRole(@PathVariable String id) {
-//        return AjaxResult.success(userService.removeRole(id));
-//    }
+
+    /**
+     * 修改用户
+     *
+     * @param user
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/editUser")
+    public AjaxResult editUser(User user) {
+        return AjaxResult.success(userService.updateUser(user));
+    }
+
+
+    @ResponseBody
+    @RequestMapping("/removeUser/{id}")
+    public AjaxResult removeRole(@PathVariable String id) {
+        return AjaxResult.success(userService.deleteUserByIds(id));
+    }
 }

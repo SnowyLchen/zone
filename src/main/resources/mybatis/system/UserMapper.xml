@@ -14,12 +14,16 @@
         <result column="avatar" jdbcType="INTEGER" property="avatar"/>
         <result column="password" jdbcType="VARCHAR" property="password"/>
         <result column="salt" jdbcType="VARCHAR" property="salt"/>
-        <result column="status" jdbcType="CHAR" property="status"/>
+        <result column="activated" jdbcType="CHAR" property="activated"/>
         <result column="login_ip" jdbcType="VARCHAR" property="loginIp"/>
         <result column="login_date" jdbcType="TIMESTAMP" property="loginTime"/>
         <result column="del_flag" jdbcType="CHAR" property="delFlag"/>
         <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
         <result column="home_url" jdbcType="VARCHAR" property="homeUrl"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
     </resultMap>
 
     <sql id="selectUserVo">
@@ -74,8 +78,34 @@
             </if>
         </where>
     </select>
+
+    <update id="updateUser" parameterType="com.cjl.basic.zone.project.user.domain.User">
+        update z_users
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="loginName != null  and loginName != ''  ">login_name = #{loginName},</if>
+            <if test="userName != null  and userName != ''  ">user_name = #{userName},</if>
+            <if test="email != null ">email = #{email},</if>
+            <if test="activated != null ">activated = #{activated},</if>
+            <if test="phonenumber != null  and phonenumber != ''  ">phonenumber = #{phonenumber},</if>
+            <if test="sex != null  and sex != ''  ">sex = #{sex},</if>
+            <if test="homeUrl != null  and homeUrl != ''  ">home_url = #{homeUrl},</if>
+            <if test="avatar != null  ">avatar = #{avatar},</if>
+            <if test="password != null  and password != ''  ">password = #{password},</if>
+            <if test="loginIp != null  and loginIp != ''  ">login_ip = #{loginIp},</if>
+            <if test="loginDate != null  ">login_date = #{loginDate},</if>
+            <if test="delFlag != null  and delFlag != ''  ">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+        </trim>
+        <where>
+            <if test="accountId != null and accountId !='' ">and account_id=#{accountId}</if>
+            <if test="loginName != null and loginName !='' ">and login_name=#{loginName}</if>
+        </where>
+    </update>
     <update id="deleteUserByIds">
-        update mfrs_account
+        update z_users
         set del_flag   = 1,
             update_by=#{updateBy},
             update_time=#{date}
@@ -127,49 +157,6 @@
           and del_flag = 0
           and status != 2
     </select>
-
-    <update id="updateUser" parameterType="com.cjl.basic.zone.project.user.domain.User">
-        update mfrs_account
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="deptId != null  ">dept_id = #{deptId},</if>
-            <if test="loginName != null  and loginName != ''  ">login_name = #{loginName},</if>
-            <if test="userName != null  and userName != ''  ">user_name = #{userName},</if>
-            <if test="userType != null  and userType != ''  ">user_type = #{userType},</if>
-            <if test="email != null ">email = #{email},</if>
-            <if test="phonenumber != null  and phonenumber != ''  ">phonenumber = #{phonenumber},</if>
-            <if test="sex != null  and sex != ''  ">sex = #{sex},</if>
-            <if test="avatar != null  ">avatar = #{avatar},</if>
-            <if test="password != null  and password != ''  ">password = #{password},</if>
-            <if test="salt != null  and salt != ''  ">salt = #{salt},</if>
-            <if test="status != null  and status != ''  ">status = #{status},</if>
-            <if test="loginIp != null  and loginIp != ''  ">login_ip = #{loginIp},</if>
-            <if test="loginDate != null  ">login_date = #{loginDate},</if>
-            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
-            <if test="mfrsId != null  ">mfrs_id = #{mfrsId},</if>
-            <if test="delFlag != null  and delFlag != ''  ">del_flag = #{delFlag},</if>
-            <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
-            <if test="createTime != null  ">create_time = #{createTime},</if>
-            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
-            <if test="updateTime != null  ">update_time = #{updateTime},</if>
-            <if test="dataScope != null  ">data_scope = #{dataScope},</if>
-            <if test="birthday != null  ">birthday = #{birthday},</if>
-            <if test="qq != null  ">QQ = #{qq},</if>
-            <if test="positionId != null  ">position_id = #{positionId},</if>
-            <if test="technicalLevelId != null  ">technical_level_id = #{technicalLevelId},</if>
-            <if test="idcarNumber != null   ">idcar_number = #{idcarNumber},</if>
-            <if test="nation != null   ">nation = #{nation},</if>
-            <if test="nativePlace != null   ">native_place = #{nativePlace},</if>
-            <if test="contractTime != null  ">contract_time = #{contractTime},</if>
-            <if test="emergencyContact != null    ">emergency_contact = #{emergencyContact},</if>
-            <if test="emergencyContactPhone != null  ">emergency_contact_phone = #{emergencyContactPhone},</if>
-            <if test="certificate != null  and certificate != ''  ">certificate = #{certificate},</if>
-        </trim>
-        <where>
-            1=1
-            <if test="accountId != null and accountId !='' ">and account_id=#{accountId}</if>
-            <if test="loginName != null and loginName !='' ">and login_name=#{loginName}</if>
-        </where>
-    </update>
 
     <update id="updateUserSelf" parameterType="com.cjl.basic.zone.project.user.domain.User">
         update mfrs_account
@@ -237,6 +224,10 @@
             <if test="salt != null">
                 salt,
             </if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+            <if test="updateTime != null">update_time</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userName != null">
@@ -278,6 +269,10 @@
             <if test="salt != null">
                 #{salt,jdbcType=VARCHAR},
             </if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime}</if>
         </trim>
     </insert>
 

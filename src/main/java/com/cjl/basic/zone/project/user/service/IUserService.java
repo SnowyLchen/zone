@@ -31,7 +31,7 @@ public interface IUserService {
      * @return 结果
      * @throws Exception 异常
      */
-    int deleteUserByIds(String ids, String loginName) throws Exception;
+    int deleteUserByIds(String ids);
 
     /**
      * 用户是否离职
@@ -160,6 +160,7 @@ public interface IUserService {
 
     /**
      * 查询用户是否已经注册
+     *
      * @param user
      * @return
      */

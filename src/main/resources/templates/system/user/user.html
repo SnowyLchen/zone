@@ -66,11 +66,6 @@
     </button>
 </script>
 
-<script type="text/html" id="user-enable">
-    <input type="checkbox" name="enable" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="user-enable"
-           checked="{{ d.enable == 0 ? 'true' : 'false' }}">
-</script>
-
 <script type="text/html" id="user-sex">
     {{#if (d.sex == 1) { }}
     <span>男</span>
@@ -98,7 +93,7 @@
         let $ = layui.jquery;
         let common = layui.common;
 
-        let MODULE_PATH = "operate/";
+        let MODULE_PATH = "/user/operate/";
 
         let cols = [
             [{
@@ -106,13 +101,13 @@
             },
                 {
                     title: '账号',
-                    field: 'username',
+                    field: 'loginName',
                     align: 'center',
                     width: 100
                 },
                 {
                     title: '姓名',
-                    field: 'realName',
+                    field: 'userName',
                     align: 'center'
                 },
                 {
@@ -124,14 +119,18 @@
                 },
                 {
                     title: '电话',
-                    field: 'phone',
+                    field: 'phonenumber',
                     align: 'center'
                 },
                 {
                     title: '启用',
-                    field: 'enable',
+                    field: 'activated',
                     align: 'center',
-                    templet: '#user-enable'
+                    templet: function (data) {
+                        var strCheck = data.activated == "1" ? "checked" : "";
+                        var strDisable = data.accountId == '1' ? 'disabled' : "";
+                        return '<input type="checkbox" name="activated" value="' + data.activated + '" lay-filter="user-enable" ' + strDisable + ' lay-skin="switch" lay-text="启用|停用" ' + strCheck + ' accountId=' + data.accountId + '>';
+                    }
                 },
                 {
                     title: '登录',
@@ -156,7 +155,7 @@
 
         table.render({
             elem: '#user-table',
-            url: '../../admin/data/user.json',
+            url: '/user/userList',
             page: true,
             cols: cols,
             skin: 'line',
@@ -186,14 +185,47 @@
         });
 
         form.on('submit(user-query)', function (data) {
-            table.reload('user-table', {
-                where: data.field
-            })
+            var result;
+            if (result != null) {
+                result.where = {};  //置空where
+            }
+            table.reload({
+                url: '/user/userList',
+                method: 'get',
+                where: data.field,
+                page: {
+                    curr: 1
+                },
+                done: function () {
+                    result = this;
+                }
+            });
             return false;
         });
 
         form.on('switch(user-enable)', function (obj) {
-            layer.tips(this.value + ' ' + this.name + '：' + obj.elem.checked, obj.othis);
+            var id = $(this).attr('accountId');
+            var status = '';
+            obj.elem.checked ? status = '1' : status = '0';
+            $.ajax({
+                type: 'POST',
+                url: '/user/editUser',
+                data: {accountId: id, activated: status},
+                loadFlag: true,
+                success: function (data) {
+                    if (data.code == 0) {
+                        layer.msg("启用成功");
+                    } else {
+                        layer.msg("启用失败");
+                    }
+                },
+                error: function (data) {
+                    layer.msg("修改失败");
+                    debugger
+                    $(this).removeAttr('checked');
+
+                }
+            });
         });
 
         window.add = function () {
