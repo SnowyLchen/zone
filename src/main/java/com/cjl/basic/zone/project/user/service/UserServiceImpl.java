@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Service
 public class UserServiceImpl implements IUserService {
-    private static final String DEFAULT_PASSWORD = "admin123" ;
+    private static final String DEFAULT_PASSWORD = "admin123";
 
     @Autowired
     private PasswordService passwordService;
@@ -40,15 +40,16 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public User selectUserById(Long accountId) {
-        return null;
+    public User selectUserById(Integer accountId) {
+        return userMapper.selectUserById(accountId);
     }
 
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int deleteUserByIds(String ids) {
-        InsertOrUpdateUtils.requireGreaterThanI(userMapper.deleteUserByIds(ids, DateUtils.getNowDate(), ShiroAuthenticateUtils.getLoginName()), "删除用户失败");
         ShiroAuthenticateUtils.clearByAccountIds(Convert.toIntArray(ids));
+        InsertOrUpdateUtils.requireGreaterThanI(userMapper.deleteUserByIds(ids, DateUtils.getNowDate(), ShiroAuthenticateUtils.getLoginName()), "删除用户失败");
         return 1;
     }
 
@@ -85,7 +86,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public int resetUserPwd(User u) {
         u.randomSalt();
-        User nu = userMapper.selectUserById2(u.getAccountId());
+        User nu = userMapper.selectUserById(u.getAccountId());
         u.setPassword(passwordService.encryptPassword(nu.getLoginName(), u.getPassword(), u.getSalt()));
         InsertOrUpdateUtils.addUpdateAttr(u);
         return InsertOrUpdateUtils.requireGreaterThanI(userMapper.updateUser(u));

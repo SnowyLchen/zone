@@ -2,7 +2,6 @@ package com.cjl.basic.zone.common.utils.security;
 
 import com.cjl.basic.zone.common.utils.IpUtils;
 import com.cjl.basic.zone.common.utils.ServletUtils;
-import com.cjl.basic.zone.common.utils.SpringRedisUtil;
 import com.cjl.basic.zone.common.utils.spring.SpringUtils;
 import com.cjl.basic.zone.framework.shiro.StatelessConstants;
 import com.cjl.basic.zone.framework.shiro.cache.ShiroRedisCache;
@@ -15,8 +14,6 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.stream.Collectors;
 
 /**
  * shiro 工具类
@@ -110,7 +107,7 @@ public class ShiroAuthenticateUtils {
      */
     public static void clearByAccountIds(Integer... accoutIds) {
         for (Integer accoutId : accoutIds) {
-            String loginName = SpringUtils.getBean(IUserService.class).selectUserById(accoutId.longValue())
+            String loginName = SpringUtils.getBean(IUserService.class).selectUserById(accoutId)
                     .getLoginName();
             if (loginName != null) {
                 clear(loginName);

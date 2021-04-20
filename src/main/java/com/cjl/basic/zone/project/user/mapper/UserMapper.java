@@ -27,7 +27,7 @@ public interface UserMapper {
      * @param accountId 用户ID
      * @return {@link User}
      */
-    User selectUserById2(Integer accountId);
+    User selectUserById(Integer accountId);
 
 
     /**

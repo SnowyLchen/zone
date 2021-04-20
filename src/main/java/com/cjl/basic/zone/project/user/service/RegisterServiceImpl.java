@@ -1,6 +1,5 @@
 package com.cjl.basic.zone.project.user.service;
 
-import com.cjl.basic.zone.common.constant.UserConstants;
 import com.cjl.basic.zone.common.exception.user.UserRegisterExistsException;
 import com.cjl.basic.zone.common.utils.InsertOrUpdateUtils;
 import com.cjl.basic.zone.common.utils.ServletUtils;
@@ -62,7 +61,8 @@ public class RegisterServiceImpl implements IRegisterService {
                 user.getSalt()
         ));
         user.setCreateTime(DateUtils.getNowDate());
-        user.setStatus(UserStatus.OK.getCode());
+        user.setUserName(user.getLoginName());
+        user.setActivated(UserStatus.OK.getCode());
         // 写入注册时的Ip
         user.setLoginIp(ShiroAuthenticateUtils.getIp());
 

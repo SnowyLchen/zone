@@ -22,7 +22,7 @@ public interface IUserService {
      * @param accountId 用户ID
      * @return 用户对象信息
      */
-    User selectUserById(Long accountId);
+    User selectUserById(Integer accountId);
 
     /**
      * 批量删除用户信息
