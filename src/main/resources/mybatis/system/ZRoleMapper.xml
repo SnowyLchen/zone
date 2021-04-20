@@ -21,18 +21,27 @@
         select
         <include refid="Base_Column_List"/>
         from z_role
-        where z_role_id = #{zRoleId,jdbcType=INTEGER}
+        where z_role_id = #{roleId,jdbcType=INTEGER}
     </select>
     <select id="selectRoleList" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from z_role
-        where del_flag=0
+        <where>del_flag=0
+            <if test="roleName !=null and roleName != ''">
+                AND z_role_name like concat('%',#{roleName},'%')
+            </if>
+            <if test="roleKey !=null and roleKey != ''">
+                AND z_role_key like concat('%',#{roleKey},'%')
+            </if>
+        </where>
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    update z_role set del_flag=1
-    where z_role_id = #{roleId,jdbcType=INTEGER}
-  </delete>
+    <delete id="deleteByPrimaryKey">
+        update z_role set del_flag=1
+        <where>
+                z_role_id = #{zRoleIds}
+        </where>
+    </delete>
 
     <insert id="insertSelective" keyColumn="z_role_id" keyProperty="zRoleId"
             parameterType="com.cjl.basic.zone.project.role.domain.ZRole" useGeneratedKeys="true">

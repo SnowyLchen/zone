@@ -17,6 +17,14 @@ public interface IRoleService {
     List<ZRole> selectRoleList(ZRole role);
 
     /**
+     * 查询角色通过id
+     *
+     * @param roleId
+     * @return
+     */
+    ZRole selectRoleById(Integer roleId);
+
+    /**
      * 新增角色
      *
      * @param role
@@ -38,5 +46,5 @@ public interface IRoleService {
      * @param id
      * @return
      */
-    int removeRole(Integer id);
+    int removeRole(String id);
 }

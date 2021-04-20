@@ -5,8 +5,10 @@ import com.cjl.basic.zone.framework.web.domain.AjaxResult;
 import com.cjl.basic.zone.framework.web.page.TableDataInfo;
 import com.cjl.basic.zone.project.role.domain.ZRole;
 import com.cjl.basic.zone.project.role.service.IRoleService;
+import com.cjl.basic.zone.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,11 +26,14 @@ public class RoleController extends BaseController {
 
     @GetMapping("/role")
     public String role() {
-        return "system/role";
+        return "system/role" ;
     }
 
     @GetMapping("/operate/{type}")
-    public String operate(@PathVariable String type) {
+    public String operate(@PathVariable String type, Integer roleId, ModelMap map) {
+        if (StringUtils.isNotNull(roleId)) {
+            map.put("role", roleService.selectRoleById(roleId));
+        }
         return "system/operate/" + type;
     }
 
@@ -54,7 +59,7 @@ public class RoleController extends BaseController {
 
     @ResponseBody
     @RequestMapping("/removeRole/{id}")
-    public AjaxResult removeRole(@PathVariable Integer id) {
+    public AjaxResult removeRole(@PathVariable String id) {
         return AjaxResult.success(roleService.removeRole(id));
     }
 

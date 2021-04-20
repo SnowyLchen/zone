@@ -1,9 +1,11 @@
 package com.cjl.basic.zone.project.role.service.impl;
 
+import com.cjl.basic.zone.common.support.Convert;
 import com.cjl.basic.zone.project.role.domain.ZRole;
 import com.cjl.basic.zone.project.role.mapper.ZRoleMapper;
 import com.cjl.basic.zone.project.role.service.IRoleService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -23,6 +25,11 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
+    public ZRole selectRoleById(Integer roleId) {
+        return roleMapper.selectByPrimaryKey(roleId);
+    }
+
+    @Override
     public int addRole(ZRole role) {
         // 默认是停用的
         role.setStatus("0");
@@ -35,7 +42,11 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public int removeRole(Integer id) {
-        return roleMapper.deleteByPrimaryKey(id);
+    @Transactional(rollbackFor = Exception.class)
+    public int removeRole(String id) {
+        for (Integer roleId : Convert.toIntArray(id)) {
+            roleMapper.deleteByPrimaryKey(roleId);
+        }
+        return 1;
     }
 }
