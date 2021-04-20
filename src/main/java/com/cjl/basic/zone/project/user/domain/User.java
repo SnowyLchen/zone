@@ -75,9 +75,9 @@ public class User extends BaseEntity {
      */
     private String groupName;
     /**
-     *
+     * 首页
      */
-    private String homeurl;
+    private String homeUrl;
     private String activated;
 
     public String getActivated() {
@@ -88,12 +88,12 @@ public class User extends BaseEntity {
         this.activated = activated;
     }
 
-    public String getHomeurl() {
-        return homeurl;
+    public String getHomeUrl() {
+        return homeUrl;
     }
 
-    public void setHomeurl(String homeurl) {
-        this.homeurl = homeurl;
+    public void setHomeUrl(String homeUrl) {
+        this.homeUrl = homeUrl;
     }
 
     public String getGroupName() {

@@ -37,11 +37,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public List<User> selectUserList(User user) {
-        user.setLoginName(user.getLoginName());
-        user.setUserName(user.getUserName());
-        user.setPhonenumber(user.getPhonenumber());
-        user.setAccountId(ShiroAuthenticateUtils.getAccountId());
-        return new ArrayList<>();
+        return userMapper.selectUserList(user);
     }
 
     @Override
@@ -191,7 +187,7 @@ public class UserServiceImpl implements IUserService {
         // 初始化一般用户时为禁用状态，需要管理员该账号才能正常使用
         if (u.getGroupName() == null) {
             u.setGroupName(UserConstants.USER_TYPE_ADMIN_NAME_FLAG);
-            u.setHomeurl(UserConstants.USER_TYPE_ADMIN_URL);
+            u.setHomeUrl(UserConstants.USER_TYPE_ADMIN_URL);
         }
         if (u.getPassword() == null) {
             // 随机生成密码加密盐
@@ -246,7 +242,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public List<User> selectUserList2AllUser(User user) {
-        return userMapper.selectUserList2(user);
+        return userMapper.selectUserList(user);
     }
 
 

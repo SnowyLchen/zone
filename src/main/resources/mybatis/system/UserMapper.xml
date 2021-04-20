@@ -18,44 +18,25 @@
         <result column="login_ip" jdbcType="VARCHAR" property="loginIp"/>
         <result column="login_date" jdbcType="TIMESTAMP" property="loginTime"/>
         <result column="del_flag" jdbcType="CHAR" property="delFlag"/>
+        <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="home_url" jdbcType="VARCHAR" property="homeUrl"/>
     </resultMap>
 
-    <sql id="selectUserVo2">
-        select account_id,
-               dept_id,
-               login_name,
-               user_name,
-               user_type,
-               email,
-               phonenumber,
-               sex,
-               avatar,
-               password,
-               salt,
-               status,
-               login_ip,
-               login_date,
-               remark,
-               mfrs_id,
-               del_flag,
-               create_by,
-               create_time,
-               update_by,
-               update_time,
-               data_scope,
-               birthday,
-               QQ,
-               position_id,
-               technical_level_id,
-               idcar_number,
-               nation,
-               native_place,
-               contract_time,
-               emergency_contact,
-               emergency_contact_phone,
-               certificate,
-               quit_time
-        from mfrs_account
+    <sql id="selectUserVo">
+         select    account_id,
+                   user_name,
+                   email,
+                   home_url,
+                   login_time,
+                   activated,
+                   logged,
+                   group_name,
+                   login_name,
+                   phonenumber,
+                   del_flag,
+                   sex,
+                   avatar
+            from z_users
     </sql>
     <sql id="UserVo">
          select zu.account_id,
@@ -64,7 +45,7 @@
                 zu.sex,
                 zu.password,
                 zu.email,
-                zu.homeUrl,
+                zu.home_url,
                 zu.login_time,
                 zu.activated,
                 zu.salt,
@@ -72,52 +53,27 @@
                 zu.login_name
         from z_users zu
     </sql>
-    <sql id="selectUserVo">
-        select u.account_id,
-               u.mfrs_id,
-               u.login_name,
-               u.user_name,
-               u.email,
-               u.phonenumber,
-               u.sex,
-               u.avatar,
-               u.password,
-               u.salt,
-               u.status,
-               u.del_flag,
-               u.login_ip,
-               u.login_date,
-               u.create_time,
-               u.remark,
-               u.user_type,
-               d.dept_id,
-               d.parent_id,
-               d.dept_name,
-               d.order_num,
-               d.status                                as dept_status,
-               r.role_id,
-               r.role_name,
-               r.role_key,
-               r.role_sort,
-               u.data_scope,
-               r.status                                as role_status,
-               u.birthday,
-               u.QQ,
-               u.position_id,
-               u.technical_level_id,
-               u.idcar_number,
-               u.nation,
-               u.native_place,
-               u.contract_time,
-               u.emergency_contact,
-               u.emergency_contact_phone,
-               u.certificate,
-               group_concat(r.role_name separator '/') as role_arr
-        from mfrs_account u
-                 left join mfrs_dept d on u.dept_id = d.dept_id and d.del_flag = 0
-                 left join mfrs_user_role ur on u.account_id = ur.account_id
-                 left join mfrs_role r on r.role_id = ur.role_id and r.del_flag = 0
-    </sql>
+    <select id="selectUserList" resultMap="UserResultMap">
+        <include refid="selectUserVo"/>
+        <where>
+            del_flag = 0
+            <if test="loginName != null">
+                and login_name like concat('%',#{loginName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="userName != null">
+                and user_name =like concat('%', #{userName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="email != null">
+                and email = #{email,jdbcType=VARCHAR}
+            </if>
+            <if test="phonenumber != null">
+                and phonenumber = #{phonenumber,jdbcType=VARCHAR}
+            </if>
+            <if test="sex != null">
+                and sex = #{sex,jdbcType=CHAR}
+            </if>
+        </where>
+    </select>
     <update id="deleteUserByIds">
         update mfrs_account
         set del_flag   = 1,
@@ -141,114 +97,9 @@
             OR email=#{email}
         </if>
     </select>
-    <select id="selectUserList2" resultMap="UserResultMap">
-        <include refid="selectUserVo2"/>
-        <where>
-            <if test="accountId != null">
-                and account_id = #{accountId,jdbcType=INTEGER}
-            </if>
-            <if test="deptId != null">
-                and dept_id = #{deptId,jdbcType=INTEGER}
-            </if>
-            <if test="loginName != null">
-                and login_name = #{loginName,jdbcType=VARCHAR}
-            </if>
-            <if test="userName != null">
-                and user_name = #{userName,jdbcType=VARCHAR}
-            </if>
-            <if test="userType != null">
-                and user_type = #{userType,jdbcType=VARCHAR}
-            </if>
-            <if test="email != null">
-                and email = #{email,jdbcType=VARCHAR}
-            </if>
-            <if test="phonenumber != null">
-                and phonenumber = #{phonenumber,jdbcType=VARCHAR}
-            </if>
-            <if test="sex != null">
-                and sex = #{sex,jdbcType=CHAR}
-            </if>
-            <if test="avatar != null">
-                and avatar = #{avatar,jdbcType=INTEGER}
-            </if>
-            <if test="password != null">
-                and `password` = #{password,jdbcType=VARCHAR}
-            </if>
-            <if test="salt != null">
-                and salt = #{salt,jdbcType=VARCHAR}
-            </if>
-            <if test="status != null">
-                and `status` = #{status,jdbcType=CHAR}
-            </if>
-            <if test="loginIp != null">
-                and login_ip = #{loginIp,jdbcType=VARCHAR}
-            </if>
-            <if test="loginDate != null">
-                and login_date = #{loginDate,jdbcType=TIMESTAMP}
-            </if>
-            <if test="remark != null">
-                and remark = #{remark,jdbcType=VARCHAR}
-            </if>
-            <if test="mfrsId != null">
-                and mfrs_id = #{mfrsId,jdbcType=INTEGER}
-            </if>
-            <if test="createBy != null">
-                and create_by = #{createBy,jdbcType=VARCHAR}
-            </if>
-            <if test="createTime != null">
-                and create_time = #{createTime,jdbcType=TIMESTAMP}
-            </if>
-            <if test="updateBy != null">
-                and update_by = #{updateBy,jdbcType=VARCHAR}
-            </if>
-            <if test="updateTime != null">
-                and update_time = #{updateTime,jdbcType=TIMESTAMP}
-            </if>
-            <if test="dataScope != null">
-                and data_scope = #{dataScope,jdbcType=INTEGER}
-            </if>
-            <if test="birthday != null">
-                and birthday = #{birthday,jdbcType=TIMESTAMP}
-            </if>
-            <if test="qq != null">
-                and QQ = #{qq,jdbcType=VARCHAR}
-            </if>
-            <if test="positionId != null">
-                and position_id = #{positionId,jdbcType=INTEGER}
-            </if>
-            <if test="technicalLevelId != null">
-                and technical_level_id = #{technicalLevelId,jdbcType=INTEGER}
-            </if>
-            <if test="idcarNumber != null">
-                and idcar_number = #{idcarNumber,jdbcType=VARCHAR}
-            </if>
-            <if test="nation != null">
-                and nation = #{nation,jdbcType=VARCHAR}
-            </if>
-            <if test="nativePlace != null">
-                and native_place = #{nativePlace,jdbcType=VARCHAR}
-            </if>
-            <if test="contractTime != null">
-                and contract_time = #{contractTime,jdbcType=TIMESTAMP}
-            </if>
-            <if test="emergencyContact != null">
-                and emergency_contact = #{emergencyContact,jdbcType=VARCHAR}
-            </if>
-            <if test="emergencyContactPhone != null">
-                and emergency_contact_phone = #{emergencyContactPhone,jdbcType=VARCHAR}
-            </if>
-            <if test="certificate != null">
-                and certificate = #{certificate,jdbcType=VARCHAR}
-            </if>
-            <if test="quitTime != null">
-                and quit_time = #{quitTime,jdbcType=TIMESTAMP}
-            </if>
-            and del_flag = 0
-        </where>
-    </select>
 
     <select id="selectUserById2" resultMap="UserResultMap">
-        <include refid="selectUserVo2"/>
+        <include refid="selectUserVo"/>
         <where>
             and account_id = #{accountId,jdbcType=INTEGER}
             and del_flag = 0
@@ -454,7 +305,7 @@
     </select>
 
     <select id="selectUserByPhoneNumber" resultMap="UserResultMap">
-        <include refid="selectUserVo2"/>
+        <include refid="selectUserVo"/>
         <where>
             and phonenumber = #{userName,jdbcType=VARCHAR} and del_flag = 0 and status != 2
         </where>

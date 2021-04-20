@@ -26,7 +26,7 @@ public class RoleController extends BaseController {
 
     @GetMapping("/role")
     public String role() {
-        return "system/role" ;
+        return "system/role/role" ;
     }
 
     @GetMapping("/operate/{type}")
@@ -34,7 +34,7 @@ public class RoleController extends BaseController {
         if (StringUtils.isNotNull(roleId)) {
             map.put("role", roleService.selectRoleById(roleId));
         }
-        return "system/operate/" + type;
+        return "system/role/" + type;
     }
 
     @ResponseBody

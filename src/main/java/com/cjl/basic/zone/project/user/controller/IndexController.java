@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
@@ -38,12 +37,12 @@ public class IndexController extends BaseController {
         mmap.put("user", user);
         mmap.put("copyrightYear", zoneConfig.getCopyrightYear());
         //当前用户是游客，需要获取当前的用户状态
-        final String visitor = "visitor";
+        final String visitor = "visitor" ;
 //            mmap.put("userstate", userService.loginGetUser(user.getLoginName()));
-        if (StringUtils.isEmpty(user.getHomeurl())) {
-            return "error/404";
+        if (StringUtils.isEmpty(user.getHomeUrl())) {
+            return "error/404" ;
         }
-        return user.getHomeurl();
+        return user.getHomeUrl();
     }
 
     /**
@@ -52,7 +51,7 @@ public class IndexController extends BaseController {
     @GetMapping("/system/main")
     public String main(ModelMap mmap) {
         mmap.put("version", zoneConfig.getVersion());
-        return "main";
+        return "main" ;
     }
 
     /**
@@ -62,7 +61,7 @@ public class IndexController extends BaseController {
     @ResponseBody
     public String menu(ModelMap mmap) {
 
-        return "main";
+        return "main" ;
     }
 
     /**
@@ -70,7 +69,7 @@ public class IndexController extends BaseController {
      */
     @GetMapping("/header")
     public String console(ModelMap mmap) {
-        return "space/header";
+        return "space/header" ;
     }
 
     /**
@@ -78,7 +77,7 @@ public class IndexController extends BaseController {
      */
     @GetMapping("/admin/header")
     public String admin(ModelMap mmap) {
-        return "header";
+        return "header" ;
     }
 
     /**
@@ -86,6 +85,6 @@ public class IndexController extends BaseController {
      */
     @GetMapping("/profiles")
     public String profiles(ModelMap mmap) {
-        return "system/person";
+        return "system/person" ;
     }
 }

@@ -19,7 +19,7 @@ public interface UserMapper {
      * @param user 查询用户形象
      * @return {@link List<User>}
      */
-    List<User> selectUserList2(User user);
+    List<User> selectUserList(User user);
 
     /**
      * 查询用户信息根据ID
