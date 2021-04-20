@@ -87,11 +87,12 @@
 </script>
 <div th:include="include::footer"></div>
 <script>
-    layui.use(['table', 'form', 'jquery', 'common'], function () {
+    layui.use(['table', 'form', 'jquery', 'common', 'popup'], function () {
         let table = layui.table;
         let form = layui.form;
         let $ = layui.jquery;
         let common = layui.common;
+        let popup = layui.popup;
 
         let MODULE_PATH = "/user/operate/";
 
@@ -206,6 +207,7 @@
         form.on('switch(user-enable)', function (obj) {
             var id = $(this).attr('accountId');
             var status = '';
+            $('[name=activated]').attr('disabled', true);
             obj.elem.checked ? status = '1' : status = '0';
             $.ajax({
                 type: 'POST',
@@ -213,17 +215,16 @@
                 data: {accountId: id, activated: status},
                 loadFlag: true,
                 success: function (data) {
+                    $('[name=activated]').attr('disabled', false);
                     if (data.code == 0) {
-                        layer.msg("启用成功");
+                        popup.success("启用成功");
                     } else {
                         layer.msg("启用失败");
                     }
                 },
                 error: function (data) {
-                    layer.msg("修改失败");
-                    debugger
-                    $(this).removeAttr('checked');
-
+                    popup.failure("修改失败");
+                    $('[name=activated]').attr('checked', false);
                 }
             });
         });
