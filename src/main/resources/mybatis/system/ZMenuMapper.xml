@@ -8,10 +8,11 @@
         <result column="href" jdbcType="VARCHAR" property="href"/>
         <result column="icon" jdbcType="VARCHAR" property="icon"/>
         <result column="type" jdbcType="INTEGER" property="type"/>
-        <result column="open_type" jdbcType="VARCHAR" property="openType"/>
+        <result column="visible" jdbcType="INTEGER" property="visible"/>
+        <result column="order_num" jdbcType="VARCHAR" property="orderNum"/>
     </resultMap>
     <sql id="Base_Column_List">
-        menu_id, title, parent_id, href, icon, `type`, open_type
+        menu_id, title, parent_id, href, icon, `type`, order_num,visible
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -25,7 +26,7 @@
         from z_menu
         <where>
             <if test="title !=null and title !=''">title like concat('%',#{title},'%')</if>
-            <if test="openType !=null and openType !=''">open_type =#{openType}</if>
+            <if test="orderNum !=null and orderNum !=''">order_num =#{orderNum}</if>
         </where>
     </select>
     <select id="selectMenuListByRole" resultType="com.cjl.basic.zone.project.menu.domain.ZRoleMenu">
@@ -57,8 +58,11 @@
             <if test="type != null">
                 `type`,
             </if>
-            <if test="openType != null">
-                open_type,
+            <if test="orderNum != null">
+                order_num,
+            </if>
+            <if test="visible != null">
+                visible,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -77,8 +81,11 @@
             <if test="type != null">
                 #{type,jdbcType=INTEGER},
             </if>
-            <if test="openType != null">
-                #{openType,jdbcType=VARCHAR},
+            <if test="orderNum != null">
+                #{orderNum,jdbcType=VARCHAR},
+            </if>
+            <if test="visible != null">
+                #{visible,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -100,20 +107,16 @@
             <if test="type != null">
                 `type` = #{type,jdbcType=INTEGER},
             </if>
-            <if test="openType != null">
-                open_type = #{openType,jdbcType=VARCHAR},
+            <if test="orderNum != null">
+                order_num = #{orderNum,jdbcType=VARCHAR},
+            </if>
+            <if test="visible != null">
+                visible = #{visible,jdbcType=INTEGER},
             </if>
         </set>
-        where menu_id = #{menuId,jdbcType=INTEGER}
+        <where>
+            menu_id = #{menuId,jdbcType=INTEGER}
+        </where>
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.cjl.basic.zone.project.menu.domain.ZMenu">
-    update z_menu
-    set title = #{title,jdbcType=VARCHAR},
-      parent_id = #{parentId,jdbcType=INTEGER},
-      href = #{href,jdbcType=VARCHAR},
-      icon = #{icon,jdbcType=VARCHAR},
-      `type` = #{type,jdbcType=INTEGER},
-      open_type = #{openType,jdbcType=VARCHAR}
-    where menu_id = #{menuId,jdbcType=INTEGER}
-  </update>
+
 </mapper>

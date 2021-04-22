@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <title>树结构</title>
+        <div th:include="include::header"></div>
+    </head>
+    <body class="pear-container">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    下拉树
+                </div>
+                <div class="layui-card-body">
+                    <ul id="demoTree2" class="dtree" data-id="0"></ul>
+                </div>
+            </div>
+        </div>
+        <div th:include="include::footer"></div>
+        <script>
+            layui.use(['dtree', 'jquery', 'element', 'code'], function () {
+                var $ = layui.jquery,
+                    dtree = layui.dtree;
+
+                layui.code();
+                dtree.render({
+                    elem: "#demoTree2",
+                    initLevel: "1",
+                    method: 'get',
+                    url: "../../admin/data/dtree.json",
+                    select: true
+                });
+            });
+        </script>
+    </body>
+</html>

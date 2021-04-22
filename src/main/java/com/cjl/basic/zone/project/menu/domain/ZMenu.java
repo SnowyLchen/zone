@@ -34,13 +34,26 @@ public class ZMenu extends BaseEntity implements Serializable {
      * 菜单图标
      */
     private String icon;
-
-    private Integer type;
-
     /**
      * 类型
      */
-    private String openType;
+    private Integer type;
+    /**
+     * 是否隐藏
+     */
+    private Integer visible;
+    /**
+     * 排序
+     */
+    private String orderNum;
+
+    public Integer getVisible() {
+        return visible;
+    }
+
+    public void setVisible(Integer visible) {
+        this.visible = visible;
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -92,11 +105,11 @@ public class ZMenu extends BaseEntity implements Serializable {
         this.type = type;
     }
 
-    public String getOpenType() {
-        return openType;
+    public String getOrderNum() {
+        return orderNum;
     }
 
-    public void setOpenType(String openType) {
-        this.openType = openType;
+    public void setOrderNum(String orderNum) {
+        this.orderNum = orderNum;
     }
 }

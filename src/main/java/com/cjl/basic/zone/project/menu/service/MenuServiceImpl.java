@@ -1,8 +1,10 @@
 package com.cjl.basic.zone.project.menu.service;
 
+import com.cjl.basic.zone.common.support.Convert;
 import com.cjl.basic.zone.project.menu.domain.ZMenu;
 import com.cjl.basic.zone.project.menu.mapper.ZMenuMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -33,11 +35,15 @@ public class MenuServiceImpl implements IMenuService {
 
     @Override
     public int editMenu(ZMenu menu) {
-        return menuMapper.updateByPrimaryKey(menu);
+        return menuMapper.updateByPrimaryKeySelective(menu);
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int removeMenu(String id) {
-        return 0;
+        for (Integer menuId : Convert.toIntArray(id)) {
+            menuMapper.deleteByPrimaryKey(menuId);
+        }
+        return 1;
     }
 }

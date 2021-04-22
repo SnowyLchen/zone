@@ -65,18 +65,23 @@
         </script>
 
         <script type="text/html" id="menu-type">
-            {{#if (d.powerType == '0') { }}
+            {{#if (d.type == '0') { }}
             <span>目录</span>
-            {{# }else if(d.powerType == '1'){ }}
+            {{# }else if(d.type == '1'){ }}
             <span>菜单</span>
-            {{# }else if(d.powerType == '2'){ }}
+            {{# }else if(d.type == '2'){ }}
             <span>按钮</span>
             {{# } }}
         </script>
 
         <script type="text/html" id="menu-enable">
-            <input type="checkbox" name="enable" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用"
-                   lay-filter="user-enable" checked="{{ d.id == 10003 ? 'true' : 'false' }}">
+            {{#  if(d.visible == 1){ }}
+            <input type="checkbox" name="enable" value="{{d.menuId}}" lay-skin="switch" lay-text="显示|隐藏"
+                   lay-filter="menu-enable" menuId="{{d.menuId}}" vis="{{d.visible==1}}" checked>
+            {{#  } else { }}
+            <input type="checkbox" name="enable" value="{{d.menuId}}" lay-skin="switch" lay-text="显示|隐藏"
+                   lay-filter="menu-enable" menuId="{{d.menuId}}" vis="{{d.visible==1}}">
+            {{#  } }}
         </script>
 
         <script type="text/html" id="icon">
@@ -85,11 +90,12 @@
 
         <div th:include="include::footer"></div>
         <script>
-            layui.use(['table', 'form', 'jquery', 'treetable'], function () {
+            layui.use(['table', 'form', 'jquery', 'treetable', 'common'], function () {
                 let table = layui.table;
                 let form = layui.form;
                 let $ = layui.jquery;
                 let treetable = layui.treetable;
+                let common = layui.common;
 
                 let MODULE_PATH = "/menu/operate/";
 
@@ -111,9 +117,9 @@
                                 {type: 'checkbox'},
                                 {field: 'title', minWidth: 200, title: '菜单名称'},
                                 {field: 'icon', title: '图标', templet: '#icon'},
-                                {field: 'powerType', title: '类型', templet: '#menu-type'},
-                                {field: 'enable', title: '是否可用', templet: '#menu-enable'},
-                                {field: 'sort', title: '排序'},
+                                {field: 'type', title: '类型', templet: '#menu-type'},
+                                {field: 'visible', title: '是否显示', templet: '#menu-enable'},
+                                {field: 'orderNum', title: '排序'},
                                 {title: '操作', templet: '#menu-bar', width: 150, align: 'center'}
                             ]
                         ]
@@ -121,6 +127,28 @@
                 }
 
                 render();
+                form.on('switch(menu-enable)', function (obj) {
+                    var id = $(this).attr('menuId');
+                    debugger
+                    var index = top.layer.msg('请稍候...', {icon: 16, time: 3000, shade: 0.8});
+                    var status = '';
+                    obj.elem.checked ? status = '1' : status = '0';
+                    $.ajax({
+                        type: 'POST',
+                        url: '/menu/editMenu',
+                        data: {menuId: id, visible: status},
+                        loadFlag: true,
+                        success: function (data) {
+                            common.enableMsg(index, data, status == '1' ? '显示' : '隐藏');
+                        },
+                        error: function (data) {
+                            top.layer.close(index);
+                            layer.msg("修改失败");
+                            $(this).attr('checked', status != '1');
+                        }
+                    });
+                });
+
 
                 table.on('tool(menu-table)', function (obj) {
                     if (obj.event === 'remove') {
@@ -150,8 +178,8 @@
                         type: 2,
                         title: '新增',
                         shade: 0.1,
-                        area: ['450px', '500px'],
-                        content: MODULE_PATH + 'add.html'
+                        area: ['850px', '380px'],
+                        content: MODULE_PATH + 'add'
                     });
                 }
 
@@ -161,7 +189,7 @@
                         title: '修改',
                         shade: 0.1,
                         area: ['450px', '500px'],
-                        content: MODULE_PATH + 'edit.html'
+                        content: MODULE_PATH + 'edit'
                     });
                 }
                 window.remove = function (obj) {
