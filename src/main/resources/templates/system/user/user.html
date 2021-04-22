@@ -8,28 +8,32 @@
 <body class="pear-container">
 <div class="layui-card">
     <div class="layui-card-body">
-        <form class="layui-form" action="">
+        <form class="layui-form">
             <div class="layui-form-item">
                 <div class="layui-form-item layui-inline">
-                    <label class="layui-form-label">用户名</label>
+                    <label class="layui-form-label">账号</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="realName" placeholder="" class="layui-input">
+                        <input type="text" name="userName" placeholder="请输入账号名" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item layui-inline">
-                    <label class="layui-form-label">性别</label>
+                    <label class="layui-form-label">电话号码</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="realName" placeholder="" class="layui-input">
+                        <input type="text" name="phonenumber" placeholder="请输入电话号码" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item layui-inline">
-                    <label class="layui-form-label">邮箱</label>
+                    <label class="layui-form-label">启用/停用</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="realName" placeholder="" class="layui-input">
+                        <select name="activated" lay-search>
+                            <option value=""></option>
+                            <option value="1">启用</option>
+                            <option value="0">停用</option>
+                        </select>
                     </div>
                 </div>
                 <div class="layui-form-item layui-inline">
-                    <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="user-query">
+                    <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit="" lay-filter="user-query">
                         <i class="layui-icon layui-icon-search"></i>
                         查询
                     </button>
@@ -81,18 +85,13 @@
     <span>离线</span>
     {{# } }}
 </script>
-
-<script type="text/html" id="user-createTime">
-    {{layui.util.toDateString(d.createTime, 'yyyy-MM-dd')}}
-</script>
 <div th:include="include::footer"></div>
 <script>
-    layui.use(['table', 'form', 'jquery', 'common', 'popup'], function () {
+    layui.use(['table', 'form', 'jquery', 'common'], function () {
         let table = layui.table;
         let form = layui.form;
         let $ = layui.jquery;
         let common = layui.common;
-        let popup = layui.popup;
 
         let MODULE_PATH = "/user/operate/";
 
@@ -116,7 +115,15 @@
                     field: 'sex',
                     align: 'center',
                     width: 80,
-                    templet: '#user-sex'
+                    templet: function (data) {
+                        if (data.sex == 1) {
+                            return '男'
+                        } else if (data.sex == 0) {
+                            return '女'
+                        } else {
+                            return '-';
+                        }
+                    }
                 },
                 {
                     title: '电话',
@@ -143,7 +150,6 @@
                     title: '注册',
                     field: 'createTime',
                     align: 'center',
-                    templet: '#user-createTime'
                 },
                 {
                     title: '操作',
@@ -185,6 +191,7 @@
             }
         });
 
+
         form.on('submit(user-query)', function (data) {
             var result;
             if (result != null) {
@@ -204,10 +211,10 @@
             return false;
         });
 
+
         form.on('switch(user-enable)', function (obj) {
             var id = $(this).attr('accountId');
             var status = '';
-            $('[name=activated]').attr('disabled', true);
             obj.elem.checked ? status = '1' : status = '0';
             $.ajax({
                 type: 'POST',
@@ -215,37 +222,27 @@
                 data: {accountId: id, activated: status},
                 loadFlag: true,
                 success: function (data) {
-                    $('[name=activated]').attr('disabled', false);
                     if (data.code == 0) {
-                        popup.success("启用成功");
+                        layer.msg("启用成功");
                     } else {
                         layer.msg("启用失败");
                     }
                 },
                 error: function (data) {
-                    popup.failure("修改失败");
-                    $('[name=activated]').attr('checked', false);
+                    layer.msg("修改失败");
+                    $(this).removeAttr('checked');
+
                 }
             });
         });
-
-        window.add = function () {
-            layer.open({
-                type: 2,
-                title: '新增',
-                shade: 0.1,
-                area: ['500px', '400px'],
-                content: MODULE_PATH + 'add.html'
-            });
-        }
 
         window.edit = function (obj) {
             layer.open({
                 type: 2,
                 title: '修改',
                 shade: 0.1,
-                area: ['500px', '400px'],
-                content: MODULE_PATH + 'edit.html'
+                area: ['730px', '400px'],
+                content: MODULE_PATH + 'edit?accountId=' + obj.data.accountId
             });
         }
 
@@ -257,12 +254,12 @@
                 layer.close(index);
                 let loading = layer.load();
                 $.ajax({
-                    url: MODULE_PATH + "remove/" + obj.data['userId'],
+                    url: '/user/removeUser/' + obj.data['accountId'],
                     dataType: 'json',
-                    type: 'delete',
+                    type: 'POST',
                     success: function (result) {
                         layer.close(loading);
-                        if (result.success) {
+                        if (result.code == '0') {
                             layer.msg(result.msg, {
                                 icon: 1,
                                 time: 1000

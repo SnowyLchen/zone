@@ -27,13 +27,13 @@ public class UserController extends BaseController {
 
     @GetMapping("/user")
     public String role() {
-        return "system/user/user" ;
+        return "system/user/user";
     }
 
     @GetMapping("/operate/{type}")
     public String operate(@PathVariable String type, Integer accountId, ModelMap map) {
         if (StringUtils.isNotNull(accountId)) {
-            map.put("user", userService.selectUserById(accountId.longValue()));
+            map.put("user", userService.selectUserById(accountId));
         }
         return "system/user/" + type;
     }

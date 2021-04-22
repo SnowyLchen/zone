@@ -39,7 +39,9 @@
                    phonenumber,
                    del_flag,
                    sex,
-                   avatar
+                   avatar,
+                   create_time,
+                   update_time
             from z_users
     </sql>
     <sql id="UserVo">
@@ -128,7 +130,7 @@
         </if>
     </select>
 
-    <select id="selectUserById2" resultMap="UserResultMap">
+    <select id="selectUserById" resultMap="UserResultMap">
         <include refid="selectUserVo"/>
         <where>
             and account_id = #{accountId,jdbcType=INTEGER}
@@ -194,8 +196,8 @@
             <if test="email != null">
                 email,
             </if>
-            <if test="homeurl != null">
-                homeUrl,
+            <if test="homeUrl != null">
+                home_url,
             </if>
             <if test="loginTime != null">
                 login_time,
@@ -239,8 +241,8 @@
             <if test="email != null">
                 #{email,jdbcType=VARCHAR},
             </if>
-            <if test="homeurl != null">
-                #{homeurl,jdbcType=VARCHAR},
+            <if test="homeUrl != null">
+                #{homeUrl,jdbcType=VARCHAR},
             </if>
             <if test="loginTime != null">
                 #{loginTime,jdbcType=INTEGER},
