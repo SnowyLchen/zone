@@ -11,13 +11,22 @@
         <result column="open_type" jdbcType="VARCHAR" property="openType"/>
     </resultMap>
     <sql id="Base_Column_List">
-    menu_id, title, parent_id, href, icon, `type`, open_type
-  </sql>
+        menu_id, title, parent_id, href, icon, `type`, open_type
+    </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from z_menu
         where menu_id = #{menuId,jdbcType=INTEGER}
+    </select>
+    <select id="selectMenuList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from z_menu
+        <where>
+            <if test="title !=null and title !=''">title like concat('%',#{title},'%')</if>
+            <if test="openType !=null and openType !=''">open_type =#{openType}</if>
+        </where>
     </select>
     <select id="selectMenuListByRole" resultType="com.cjl.basic.zone.project.menu.domain.ZRoleMenu">
         select

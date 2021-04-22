@@ -115,7 +115,7 @@ spring:
       # 热部署开关
       enabled: true
   redis:
-    host: 39.102.117.87
+    host: 192.168.1.194
     port: 6379
     timeout: 30000
     password: 123456

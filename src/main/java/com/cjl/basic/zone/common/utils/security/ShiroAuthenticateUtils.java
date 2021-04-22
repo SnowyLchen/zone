@@ -183,17 +183,6 @@ public class ShiroAuthenticateUtils {
         return getUserByToken().getLoginName();
     }
 
-//    /**
-//     * 获取企业
-//     */
-//    public static Integer getMfrsId() {
-//        try {
-//            return Objects.requireNonNull(getUserByToken().getMfrsId());
-//        } catch (NullPointerException e) {
-//            return null;
-//        }
-//    }
-
     /**
      * 获取ip
      */

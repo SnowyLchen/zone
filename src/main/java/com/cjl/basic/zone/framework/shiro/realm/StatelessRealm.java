@@ -122,9 +122,9 @@ public class StatelessRealm extends AuthorizingRealm {
 
     @Override
     protected Object getAuthorizationCacheKey(PrincipalCollection principals) {
-//        final User user = (User) principals.getPrimaryPrincipal();
+        final User user = (User) principals.getPrimaryPrincipal();
 //        final String loginName = user.getLoginName();
-        final String loginName = "user.getLoginName()";
+        final String loginName = user.getLoginName();
         return loginName + ":" + StatelessConstants.ACCESS_AUTHORIZED;
     }
 

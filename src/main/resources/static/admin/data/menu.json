@@ -340,11 +340,11 @@
       },
       {
         "id": 604,
-        "title": "部门管理",
+        "title": "菜单管理",
         "icon": "layui-icon layui-icon-face-cry",
         "type": 1,
         "openType": "_iframe",
-        "href": "view/system/deptment.html"
+        "href": "menu/menu"
       },
       {
         "id": 605,

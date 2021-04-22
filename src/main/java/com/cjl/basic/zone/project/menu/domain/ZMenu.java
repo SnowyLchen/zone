@@ -1,13 +1,15 @@
 package com.cjl.basic.zone.project.menu.domain;
 
+import com.cjl.basic.zone.framework.web.domain.BaseEntity;
+
 import java.io.Serializable;
 
 /**
  * z_menu
  *
- * @author
+ * @author chen
  */
-public class ZMenu implements Serializable {
+public class ZMenu extends BaseEntity implements Serializable {
     /**
      * 菜单ID
      */

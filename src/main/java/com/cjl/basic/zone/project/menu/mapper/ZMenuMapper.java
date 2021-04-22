@@ -16,4 +16,11 @@ public interface ZMenuMapper {
     int updateByPrimaryKeySelective(ZMenu record);
 
     int updateByPrimaryKey(ZMenu record);
+
+    /**
+     * 查询菜单列表
+     * @param menu
+     * @return
+     */
+    List<ZMenu> selectMenuList(ZMenu menu);
 }
