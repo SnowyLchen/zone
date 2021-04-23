@@ -17,7 +17,7 @@
                             </div>
                         </div>
                         <div class="layui-form-item layui-inline">
-                            <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="user-query">
+                            <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="menu-query">
                                 <i class="layui-icon layui-icon-search"></i>
                                 查询
                             </button>
@@ -53,7 +53,7 @@
                 <i class="layui-icon layui-icon-shrink-right"></i>
                 折叠
             </button>
-            <button class="pear-btn pear-btn-success pear-btn-md" lay-event="aa">
+            <button class="pear-btn pear-btn-success pear-btn-md" lay-event="refresh">
                 <i class="layui-icon layui-icon-shrink-right"></i>
                 刷新
             </button>
@@ -98,7 +98,6 @@
                 let common = layui.common;
 
                 let MODULE_PATH = "/menu/operate/";
-
                 window.render = function () {
                     treetable.render({
                         treeColIndex: 1,
@@ -131,11 +130,10 @@
                         ]
                     });
                 }
-
-                render();
+                render()
                 form.on('switch(menu-enable)', function (obj) {
                     var id = $(this).attr('menuId');
-                    var index = top.layer.msg('请稍候...', {icon: 16, time: 3000, shade: 0.8});
+                    var index = top.layer.msg('请稍候...', {icon: 16, time: false, shade: 0.8});
                     var status = '';
                     obj.elem.checked ? status = '1' : status = '0';
                     $.ajax({
@@ -175,12 +173,13 @@
                         treetable.expandAll("#menu-table");
                     } else if (obj.event === 'foldAll') {
                         treetable.foldAll("#menu-table");
-                    } else {
-                        treetable.reload('menu-table')
+                    } else if (obj.event === 'refresh') {
+                        window.refresh();
                     }
                 });
                 window.refresh = function () {
-                    treetable.reload('menu-table');
+                    // debugger
+                    window.render();
                 }
                 window.add = function () {
                     layer.open({
@@ -202,11 +201,11 @@
                     });
                 }
                 window.remove = function (obj) {
-                    layer.confirm('确定要删除该菜单', {icon: 3, title: '提示'}, function (index) {
+                    layer.confirm('确定要删除该菜单?', {icon: 3, title: '提示'}, function (index) {
                         layer.close(index);
                         let loading = layer.load();
                         $.ajax({
-                            url: MODULE_PATH + "remove/" + obj.data['menuId'],
+                            url: "/menu/removeMenu/" + obj.data['menuId'],
                             dataType: 'json',
                             type: 'POST',
                             success: function (result) {
@@ -218,6 +217,7 @@
                                 } else {
                                     layer.msg(result.msg, {icon: 2, time: 1000});
                                 }
+                                window.refresh();
                             }
                         })
                     });

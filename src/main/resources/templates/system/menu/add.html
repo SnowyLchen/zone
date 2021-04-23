@@ -98,6 +98,11 @@
                 });
 
             })
+            form.on('switch(visible)', function (obj) {
+                var status = obj.elem.checked ? 1 : 0;
+                $('#visible').val(status);
+                $('[name=visible]').val(status);
+            });
 
             layui.use(['form', 'jquery', 'common', 'dtree'], function () {
                 let form = layui.form;
@@ -130,7 +135,8 @@
                         dataType: 'json',
                         type: 'post',
                         success: function (result) {
-                            common.ajaxMsg(result, 'menu-table');
+                            common.ajaxMsg(result);
+                            parent.refresh()
                         }
                     })
                     return false;

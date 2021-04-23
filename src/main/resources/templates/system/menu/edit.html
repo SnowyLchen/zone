@@ -49,14 +49,17 @@
                     </div>
                     <label class="layui-form-label">是否显示</label>
                     <div class="layui-input-inline">
-                        <input type="checkbox" name="visible" lay-skin="switch" th:checked="${menu?.visible==1}"
+                        <input type="hidden" name="visible" th:value="${menu?.visible}">
+                        <input type="checkbox" lay-filter="visible" lay-skin="switch"
+                               th:value="${menu?.visible}" id="visible"
+                               th:checked="${menu?.visible==1}"
                                lay-text="显示|隐藏">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">图标</label>
                     <div class="layui-input-block">
-                        <input type="hidden" name="icon">
+                        <input type="hidden" name="icon" th:value="${menu?.icon}">
                         <input type="text" id="icon" name="_icon" readonly required lay-verify="required"
                                placeholder="请选择图标"
                                autocomplete="off" class="layui-input" th:value="${menu?.icon}">
@@ -126,17 +129,26 @@
                         $("[name=parentId]").val(0);
                     }
                 });
+
+                form.on('switch(visible)', function (obj) {
+                    var status = obj.elem.checked ? 1 : 0;
+                    $('#visible').val(status);
+                    $('[name=visible]').val(status);
+                })
+
+
                 form.on('submit(menu-save)', function (data) {
-                    $('[name=visible]').val(data.field.visible == 'on' ? 1 : 0);
-                    common.ajaxMsg({code: 0}, 'menu-table');
-                    // $.ajax({
-                    //     url: '/menu/editMenu',
-                    //     data: $("#form-menu-edit").serialize(),
-                    //     dataType: 'json',
-                    //     type: 'post',
-                    //     success: function (result) {
-                    //     }
-                    // })
+                    var index = top.layer.msg('请稍候...', {icon: 16, time: false, shade: 0.8});
+                    $.ajax({
+                        url: '/menu/editMenu',
+                        data: $("#form-menu-edit").serialize(),
+                        dataType: 'json',
+                        type: 'post',
+                        success: function (result) {
+                            common.ajaxMsg(result, index);
+                            parent.refresh()
+                        }
+                    })
                     return false;
                 });
             })
