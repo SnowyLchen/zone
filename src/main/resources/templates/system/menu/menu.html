@@ -8,7 +8,7 @@
     <body class="pear-container">
         <div class="layui-card">
             <div class="layui-card-body">
-                <form class="layui-form" action="">
+                <form class="layui-form">
                     <div class="layui-form-item">
                         <div class="layui-form-item layui-inline">
                             <label class="layui-form-label">菜单名称</label>
@@ -84,9 +84,9 @@
             {{#  } }}
         </script>
 
-        <script type="text/html" id="icon">
-            <i class="layui-icon {{d.icon}}"></i>
-        </script>
+        <!--        <script type="text/html" id="icon">-->
+        <!--            <i class="layui-icon {{d.icon}}"></i>-->
+        <!--        </script>-->
 
         <div th:include="include::footer"></div>
         <script>
@@ -116,7 +116,13 @@
                             [
                                 {type: 'checkbox'},
                                 {field: 'title', minWidth: 200, title: '菜单名称'},
-                                {field: 'icon', title: '图标', templet: '#icon'},
+                                {
+                                    field: 'icon', title: '图标', templet: function (d) {
+                                        var icon = d.icon == null || d.icon == '' ? '-' : d.icon.split('icon>')[1].split('</')[0];
+                                        var _class = d.icon == null || d.icon == '' ? '-' : d.icon.split('=')[1].split('>')[0];
+                                        return '<i class=\"' + _class + '\">' + decodeURIComponent(icon) + '</i>';
+                                    }
+                                },
                                 {field: 'type', title: '类型', templet: '#menu-type'},
                                 {field: 'visible', title: '是否显示', templet: '#menu-enable'},
                                 {field: 'orderNum', title: '排序'},
@@ -178,7 +184,7 @@
                         type: 2,
                         title: '新增',
                         shade: 0.1,
-                        area: ['850px', '380px'],
+                        area: ['850px', '480px'],
                         content: MODULE_PATH + 'add'
                     });
                 }

@@ -46,6 +46,13 @@ public class MenuController extends BaseController {
 
 
     @ResponseBody
+    @RequestMapping("/menuTree")
+    public AjaxResult menuTree(ZMenu menu) {
+        return AjaxResult.successTree(menuService.selectMenuTree(menu));
+    }
+
+
+    @ResponseBody
     @RequestMapping("/addMenu")
     public AjaxResult addMenu(ZMenu menu) {
         return AjaxResult.success(menuService.addMenu(menu));

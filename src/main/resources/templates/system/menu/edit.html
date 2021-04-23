@@ -1,81 +1,128 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
-        <title>修改角色</title>
+        <title>修改菜单</title>
         <div th:include="include::header"></div>
     </head>
     <body>
-        <form class="layui-form" id="form-role-edit">
-            <div class="mainBox">
-                <div class="main-container">
-                    <input type="hidden" th:value="${role?.roleId}" name="roleId">
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">角色名</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="roleName" lay-verify="title" th:value="${role?.roleName}"
-                                   autocomplete="off" placeholder="请输入角色名"
-                                   class="layui-input">
-                        </div>
+        <form class="layui-form" id="form-menu-edit">
+            <div class="main-container">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">菜单名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="title" required lay-verify="required" autocomplete="off"
+                               placeholder="请输入菜单名"
+                               class="layui-input">
                     </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">角色key</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="roleKey" lay-verify="title" th:value="${role?.roleKey}"
-                                   autocomplete="off"
-                                   placeholder="请输入key"
-                                   class="layui-input">
-                        </div>
+                    <label class="layui-form-label">URL</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="href" required lay-verify="required" autocomplete="off"
+                               placeholder="请输入URL"
+                               class="layui-input">
                     </div>
-                    <div class="layui-form-item layui-form-text">
-                        <label class="layui-form-label">描述</label>
-                        <div class="layui-input-block">
-                            <textarea name="remark" placeholder="请输入描述" lay-verify="title"
-                                      autocomplete="off"
-                                      class="layui-textarea">[[${role?.remark}]]
-                            </textarea>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">类型</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="type" value="0" title="菜单">
+                        <input type="radio" name="type" value="1" title="目录">
+                        <input type="radio" name="type" value="2" title="按钮" checked>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">上级菜单</label>
+                    <div class="layui-input-block">
+                        <ul id="tree" class="dtree" data-id="0"></ul>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="orderNum" required lay-verify="required" placeholder="请输入排序"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                    <label class="layui-form-label">是否显示</label>
+                    <div class="layui-input-inline">
+                        <input type="checkbox" name="visible" lay-skin="switch" checked lay-text="显示|隐藏">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">图标</label>
+                    <div class="layui-input-block">
+                        <input type="hidden" name="icon">
+                        <input type="text" id="icon" name="_icon" readonly required lay-verify="required"
+                               placeholder="请选择图标"
+                               autocomplete="off" class="layui-input">
+                        <div style="width: 100%;">
+                            <div class="icon-drop layui-anim-down"
+                                 style="display: none;max-height:90px;overflow-y:auto">
+                                <div data-th-include="system/menu/icon"></div>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>
             <div class="bottom">
                 <div class="button-container">
                     <button type="submit" class="layui-btn layui-btn-normal layui-btn-sm" lay-submit=""
-                            lay-filter="role-edit">
+                            lay-filter="menu-save">
                         <i class="layui-icon layui-icon-ok"></i>
                         提交
                     </button>
                 </div>
             </div>
         </form>
+
         <div th:include="include::footer"></div>
         <script>
-            layui.use(['form', 'jquery'], function () {
+            $(function () {
+                $("input[name='_icon']").focus(function () {
+                    $(".icon-drop").show();
+                });
+                $("#form-menu-add").click(function (event) {
+                    var obj = event.srcElement || event.target;
+                    if (!$(obj).is("input[name='_icon']")) {
+                        $(".icon-drop").hide();
+                    }
+                });
+                $(".icon-drop").find(".ico-list i").on("click", function () {
+                    $('[name=icon]').val("<span class=" + $(this).attr('class') + ">" + encodeURIComponent($(this).text()) + "</span>");
+                    $('[name=_icon]').val("<span class=" + $(this).attr('class') + ">" + encodeURIComponent($(this).text()) + "</span>");
+                });
+
+            })
+            window.add = function () {
+                layer.open({
+                    type: 2,
+                    title: '新增',
+                    shade: 0.1,
+                    area: ['850px', '380px'],
+                    content: 'operator/add'
+                });
+            }
+            layui.use(['form', 'jquery', 'common', 'dtree'], function () {
                 let form = layui.form;
                 let $ = layui.jquery;
-
-                form.on('submit(role-edit)', function (data) {
-                    let roleIds = "";
-                    $('input[type=checkbox]:checked').each(function () {
-                        roleIds += $(this).val() + ",";
-                    });
-                    roleIds = roleIds.substr(0, roleIds.length - 1);
-                    data.field.roleIds = roleIds;
-
+                let common = layui.common,
+                    dtree = layui.dtree;
+                dtree.render({
+                    elem: "#tree",
+                    initLevel: "1",
+                    method: 'get',
+                    url: "../../admin/data/dtree.json",
+                    select: true
+                });
+                form.on('submit(menu-save)', function (data) {
+                    $('[name=visible]').val(data.field.visible == 'on' ? 1 : 0);
                     $.ajax({
-                        url: '/role/editRole',
-                        data: $("#form-role-edit").serialize(),
+                        url: '/menu/editMenu',
+                        data: $("#form-menu-edit").serialize(),
                         dataType: 'json',
                         type: 'post',
                         success: function (result) {
-                            if (result.code == 0) {
-                                layer.msg(result.msg, {icon: 1, time: 1000}, function () {
-                                    parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
-                                    parent.layui.table.reload("role-table");
-                                });
-                            } else {
-                                layer.msg(result.msg, {icon: 2, time: 1000});
-                            }
+                            common.ajaxMsg(result);
                         }
                     })
                     return false;

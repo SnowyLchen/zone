@@ -29,6 +29,15 @@
             <if test="orderNum !=null and orderNum !=''">order_num =#{orderNum}</if>
         </where>
     </select>
+    <select id="selectMenuTree" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from z_menu
+        <where>
+            <if test="title !=null and title !=''">title like concat('%',#{title},'%')</if>
+            <if test="orderNum !=null and orderNum !=''">order_num =#{orderNum}</if>
+        </where>
+    </select>
     <select id="selectMenuListByRole" resultType="com.cjl.basic.zone.project.menu.domain.ZRoleMenu">
         select
         <include refid="Base_Column_List"/>

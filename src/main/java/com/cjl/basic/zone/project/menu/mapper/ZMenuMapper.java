@@ -52,4 +52,11 @@ public interface ZMenuMapper {
      * @return
      */
     List<ZMenu> selectMenuList(ZMenu menu);
+
+    /**
+     * 树
+     * @param menu
+     * @return
+     */
+    List<ZMenu> selectMenuTree(ZMenu menu);
 }

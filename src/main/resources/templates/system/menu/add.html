@@ -24,13 +24,18 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">类型</label>
-                    <div class="layui-input-block">
+                    <div class="layui-col-sm5">
                         <input type="radio" name="type" value="0" title="菜单">
                         <input type="radio" name="type" value="1" title="目录">
                         <input type="radio" name="type" value="2" title="按钮" checked>
                     </div>
+                    <label class="layui-form-label">是否根目录</label>
+                    <div class="layui-col-sm3">
+                        <input type="checkbox" id="isCatalog" lay-skin="switch" checked lay-text="是|否"
+                               lay-filter="isCatalog">
+                    </div>
                 </div>
-                <div class="layui-form-item">
+                <div class="layui-form-item" style="display: none;" id="cata">
                     <label class="layui-form-label">上级菜单</label>
                     <div class="layui-input-block">
                         <ul id="tree" class="dtree" data-id="0"></ul>
@@ -51,11 +56,12 @@
                     <label class="layui-form-label">图标</label>
                     <div class="layui-input-block">
                         <input type="hidden" name="icon">
-                        <input type="text" id="icon" readonly required lay-verify="required" placeholder="请选择图标"
+                        <input type="text" id="icon" name="_icon" readonly required lay-verify="required"
+                               placeholder="请选择图标"
                                autocomplete="off" class="layui-input">
-                        <div class="ms-parent" style="width: 100%;">
-                            <div class="icon-drop animated flipInX"
-                                 style="display: none;max-height:200px;overflow-y:auto">
+                        <div style="width: 100%;">
+                            <div class="icon-drop layui-anim-down"
+                                 style="display: none;max-height:90px;overflow-y:auto">
                                 <div data-th-include="system/menu/icon"></div>
                             </div>
                         </div>
@@ -77,18 +83,18 @@
         <div th:include="include::footer"></div>
         <script>
             $(function () {
-                $("input[name='icon']").focus(function () {
+                $("input[name='_icon']").focus(function () {
                     $(".icon-drop").show();
                 });
                 $("#form-menu-add").click(function (event) {
                     var obj = event.srcElement || event.target;
-                    if (!$(obj).is("input[name='icon']")) {
+                    if (!$(obj).is("input[name='_icon']")) {
                         $(".icon-drop").hide();
                     }
                 });
                 $(".icon-drop").find(".ico-list i").on("click", function () {
-                    $('#icon').val($(this).attr('class'));
-                    $('[name=icon]').val(encodeURIComponent($(this).text()));
+                    $('[name=icon]').val("<span class=" + $(this).attr('class') + ">" + encodeURIComponent($(this).text()) + "</span>");
+                    $('[name=_icon]').val("<span class=" + $(this).attr('class') + ">" + encodeURIComponent($(this).text()) + "</span>");
                 });
 
             })
@@ -110,8 +116,20 @@
                     elem: "#tree",
                     initLevel: "1",
                     method: 'get',
-                    url: "../../admin/data/dtree.json",
+                    url: "/menu/menuTree",
+                    selectInputName: {nodeId: 'parentId'},
                     select: true
+                });
+
+                form.on('switch(isCatalog)', function (obj) {
+                    var id = $(this).attr('menuId');
+                    var isCatalog = !!obj.elem.checked;
+                    if (!isCatalog) {
+                        $("#cata").show();
+                    } else {
+                        $("#cata").hide();
+                        $("[name=parentId]").val(0);
+                    }
                 });
                 form.on('submit(menu-save)', function (data) {
                     $('[name=visible]').val(data.field.visible == 'on' ? 1 : 0);

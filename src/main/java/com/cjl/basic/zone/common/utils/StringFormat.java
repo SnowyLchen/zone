@@ -1,5 +1,7 @@
 package com.cjl.basic.zone.common.utils;
 
+import com.cjl.basic.zone.project.menu.domain.ZMenu;
+import com.cjl.basic.zone.project.menu.domain.ZMenuTree;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,21 +10,11 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class StringFormat {
 
     public static Logger log = LoggerFactory.getLogger(StringFormat.class);
-
-    public static void main(String[] args) throws ScriptException {
-        Map<String, Object> map =new HashMap<>();
-        System.out.println(getIdSet("{{528}}>10||{{530}}<10"));
-        System.out.println(getIdSet("{{528}}>10||{{530}}<10").size());
-        map.put("528","1");
-        map.put("530","1");
-        List<String> list = isTpye("{{528}}>10");
-        SplitOperation(list,5);
-        System.out.println(format("{{528}}>10||{{530}}<10",map));
-    }
 
 
     public static String format(String string, Map<String, Object> map) {
@@ -36,6 +28,7 @@ public class StringFormat {
         }
         return string;
     }
+
     public static String format1(String string, Map<String, Object> map) {
         if (Objects.isNull(map) || map.isEmpty()) {
             return string;
@@ -43,9 +36,9 @@ public class StringFormat {
         Iterator<String> stringIterator = map.keySet().iterator();
         while (stringIterator.hasNext()) {
             String key = stringIterator.next();
-            if (string.contains("TimeFunction(")){
-                string = string.replace("TimeFunction({{" +key + "}})", map.get(key).toString());
-            }else{
+            if (string.contains("TimeFunction(")) {
+                string = string.replace("TimeFunction({{" + key + "}})", map.get(key).toString());
+            } else {
                 string = string.replace("{{" + key + "}}", map.get(key).toString());
             }
         }
@@ -57,7 +50,7 @@ public class StringFormat {
         String[] items = string.split("\\{\\{");
         for (String item : items) {
             String number = item.split("}}")[0];
-            if (Strings.isBlank(number)|| number.contains("TimeFunction(")) {
+            if (Strings.isBlank(number) || number.contains("TimeFunction(")) {
                 continue;
             }
             try {
@@ -69,7 +62,8 @@ public class StringFormat {
         }
         return idSet;
     }
-    public static List<String> isTpye(String rule){
+
+    public static List<String> isTpye(String rule) {
         List<String> list = new ArrayList<>();
         if (rule.contains("TimeFunction")) {
             list.add("1");
@@ -77,7 +71,7 @@ public class StringFormat {
             list.add(rule);
             list.add(rule.split("\\{\\{")[1].split("}}")[0]);
             return list;
-        }else{
+        } else {
             list.add("0");
             list.add(rule);
             list.add(rule.split("\\{\\{")[1].split("}}")[0]);
@@ -89,10 +83,10 @@ public class StringFormat {
         String rule = null;
         if ("1".equals(list.get(0))) {
             String item[] = list.get(1).split("\\{\\{");
-            rule = item[0] +(System.currentTimeMillis() - (Long)value) / 60000 + item[1].split("}}")[1];
+            rule = item[0] + (System.currentTimeMillis() - (Long) value) / 60000 + item[1].split("}}")[1];
         } else {
-           String item[] = list.get(1).split("\\{\\{");
-           rule = item[0] + value + item[1].split("}}")[1];
+            String item[] = list.get(1).split("\\{\\{");
+            rule = item[0] + value + item[1].split("}}")[1];
         }
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("js");
@@ -101,7 +95,7 @@ public class StringFormat {
         return result;
     }
 
-    public static  Integer[] getJ(Integer[] m, Integer[] n) {
+    public static Integer[] getJ(Integer[] m, Integer[] n) {
         List<Integer> rs = new ArrayList<Integer>();
         // 将较长的数组转换为set
         Set<Integer> set = new HashSet<Integer>(Arrays.asList(m.length > n.length ? m : n));
@@ -114,6 +108,7 @@ public class StringFormat {
         Integer[] arr = {};
         return rs.toArray(arr);
     }
+
     public static Integer[] getC(Integer[] m, Integer[] n) {
         // 将较长的数组转换为set
         Set<Integer> set = new HashSet<Integer>(Arrays.asList(m.length > n.length ? m : n));
@@ -130,6 +125,7 @@ public class StringFormat {
         Integer[] arr = {};
         return set.toArray(arr);
     }
+
     public static Integer[] stringConvertInt(String value) {
         Integer[] intArr;
         if (StringUtils.isEmpty(value)) {
@@ -143,4 +139,63 @@ public class StringFormat {
         }
         return intArr;
     }
+
+
+    public static List<ZMenuTree> formatTreeData(List<ZMenu> list) {
+        if (list == null) {
+            throw new RuntimeException("错误");
+        }
+        Map<Integer, List<ZMenu>> parents = list.stream().collect(Collectors.groupingBy(ZMenu::getParentId));
+        List<ZMenuTree> treeList = new ArrayList<>();
+        for (Map.Entry<Integer, List<ZMenu>> p : parents.entrySet()) {
+            Integer pid = p.getKey();
+            // 第一级
+            if (pid == 0) {
+                for (ZMenu zMenu : p.getValue()) {
+                    ZMenuTree firstTree = new ZMenuTree();
+                    firstTree.setId(zMenu.getMenuId());
+                    firstTree.setTitle(zMenu.getTitle());
+                    firstTree.setParentId(pid);
+                    treeList.add(firstTree);
+                }
+            } else {
+                // 其它级
+                if (treeList.size() > 0) {
+                    for (ZMenuTree tree : treeList) {
+                        if (tree.getChildren() == null) {
+                            if (tree.getId().equals(pid)) {
+                                List<ZMenuTree> children = new ArrayList<>();
+                                for (ZMenu zMenu : p.getValue()) {
+                                    ZMenuTree childTree = new ZMenuTree();
+                                    childTree.setId(zMenu.getMenuId());
+                                    childTree.setTitle(zMenu.getTitle());
+                                    childTree.setParentId(pid);
+                                    children.add(childTree);
+                                }
+                                tree.setChildren(children);
+                            }
+                        } else {
+                            for (ZMenuTree child : tree.getChildren()) {
+                                if (child.getId().equals(pid)) {
+                                    List<ZMenuTree> children = new ArrayList<>();
+                                    for (ZMenu zMenu : p.getValue()) {
+                                        ZMenuTree childTree = new ZMenuTree();
+                                        childTree.setId(zMenu.getMenuId());
+                                        childTree.setTitle(zMenu.getTitle());
+                                        childTree.setParentId(pid);
+                                        children.add(childTree);
+                                    }
+                                    child.setChildren(children);
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        return treeList;
+    }
+
+
 }

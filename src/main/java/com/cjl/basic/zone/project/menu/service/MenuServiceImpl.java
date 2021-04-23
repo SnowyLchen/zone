@@ -1,7 +1,9 @@
 package com.cjl.basic.zone.project.menu.service;
 
 import com.cjl.basic.zone.common.support.Convert;
+import com.cjl.basic.zone.common.utils.StringFormat;
 import com.cjl.basic.zone.project.menu.domain.ZMenu;
+import com.cjl.basic.zone.project.menu.domain.ZMenuTree;
 import com.cjl.basic.zone.project.menu.mapper.ZMenuMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,5 +47,10 @@ public class MenuServiceImpl implements IMenuService {
             menuMapper.deleteByPrimaryKey(menuId);
         }
         return 1;
+    }
+
+    @Override
+    public List<ZMenuTree> selectMenuTree(ZMenu menu) {
+        return StringFormat.formatTreeData(menuMapper.selectMenuTree(menu));
     }
 }

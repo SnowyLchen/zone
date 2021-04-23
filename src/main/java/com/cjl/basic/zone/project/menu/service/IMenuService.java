@@ -2,6 +2,7 @@ package com.cjl.basic.zone.project.menu.service;
 
 
 import com.cjl.basic.zone.project.menu.domain.ZMenu;
+import com.cjl.basic.zone.project.menu.domain.ZMenuTree;
 
 import java.util.List;
 
@@ -49,4 +50,12 @@ public interface IMenuService {
      * @return
      */
     int removeMenu(String id);
+
+    /**
+     * 查询树
+     *
+     * @param menu
+     * @return
+     */
+    List<ZMenuTree> selectMenuTree(ZMenu menu);
 }

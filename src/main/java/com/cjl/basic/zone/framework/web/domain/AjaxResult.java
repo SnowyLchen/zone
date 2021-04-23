@@ -84,6 +84,22 @@ public class AjaxResult extends HashMap<String, Object> {
     }
 
     /**
+     * 返回成功消息+数据
+     *
+     * @param data 内容
+     * @return 成功消息
+     */
+    public static AjaxResult successTree(Object data) {
+        AjaxResult json = new AjaxResult();
+        AjaxResult status = new AjaxResult();
+        json.put("data", data);
+        status.put("code", 200);
+        status.put("msg", "成功");
+        json.put("status", status);
+        return json;
+    }
+
+    /**
      * 返回成功消息
      *
      * @return 成功消息
