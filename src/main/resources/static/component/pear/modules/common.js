@@ -65,11 +65,11 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
                 }
             }, 500);
         }
-        this.ajaxMsg = function (res) {
+        this.ajaxMsg = function (res, reloadTable) {
             if (res.code === 0) {
                 layer.msg(res.msg, {icon: 1, time: 1000}, function () {
                     parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
-                    parent.layui.table.reload("menu-table");
+                    parent.layui.table.reload(reloadTable);
                 });
             } else {
                 layer.msg(res.msg, {icon: 2, time: 1000});

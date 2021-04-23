@@ -19,7 +19,7 @@ layui.define(['layer', 'table'], function (exports) {
                 treetable.init(param, param.data);
             } else {
                 $.getJSON(param.url, param.where, function (res) {
-                    if(param.parseData){
+                    if (param.parseData) {
                         res.data = param.parseData(res);
                         param.data = res.data;
                     }
@@ -195,9 +195,15 @@ layui.define(['layer', 'table'], function (exports) {
                     $ti.trigger('click');
                 }
             });
+        },
+        // 重载
+        reload: function (dom) {
+            table.reload(dom)
+            // this.render()
+            debugger
         }
     };
-	
+
     // 给图标列绑定事件
     $('body').on('click', '.treeTable .treeTable-icon', function () {
         var treeLinkage = $(this).parents('.treeTable').attr('treeLinkage');

@@ -7,44 +7,50 @@
     </head>
     <body>
         <form class="layui-form" id="form-menu-edit">
+            <input type="hidden" name="menuId" th:value="${menu?.menuId}">
             <div class="main-container">
                 <div class="layui-form-item">
                     <label class="layui-form-label">菜单名</label>
                     <div class="layui-input-inline">
                         <input type="text" name="title" required lay-verify="required" autocomplete="off"
-                               placeholder="请输入菜单名"
+                               placeholder="请输入菜单名" th:value="${menu?.title}"
                                class="layui-input">
                     </div>
                     <label class="layui-form-label">URL</label>
                     <div class="layui-input-inline">
                         <input type="text" name="href" required lay-verify="required" autocomplete="off"
-                               placeholder="请输入URL"
+                               placeholder="请输入URL" th:value="${menu?.href}"
                                class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">类型</label>
-                    <div class="layui-input-block">
-                        <input type="radio" name="type" value="0" title="菜单">
-                        <input type="radio" name="type" value="1" title="目录">
-                        <input type="radio" name="type" value="2" title="按钮" checked>
+                    <div class="layui-col-sm5">
+                        <input type="radio" name="type" value="0" lay-filter="isCatalog" title="目录"
+                               th:checked="${menu?.type==0}">
+                        <input type="radio" name="type" value="1" lay-filter="isCatalog" title="菜单"
+                               th:checked="${menu?.type==1}">
+                        <input type="radio" name="type" value="2" lay-filter="isCatalog" title="按钮"
+                               th:checked="${menu?.type==2}">
                     </div>
                 </div>
-                <div class="layui-form-item">
+                <div class="layui-form-item" th:if="${menu?.type==1 or menu?.type==2}" id="cata">
                     <label class="layui-form-label">上级菜单</label>
                     <div class="layui-input-block">
-                        <ul id="tree" class="dtree" data-id="0"></ul>
+                        <input type="hidden" name="parentId" th:value="${menu?.parentId}"/>
+                        <input type="text" class="layui-input" disabled th:value="${menu?.parentName}"/>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">排序</label>
                     <div class="layui-input-inline">
                         <input type="text" name="orderNum" required lay-verify="required" placeholder="请输入排序"
-                               autocomplete="off" class="layui-input">
+                               autocomplete="off" class="layui-input" th:value="${menu?.orderNum}">
                     </div>
                     <label class="layui-form-label">是否显示</label>
                     <div class="layui-input-inline">
-                        <input type="checkbox" name="visible" lay-skin="switch" checked lay-text="显示|隐藏">
+                        <input type="checkbox" name="visible" lay-skin="switch" th:checked="${menu?.visible==1}"
+                               lay-text="显示|隐藏">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -53,7 +59,7 @@
                         <input type="hidden" name="icon">
                         <input type="text" id="icon" name="_icon" readonly required lay-verify="required"
                                placeholder="请选择图标"
-                               autocomplete="off" class="layui-input">
+                               autocomplete="off" class="layui-input" th:value="${menu?.icon}">
                         <div style="width: 100%;">
                             <div class="icon-drop layui-anim-down"
                                  style="display: none;max-height:90px;overflow-y:auto">
@@ -81,7 +87,7 @@
                 $("input[name='_icon']").focus(function () {
                     $(".icon-drop").show();
                 });
-                $("#form-menu-add").click(function (event) {
+                $("#form-menu-edit").click(function (event) {
                     var obj = event.srcElement || event.target;
                     if (!$(obj).is("input[name='_icon']")) {
                         $(".icon-drop").hide();
@@ -93,43 +99,47 @@
                 });
 
             })
-            window.add = function () {
-                layer.open({
-                    type: 2,
-                    title: '新增',
-                    shade: 0.1,
-                    area: ['850px', '380px'],
-                    content: 'operator/add'
-                });
-            }
+
             layui.use(['form', 'jquery', 'common', 'dtree'], function () {
                 let form = layui.form;
                 let $ = layui.jquery;
                 let common = layui.common,
                     dtree = layui.dtree;
-                dtree.render({
-                    elem: "#tree",
-                    initLevel: "1",
-                    method: 'get',
-                    url: "../../admin/data/dtree.json",
-                    select: true
+                var type = [[${menu?.type}]];
+                if (type === '1' || type === '2') {
+                    dtree.render({
+                        elem: "#tree",
+                        initLevel: "1",
+                        method: 'get',
+                        url: "/menu/menuTree",
+                        selectInputName: {nodeId: 'parentId'},
+                        select: true
+                    });
+                }
+
+                form.on('radio(isCatalog)', function (obj) {
+                    var isCatalog = obj.value;
+                    if (isCatalog !== '0') {
+                        $("#cata").show();
+                    } else {
+                        $("#cata").hide();
+                        $("[name=parentId]").val(0);
+                    }
                 });
                 form.on('submit(menu-save)', function (data) {
                     $('[name=visible]').val(data.field.visible == 'on' ? 1 : 0);
-                    $.ajax({
-                        url: '/menu/editMenu',
-                        data: $("#form-menu-edit").serialize(),
-                        dataType: 'json',
-                        type: 'post',
-                        success: function (result) {
-                            common.ajaxMsg(result);
-                        }
-                    })
+                    common.ajaxMsg({code: 0}, 'menu-table');
+                    // $.ajax({
+                    //     url: '/menu/editMenu',
+                    //     data: $("#form-menu-edit").serialize(),
+                    //     dataType: 'json',
+                    //     type: 'post',
+                    //     success: function (result) {
+                    //     }
+                    // })
                     return false;
                 });
             })
-        </script>
-        <script>
         </script>
     </body>
 </html>

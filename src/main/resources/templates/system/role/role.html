@@ -54,18 +54,20 @@
 </script>
 
 <script type="text/html" id="role-bar">
-    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i></button>
-<!--    <button class="pear-btn pear-btn-warming pear-btn-sm" lay-event="power"><i class="layui-icon layui-icon-vercode"></i></button>-->
-    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i></button>
+    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>
+    </button>
+    <!--    <button class="pear-btn pear-btn-warming pear-btn-sm" lay-event="power"><i class="layui-icon layui-icon-vercode"></i></button>-->
+    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i>
+    </button>
 </script>
 <!-- 资 源 引 入 -->
 <div th:include="include::footer"></div>
 <script>
-    layui.use(['table', 'form', 'jquery', 'layer'], function () {
+    layui.use(['table', 'form', 'jquery', 'layer', 'common'], function () {
         let table = layui.table;
         let form = layui.form;
         let $ = layui.jquery;
-
+        let common = layui.common;
         let MODULE_PATH = "/role/operate/";
 
         let cols = [
@@ -141,6 +143,7 @@
         form.on('switch(role-enable)', function (obj) {
             var id = $(this).attr('roleId');
             var status = '';
+            var index = top.layer.msg('请稍候...', {icon: 16, time: 3000, shade: 0.8});
             obj.elem.checked ? status = '1' : status = '0';
             $.ajax({
                 type: 'POST',
@@ -148,11 +151,7 @@
                 data: {roleId: id, status: status},
                 loadFlag: true,
                 success: function (data) {
-                    if (data.code == 0) {
-                        layer.msg("启用成功");
-                    } else {
-                        layer.msg("启用失败");
-                    }
+                    common.enableMsg(index, data, status == '1' ? '启用' : '停用');
                 },
                 error: function (data) {
                     layer.msg("修改失败");
@@ -170,23 +169,13 @@
             });
         }
 
-        // window.power = function (obj) {
-        //     layer.open({
-        //         type: 2,
-        //         title: '授权',
-        //         shade: 0.1,
-        //         area: ['320px', '400px'],
-        //         content: MODULE_PATH + 'edit'
-        //     });
-        // }
-
         window.edit = function (obj) {
             layer.open({
                 type: 2,
                 title: '修改',
                 shade: 0.1,
                 area: ['500px', '400px'],
-                content: MODULE_PATH + 'edit?roleId='+obj.data.roleId
+                content: MODULE_PATH + 'edit?roleId=' + obj.data.roleId
             });
         }
 

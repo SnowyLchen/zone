@@ -215,6 +215,7 @@
         form.on('switch(user-enable)', function (obj) {
             var id = $(this).attr('accountId');
             var status = '';
+            var index = top.layer.msg('请稍候...', {icon: 16, time: 3000, shade: 0.8});
             obj.elem.checked ? status = '1' : status = '0';
             $.ajax({
                 type: 'POST',
@@ -222,16 +223,11 @@
                 data: {accountId: id, activated: status},
                 loadFlag: true,
                 success: function (data) {
-                    if (data.code == 0) {
-                        layer.msg("启用成功");
-                    } else {
-                        layer.msg("启用失败");
-                    }
+                    common.enableMsg(index, data, status == '1' ? '启用' : '停用');
                 },
                 error: function (data) {
                     layer.msg("修改失败");
                     $(this).removeAttr('checked');
-
                 }
             });
         });
@@ -296,12 +292,12 @@
                 layer.close(index);
                 let loading = layer.load();
                 $.ajax({
-                    url: MODULE_PATH + "batchRemove/" + ids,
+                    url: MODULE_PATH + "removeUser/" + checkIds,
                     dataType: 'json',
-                    type: 'delete',
+                    type: 'POST',
                     success: function (result) {
                         layer.close(loading);
-                        if (result.success) {
+                        if (result.code == 0) {
                             layer.msg(result.msg, {
                                 icon: 1,
                                 time: 1000

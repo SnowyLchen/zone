@@ -5,6 +5,7 @@
         <id column="menu_id" jdbcType="INTEGER" property="menuId"/>
         <result column="title" jdbcType="VARCHAR" property="title"/>
         <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
+        <result column="parentName" jdbcType="VARCHAR" property="parentName"/>
         <result column="href" jdbcType="VARCHAR" property="href"/>
         <result column="icon" jdbcType="VARCHAR" property="icon"/>
         <result column="type" jdbcType="INTEGER" property="type"/>
@@ -15,10 +16,21 @@
         menu_id, title, parent_id, href, icon, `type`, order_num,visible
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from z_menu
-        where menu_id = #{menuId,jdbcType=INTEGER}
+       select  zm.menu_id,
+               zm.title,
+               zm.parent_id,
+               zm.href,
+               zm.icon,
+               zm.`type`,
+               zm.order_num,
+               zm.visible,
+               (
+                   select title
+                   from z_menu
+                   where menu_id = zm.parent_id
+               ) parentName
+        from z_menu zm
+        where zm.menu_id = #{menuId}
     </select>
     <select id="selectMenuList" resultMap="BaseResultMap">
         select

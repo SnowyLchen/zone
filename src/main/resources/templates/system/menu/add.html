@@ -25,15 +25,15 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">类型</label>
                     <div class="layui-col-sm5">
-                        <input type="radio" name="type" value="0" title="菜单">
-                        <input type="radio" name="type" value="1" title="目录">
-                        <input type="radio" name="type" value="2" title="按钮" checked>
+                        <input type="radio" name="type" value="0" lay-filter="isCatalog" title="目录" checked>
+                        <input type="radio" name="type" value="1" lay-filter="isCatalog" title="菜单">
+                        <input type="radio" name="type" value="2" lay-filter="isCatalog" title="按钮">
                     </div>
-                    <label class="layui-form-label">是否根目录</label>
-                    <div class="layui-col-sm3">
-                        <input type="checkbox" id="isCatalog" lay-skin="switch" checked lay-text="是|否"
-                               lay-filter="isCatalog">
-                    </div>
+                    <!--                    <label class="layui-form-label">是否根目录</label>-->
+                    <!--                    <div class="layui-col-sm3">-->
+                    <!--                        <input type="checkbox" id="isCatalog" lay-skin="switch" checked lay-text="是|否"-->
+                    <!--                               lay-filter="isCatalog">-->
+                    <!--                    </div>-->
                 </div>
                 <div class="layui-form-item" style="display: none;" id="cata">
                     <label class="layui-form-label">上级菜单</label>
@@ -98,15 +98,7 @@
                 });
 
             })
-            window.add = function () {
-                layer.open({
-                    type: 2,
-                    title: '新增',
-                    shade: 0.1,
-                    area: ['850px', '380px'],
-                    content: 'operator/add'
-                });
-            }
+
             layui.use(['form', 'jquery', 'common', 'dtree'], function () {
                 let form = layui.form;
                 let $ = layui.jquery;
@@ -121,10 +113,9 @@
                     select: true
                 });
 
-                form.on('switch(isCatalog)', function (obj) {
-                    var id = $(this).attr('menuId');
-                    var isCatalog = !!obj.elem.checked;
-                    if (!isCatalog) {
+                form.on('radio(isCatalog)', function (obj) {
+                    var isCatalog = obj.value;
+                    if (isCatalog !== '0') {
                         $("#cata").show();
                     } else {
                         $("#cata").hide();
@@ -139,7 +130,7 @@
                         dataType: 'json',
                         type: 'post',
                         success: function (result) {
-                            common.ajaxMsg(result);
+                            common.ajaxMsg(result, 'menu-table');
                         }
                     })
                     return false;

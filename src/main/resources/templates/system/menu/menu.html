@@ -53,6 +53,10 @@
                 <i class="layui-icon layui-icon-shrink-right"></i>
                 折叠
             </button>
+            <button class="pear-btn pear-btn-success pear-btn-md" lay-event="aa">
+                <i class="layui-icon layui-icon-shrink-right"></i>
+                刷新
+            </button>
         </script>
 
         <script type="text/html" id="menu-bar">
@@ -83,10 +87,6 @@
                    lay-filter="menu-enable" menuId="{{d.menuId}}" vis="{{d.visible==1}}">
             {{#  } }}
         </script>
-
-        <!--        <script type="text/html" id="icon">-->
-        <!--            <i class="layui-icon {{d.icon}}"></i>-->
-        <!--        </script>-->
 
         <div th:include="include::footer"></div>
         <script>
@@ -135,7 +135,6 @@
                 render();
                 form.on('switch(menu-enable)', function (obj) {
                     var id = $(this).attr('menuId');
-                    debugger
                     var index = top.layer.msg('请稍候...', {icon: 16, time: 3000, shade: 0.8});
                     var status = '';
                     obj.elem.checked ? status = '1' : status = '0';
@@ -176,9 +175,13 @@
                         treetable.expandAll("#menu-table");
                     } else if (obj.event === 'foldAll') {
                         treetable.foldAll("#menu-table");
+                    } else {
+                        treetable.reload('menu-table')
                     }
                 });
-
+                window.refresh = function () {
+                    treetable.reload('menu-table');
+                }
                 window.add = function () {
                     layer.open({
                         type: 2,
@@ -194,8 +197,8 @@
                         type: 2,
                         title: '修改',
                         shade: 0.1,
-                        area: ['450px', '500px'],
-                        content: MODULE_PATH + 'edit'
+                        area: ['850px', '480px'],
+                        content: MODULE_PATH + 'edit?menuId=' + obj.data.menuId
                     });
                 }
                 window.remove = function (obj) {
@@ -203,12 +206,12 @@
                         layer.close(index);
                         let loading = layer.load();
                         $.ajax({
-                            url: MODULE_PATH + "remove/" + obj.data['powerId'],
+                            url: MODULE_PATH + "remove/" + obj.data['menuId'],
                             dataType: 'json',
-                            type: 'delete',
+                            type: 'POST',
                             success: function (result) {
                                 layer.close(loading);
-                                if (result.success) {
+                                if (result.code == 0) {
                                     layer.msg(result.msg, {icon: 1, time: 1000}, function () {
                                         obj.del();
                                     });

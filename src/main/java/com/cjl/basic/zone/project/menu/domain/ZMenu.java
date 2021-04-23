@@ -24,6 +24,7 @@ public class ZMenu extends BaseEntity implements Serializable {
      * 父菜单ID
      */
     private Integer parentId;
+    private String parentName;
 
     /**
      * 请求地址
@@ -46,6 +47,14 @@ public class ZMenu extends BaseEntity implements Serializable {
      * 排序
      */
     private String orderNum;
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
 
     public Integer getVisible() {
         return visible;
