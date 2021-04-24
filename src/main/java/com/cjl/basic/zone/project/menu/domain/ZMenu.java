@@ -40,6 +40,10 @@ public class ZMenu extends BaseEntity implements Serializable {
      */
     private Integer type;
     /**
+     * 打开方式
+     */
+    private String openType;
+    /**
      * 是否隐藏
      */
     private Integer visible;
@@ -47,6 +51,24 @@ public class ZMenu extends BaseEntity implements Serializable {
      * 排序
      */
     private String orderNum;
+
+    private String checkArr;
+
+    public String getCheckArr() {
+        return checkArr;
+    }
+
+    public void setCheckArr(String checkArr) {
+        this.checkArr = checkArr;
+    }
+
+    public String getOpenType() {
+        return openType;
+    }
+
+    public void setOpenType(String openType) {
+        this.openType = openType;
+    }
 
     public String getParentName() {
         return parentName;

@@ -3,6 +3,8 @@ package com.cjl.basic.zone.project.role.controller;
 import com.cjl.basic.zone.framework.web.controller.BaseController;
 import com.cjl.basic.zone.framework.web.domain.AjaxResult;
 import com.cjl.basic.zone.framework.web.page.TableDataInfo;
+import com.cjl.basic.zone.project.menu.domain.ZMenu;
+import com.cjl.basic.zone.project.menu.service.IMenuService;
 import com.cjl.basic.zone.project.role.domain.ZRole;
 import com.cjl.basic.zone.project.role.service.IRoleService;
 import com.cjl.basic.zone.utils.StringUtils;
@@ -23,16 +25,26 @@ public class RoleController extends BaseController {
 
     @Autowired
     private IRoleService roleService;
+    @Autowired
+    private IMenuService menuService;
 
     @GetMapping("/role")
     public String role() {
-        return "system/role/role" ;
+        return "system/role/role";
+    }
+
+    @GetMapping("/roleMenu")
+    public String roleMenu() {
+        return "system/rolemenu/rolemenu";
     }
 
     @GetMapping("/operate/{type}")
-    public String operate(@PathVariable String type, Integer roleId, ModelMap map) {
+    public String operate(@PathVariable String type, Integer roleId, Integer isRoleMenu, ModelMap map) {
         if (StringUtils.isNotNull(roleId)) {
             map.put("role", roleService.selectRoleById(roleId));
+        }
+        if (StringUtils.isNotNull(isRoleMenu)) {
+            return "system/rolemenu/" + type;
         }
         return "system/role/" + type;
     }
@@ -58,9 +70,20 @@ public class RoleController extends BaseController {
     }
 
     @ResponseBody
+    @RequestMapping("/editRole/editMenu")
+    public AjaxResult editMenu(Integer roleId, String menuIds) {
+        return AjaxResult.success(roleService.editRoleMenu(roleId,menuIds));
+    }
+
+    @ResponseBody
     @RequestMapping("/removeRole/{id}")
     public AjaxResult removeRole(@PathVariable String id) {
         return AjaxResult.success(roleService.removeRole(id));
     }
 
+    @ResponseBody
+    @RequestMapping("/menuTree")
+    public AjaxResult selectMenuTree(ZMenu menu) {
+        return AjaxResult.successTree(menuService.checkArrMenuTree(menu));
+    }
 }

@@ -21,12 +21,13 @@ public class UserConstants {
     public static final String USER_TYPE_SUPER_ADMIN_URL = "adminIndex";
 
     /**
+     *
      * 管理员
      */
     public static final String USER_TYPE_ADMIN = "2";
     public static final String USER_TYPE_ADMIN_NAME = "管理员";
     public static final String USER_TYPE_ADMIN_NAME_FLAG = "Admin";
-    public static final String USER_TYPE_ADMIN_URL = "index";
+    public static final String USER_TYPE_ADMIN_URL = "space/index";
 
     /**
      * 游客角色

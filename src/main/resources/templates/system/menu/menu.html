@@ -123,6 +123,7 @@
                                     }
                                 },
                                 {field: 'type', title: '类型', templet: '#menu-type'},
+                                {field: 'openType', title: '打开方式', width: 150},
                                 {field: 'visible', title: '是否显示', templet: '#menu-enable'},
                                 {field: 'orderNum', title: '排序'},
                                 {title: '操作', templet: '#menu-bar', width: 150, align: 'center'}
@@ -186,7 +187,7 @@
                         type: 2,
                         title: '新增',
                         shade: 0.1,
-                        area: ['850px', '480px'],
+                        area: ['850px', '420px'],
                         content: MODULE_PATH + 'add'
                     });
                 }
@@ -196,7 +197,7 @@
                         type: 2,
                         title: '修改',
                         shade: 0.1,
-                        area: ['850px', '480px'],
+                        area: ['850px', '420px'],
                         content: MODULE_PATH + 'edit?menuId=' + obj.data.menuId
                     });
                 }

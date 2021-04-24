@@ -47,4 +47,12 @@ public interface IRoleService {
      * @return
      */
     int removeRole(String id);
+
+    /**
+     * 修改角色权限
+     * @param roleId
+     * @param menuIds
+     * @return
+     */
+    int editRoleMenu(Integer roleId, String menuIds);
 }

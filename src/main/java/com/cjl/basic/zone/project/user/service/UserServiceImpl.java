@@ -2,6 +2,7 @@ package com.cjl.basic.zone.project.user.service;
 
 import com.cjl.basic.zone.common.constant.DelFlagConstants;
 import com.cjl.basic.zone.common.constant.UserConstants;
+import com.cjl.basic.zone.common.exception.base.BaseException;
 import com.cjl.basic.zone.common.support.Convert;
 import com.cjl.basic.zone.common.utils.InsertOrUpdateUtils;
 import com.cjl.basic.zone.common.utils.StringUtils;
@@ -48,6 +49,9 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int deleteUserByIds(String ids) {
+        if (ids.equals("1")){
+            throw new BaseException("不允许删除超级管理员");
+        }
         ShiroAuthenticateUtils.clearByAccountIds(Convert.toIntArray(ids));
         InsertOrUpdateUtils.requireGreaterThanI(userMapper.deleteUserByIds(ids, DateUtils.getNowDate(), ShiroAuthenticateUtils.getLoginName()), "删除用户失败");
         return 1;

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>角色管理</title>
+    <div th:include="include::header"></div>
+</head>
+<body class="pear-container">
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <div class="layui-form-item layui-inline">
+                    <label class="layui-form-label">角色名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="roleName" placeholder="" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-inline">
+                    <label class="layui-form-label">角色key</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="roleKey" placeholder="" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-inline">
+                    <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit="" lay-filter="role-query">
+                        <i class="layui-icon layui-icon-search"></i>
+                        查询
+                    </button>
+                    <button type="reset" class="pear-btn pear-btn-md">
+                        <i class="layui-icon layui-icon-refresh"></i>
+                        重置
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="layui-card">
+    <div class="layui-card-body">
+        <table id="role-table" lay-filter="role-table"></table>
+    </div>
+</div>
+
+<script type="text/html" id="role-toolbar">
+    <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
+        <i class="layui-icon layui-icon-add-1"></i>
+        新增
+    </button>
+    <button class="pear-btn pear-btn-danger pear-btn-md" lay-event="batchRemove">
+        <i class="layui-icon layui-icon-delete"></i>
+        删除
+    </button>
+</script>
+
+<script type="text/html" id="role-bar">
+    <button class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>
+    </button>
+    <!--    <button class="pear-btn pear-btn-warming pear-btn-sm" lay-event="power"><i class="layui-icon layui-icon-vercode"></i></button>-->
+    <button class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i>
+    </button>
+</script>
+<!-- 资 源 引 入 -->
+<div th:include="include::footer"></div>
+<script>
+    layui.use(['table', 'form', 'jquery', 'layer', 'common'], function () {
+        let table = layui.table;
+        let form = layui.form;
+        let $ = layui.jquery;
+        let common = layui.common;
+        let MODULE_PATH = "/role/operate/";
+
+        let cols = [
+            [
+                {type: 'checkbox'},
+                {title: '角色名', field: 'roleName', align: 'center', width: 100},
+                {title: 'Key值', field: 'roleKey', align: 'center'},
+                {title: '描述', field: 'remark', align: 'center'},
+                {
+                    title: '是否启用', field: 'status', align: 'center', templet: function (d) {  //自定义显示内容
+                        var strCheck = d.status == "1" ? "checked" : "";
+                        var strDisable = d.roleId == '1' ? 'disabled' : "";
+                        return '<input type="checkbox" name="status" value="' + d.status + '" lay-filter="role-enable" ' + strDisable + ' lay-skin="switch" lay-text="启用|停用" ' + strCheck + ' roleId=' + d.roleId + '>';
+                    }
+                },
+                {title: '操作', toolbar: '#role-bar', align: 'center', width: 195}
+            ]
+        ]
+
+        table.render({
+            elem: '#role-table',
+            url: '/role/roleList',
+            page: true,
+            cols: cols,
+            skin: 'line',
+            toolbar: '#role-toolbar',
+            defaultToolbar: [{
+                layEvent: 'refresh',
+                icon: 'layui-icon-refresh',
+            }, 'filter', 'print', 'exports']
+        });
+
+        table.on('tool(role-table)', function (obj) {
+            if (obj.event === 'remove') {
+                window.remove(obj);
+            } else if (obj.event === 'edit') {
+                window.edit(obj);
+            } else if (obj.event === 'power') {
+                // window.power(obj);
+            }
+        });
+
+        table.on('toolbar(role-table)', function (obj) {
+            if (obj.event === 'add') {
+                window.add();
+            } else if (obj.event === 'refresh') {
+                window.refresh();
+            } else if (obj.event === 'batchRemove') {
+                window.batchRemove(obj);
+            }
+        });
+
+        form.on('submit(role-query)', function (data) {
+            var result;
+            // table.reload('role-table', { url: '/role/roleList',where: data.field})
+            if (result != null) {
+                result.where = {};  //置空where
+            }
+            table.reload({
+                url: '/role/roleList',
+                method: 'get',
+                where: data.field,
+                page: {
+                    curr: 1
+                },
+                done: function () {
+                    result = this;
+                }
+            });
+            return false;
+        });
+
+        form.on('switch(role-enable)', function (obj) {
+            var id = $(this).attr('roleId');
+            var status = '';
+            var index = top.layer.msg('请稍候...', {icon: 16, time: 3000, shade: 0.8});
+            obj.elem.checked ? status = '1' : status = '0';
+            $.ajax({
+                type: 'POST',
+                url: '/role/editRole',
+                data: {roleId: id, status: status},
+                loadFlag: true,
+                success: function (data) {
+                    common.enableMsg(index, data, status == '1' ? '启用' : '停用');
+                },
+                error: function (data) {
+                    layer.msg("修改失败");
+                }
+            });
+        });
+
+
+        window.edit = function (obj) {
+            layer.open({
+                type: 2,
+                title: '修改',
+                shade: 0.1,
+                area: ['500px', '400px'],
+                content: MODULE_PATH + 'edit?roleId=' + obj.data.roleId + '&isRoleMenu=1'
+            });
+        }
+
+        window.remove = function (obj) {
+            layer.confirm('确定要删除该角色', {icon: 3, title: '提示'}, function (index) {
+                layer.close(index);
+                let loading = layer.load();
+                $.ajax({
+                    url: "/role/removeRole/" + obj.data['roleId'],
+                    dataType: 'json',
+                    type: 'POST',
+                    success: function (result) {
+                        layer.close(loading);
+                        if (result.code == 0) {
+                            layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+                                obj.del();
+                            });
+                        } else {
+                            layer.msg(result.msg, {icon: 2, time: 1000});
+                        }
+                    }
+                })
+            });
+        }
+
+        window.batchRemove = function (obj) {
+            let data = table.checkStatus(obj.config.id).data;
+            if (data.length === 0) {
+                layer.msg("未选中数据", {icon: 3, time: 1000});
+                return false;
+            }
+            let ids = "";
+            for (let i = 0; i < data.length; i++) {
+                ids += data[i].roleId + ",";
+            }
+            ids = ids.substr(0, ids.length - 1);
+            layer.confirm('确定要删除这些用户', {icon: 3, title: '提示'}, function (index) {
+                layer.close(index);
+                let loading = layer.load();
+                $.ajax({
+                    url: "/role/removeRole/" + ids,
+                    dataType: 'json',
+                    type: 'POST',
+                    success: function (result) {
+                        layer.close(loading);
+                        if (result.code == 0) {
+                            layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+                                table.reload('role-table');
+                            });
+                        } else {
+                            layer.msg(result.msg, {icon: 2, time: 1000});
+                        }
+                    }
+                })
+            });
+        }
+
+        window.refresh = function () {
+            table.reload('role-table');
+        }
+    })
+</script>
+</body>
+</html>

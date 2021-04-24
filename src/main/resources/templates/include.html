@@ -6,8 +6,12 @@
 </head>
 <body>
 <div th:fragment="header">
-    <!-- 资 源 引 入 -->
+    <!-- 依 赖 样 式 -->
     <link th:href="@{/component/pear/css/pear.css}" rel="stylesheet"/>
+    <!-- 加 载 样 式-->
+    <link th:href="@{/admin/css/load.css}" rel="stylesheet"/>
+    <!-- 布 局 样 式 -->
+    <link th:href="@{/admin/css/admin.css}" rel="stylesheet"/>
 </div>
 <div th:fragment="footer">
     <!-- 资 源 引 入 -->

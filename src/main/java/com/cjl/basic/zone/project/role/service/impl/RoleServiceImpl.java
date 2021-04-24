@@ -49,4 +49,16 @@ public class RoleServiceImpl implements IRoleService {
         }
         return 1;
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int editRoleMenu(Integer roleId, String menuIds) {
+        // 先删除之前所有权限
+        roleMapper.deleteRoleMenu(roleId);
+        // 添加权限菜单
+        for (Integer menuId : Convert.toIntArray(menuIds)) {
+            roleMapper.insertRoleMenu(roleId, menuId);
+        }
+        return 1;
+    }
 }

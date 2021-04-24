@@ -4,8 +4,10 @@ import com.cjl.basic.zone.common.utils.StringUtils;
 import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.framework.config.ZoneConfig;
 import com.cjl.basic.zone.framework.web.controller.BaseController;
+import com.cjl.basic.zone.project.menu.domain.ZMenu;
+import com.cjl.basic.zone.project.menu.domain.ZMenuTree;
+import com.cjl.basic.zone.project.menu.service.IMenuService;
 import com.cjl.basic.zone.project.user.domain.User;
-import com.cjl.basic.zone.project.user.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 首页 业务处理
@@ -22,11 +26,10 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class IndexController extends BaseController {
 
-
     @Autowired
     private ZoneConfig zoneConfig;
     @Autowired
-    private IUserService userService;
+    private IMenuService menuService;
 
     /**
      * 系统首页
@@ -37,10 +40,10 @@ public class IndexController extends BaseController {
         mmap.put("user", user);
         mmap.put("copyrightYear", zoneConfig.getCopyrightYear());
         //当前用户是游客，需要获取当前的用户状态
-        final String visitor = "visitor" ;
+        final String visitor = "visitor";
 //            mmap.put("userstate", userService.loginGetUser(user.getLoginName()));
         if (StringUtils.isEmpty(user.getHomeUrl())) {
-            return "error/404" ;
+            return "error/404";
         }
         return user.getHomeUrl();
     }
@@ -48,10 +51,9 @@ public class IndexController extends BaseController {
     /**
      * 系统介绍
      */
-    @GetMapping("/system/main")
+    @GetMapping("/homePage")
     public String main(ModelMap mmap) {
-        mmap.put("version", zoneConfig.getVersion());
-        return "main" ;
+        return "console/console1";
     }
 
     /**
@@ -59,9 +61,15 @@ public class IndexController extends BaseController {
      */
     @GetMapping("/system/menu")
     @ResponseBody
-    public String menu(ModelMap mmap) {
-
-        return "main" ;
+    public List<ZMenuTree> menu(ModelMap mmap) {
+        List<ZMenuTree> menu = new ArrayList<>();
+        List<ZMenuTree> zMenuTrees = menuService.selectMenuTree(new ZMenu());
+        for (ZMenuTree zMenuTree : zMenuTrees) {
+            if (StringUtils.isNotNull(zMenuTree.getChildren())) {
+                menu.add(zMenuTree);
+            }
+        }
+        return menu;
     }
 
     /**
@@ -69,7 +77,7 @@ public class IndexController extends BaseController {
      */
     @GetMapping("/header")
     public String console(ModelMap mmap) {
-        return "space/header" ;
+        return "space/header";
     }
 
     /**
@@ -77,7 +85,7 @@ public class IndexController extends BaseController {
      */
     @GetMapping("/admin/header")
     public String admin(ModelMap mmap) {
-        return "header" ;
+        return "manage/header";
     }
 
     /**
@@ -85,6 +93,6 @@ public class IndexController extends BaseController {
      */
     @GetMapping("/profiles")
     public String profiles(ModelMap mmap) {
-        return "system/person" ;
+        return "system/person";
     }
 }

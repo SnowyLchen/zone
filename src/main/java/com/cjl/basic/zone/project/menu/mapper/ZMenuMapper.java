@@ -59,4 +59,6 @@ public interface ZMenuMapper {
      * @return
      */
     List<ZMenu> selectMenuTree(ZMenu menu);
+
+    List<ZMenu> checkArrMenuTree(ZMenu menu);
 }

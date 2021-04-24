@@ -275,7 +275,7 @@
 
         window.batchRemove = function (obj) {
 
-            var checkIds = common.checkField(obj, 'userId');
+            var checkIds = common.checkField(obj, 'accountId');
 
             if (checkIds === "") {
                 layer.msg("未选中数据", {
@@ -284,7 +284,7 @@
                 });
                 return false;
             }
-
+            console.log(checkIds)
             layer.confirm('确定要删除这些用户', {
                 icon: 3,
                 title: '提示'
@@ -292,7 +292,7 @@
                 layer.close(index);
                 let loading = layer.load();
                 $.ajax({
-                    url: MODULE_PATH + "removeUser/" + checkIds,
+                    url: "/user/removeUser/" + checkIds,
                     dataType: 'json',
                     type: 'POST',
                     success: function (result) {

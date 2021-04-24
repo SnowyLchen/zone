@@ -3,13 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title> Pear Admin Layui </title>
-    <!-- 依 赖 样 式 -->
-    <link rel="stylesheet" href="component/pear/css/pear.css"/>
-    <!-- 加 载 样 式-->
-    <link rel="stylesheet" href="admin/css/load.css"/>
-    <!-- 布 局 样 式 -->
-    <link rel="stylesheet" href="admin/css/admin.css"/>
+    <title> Layui </title>
+    <div th:include="include::header"></div>
     <!-- 主 题 更 换 -->
     <style id="pearadmin-bg-color"></style>
     <!-- 头 部 结 束 -->
@@ -35,7 +30,7 @@
                 <!-- 头 像 -->
                 <a href="javascript:;">
                     <img src="" class="layui-nav-img">
-                    就眠仪式
+                   [[${user?.userName}]]
                 </a>
                 <!-- 功 能 菜 单 -->
                 <dl class="layui-nav-child">
@@ -49,14 +44,14 @@
         </ul>
     </div>
 </div>
-<!-- 遮 盖 层 -->
-<div class="pear-cover"></div>
-<!-- 移 动 端 便 捷 操 作 -->
-<div class="pear-collasped-pe collaspe"><a href="#" class="layui-icon layui-icon-shrink-right"></a></div>
-<!-- 加 载 动 画-->
-<div class="loader-main">
-    <div class="loader"></div>
-</div>
+<!--&lt;!&ndash; 遮 盖 层 &ndash;&gt;-->
+<!--<div class="pear-cover"></div>-->
+<!--&lt;!&ndash; 移 动 端 便 捷 操 作 &ndash;&gt;-->
+<!--<div class="pear-collasped-pe collaspe"><a href="#" class="layui-icon layui-icon-shrink-right"></a></div>-->
+<!--&lt;!&ndash; 加 载 动 画&ndash;&gt;-->
+<!--<div class="loader-main">-->
+<!--    <div class="loader"></div>-->
+<!--</div>-->
 <!--<div th:include="include::footer"></div>-->
 </body>
 </html>

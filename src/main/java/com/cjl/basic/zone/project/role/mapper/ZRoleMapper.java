@@ -2,6 +2,7 @@ package com.cjl.basic.zone.project.role.mapper;
 
 
 import com.cjl.basic.zone.project.role.domain.ZRole;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -41,4 +42,19 @@ public interface ZRoleMapper {
      * @return
      */
     List<ZRole> selectRoleList(ZRole role);
+
+    /**
+     * 删除权限菜单
+     * @param roleId
+     * @return
+     */
+    int deleteRoleMenu(Integer roleId);
+
+    /**
+     * 添加权限菜单
+     * @param roleId
+     * @param menuId
+     * @return
+     */
+    int insertRoleMenu(@Param("roleId") Integer roleId, @Param("menuId")Integer menuId);
 }

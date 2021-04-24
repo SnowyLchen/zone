@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>修改权限</title>
+    <div th:include="include::header"></div>
+</head>
+<body>
+<form class="layui-form" id="form-roleMenu-edit">
+    <div class="mainBox">
+        <div class="main-container">
+            <input type="hidden" th:value="${role?.roleId}" name="roleId" id="roleId">
+            <label class="layui-form-label">菜单列表</label>
+            <div class="layui-form-item">
+                <div class="layui-col-sm10">
+                    <ul id="tree" class="dtree" lay-filter="tree" data-id="0"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="button-container">
+            <button type="submit" class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="role-edit">
+                <i class="layui-icon layui-icon-ok"></i>
+                提交
+            </button>
+        </div>
+    </div>
+</form>
+<div th:include="include::footer"></div>
+<script>
+    layui.use(['form', 'jquery', 'dtree', 'tree'], function () {
+        let form = layui.form;
+        let $ = layui.jquery;
+        let dtree = layui.dtree;
+        let tree = layui.tree;
+        dtree.render({
+            elem: "#tree",
+            initLevel: "1",
+            // accordionUL:dtree.accordionUL("#tree"),
+            method: 'get',
+            url: "/role/menuTree",
+            selectInputName: {nodeId: 'parentId'},
+            checkbar: true
+        });
+
+        form.on('submit(role-edit)', function (data) {
+            // 取所有被选中的结点
+            var datas = dtree.getCheckbarNodesParam("tree");
+            var menuIds = '';
+            let roleId = $('#roleId').val();
+            // 取出所有menuId
+            $.each(datas, function (index, item) {
+                menuIds += item.nodeId + ','
+            });
+            var d = {
+                menuIds: menuIds.substring(0, menuIds.length - 1),
+                roleId: roleId
+            };
+            $.ajax({
+                url: '/role/editRole/editMenu',
+                data: d,
+                dataType: 'json',
+                type: 'post',
+                success: function (result) {
+                    if (result.code == 0) {
+                        layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+                            parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
+                            parent.layui.table.reload("role-table");
+                        });
+                    } else {
+                        layer.msg(result.msg, {icon: 2, time: 1000});
+                    }
+                }
+            })
+            return false;
+        });
+    })
+</script>
+<script>
+</script>
+</body>
+</html>

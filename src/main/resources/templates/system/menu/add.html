@@ -5,18 +5,23 @@
         <title>新增菜单</title>
         <div th:include="include::header"></div>
     </head>
+    <style>
+        .col9p {
+            width: 80.333333% !important;
+        }
+    </style>
     <body>
         <form class="layui-form" id="form-menu-add">
             <div class="main-container">
                 <div class="layui-form-item">
                     <label class="layui-form-label">菜单名</label>
-                    <div class="layui-input-inline">
+                    <div class="layui-col-sm4">
                         <input type="text" name="title" required lay-verify="required" autocomplete="off"
                                placeholder="请输入菜单名"
                                class="layui-input">
                     </div>
                     <label class="layui-form-label">URL</label>
-                    <div class="layui-input-inline">
+                    <div class="layui-col-sm4">
                         <input type="text" name="href" required lay-verify="required" autocomplete="off"
                                placeholder="请输入URL"
                                class="layui-input">
@@ -24,10 +29,17 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">类型</label>
-                    <div class="layui-col-sm5">
+                    <div class="layui-col-sm4">
                         <input type="radio" name="type" value="0" lay-filter="isCatalog" title="目录" checked>
                         <input type="radio" name="type" value="1" lay-filter="isCatalog" title="菜单">
                         <input type="radio" name="type" value="2" lay-filter="isCatalog" title="按钮">
+                    </div>
+                    <label class="layui-form-label">打开方式</label>
+                    <div class="layui-col-sm4">
+                        <select name="openType" lay-verify="required" lay-search>
+                            <option value=""></option>
+                            <option value="_iframe">iframe</option>
+                        </select>
                     </div>
                     <!--                    <label class="layui-form-label">是否根目录</label>-->
                     <!--                    <div class="layui-col-sm3">-->
@@ -37,24 +49,24 @@
                 </div>
                 <div class="layui-form-item" style="display: none;" id="cata">
                     <label class="layui-form-label">上级菜单</label>
-                    <div class="layui-input-block">
+                    <div class="layui-col-sm10 col9p">
                         <ul id="tree" class="dtree" data-id="0"></ul>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">排序</label>
-                    <div class="layui-input-inline">
+                    <div class="layui-col-sm4">
                         <input type="text" name="orderNum" required lay-verify="required" placeholder="请输入排序"
                                autocomplete="off" class="layui-input">
                     </div>
                     <label class="layui-form-label">是否显示</label>
-                    <div class="layui-input-inline">
+                    <div class="layui-col-sm4">
                         <input type="checkbox" name="visible" lay-skin="switch" checked lay-text="显示|隐藏">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">图标</label>
-                    <div class="layui-input-block">
+                    <div class="layui-col-sm10 col9p">
                         <input type="hidden" name="icon">
                         <input type="text" id="icon" name="_icon" readonly required lay-verify="required"
                                placeholder="请选择图标"
@@ -97,12 +109,8 @@
                     $('[name=_icon]').val("<span class=" + $(this).attr('class') + ">" + encodeURIComponent($(this).text()) + "</span>");
                 });
 
-            })
-            form.on('switch(visible)', function (obj) {
-                var status = obj.elem.checked ? 1 : 0;
-                $('#visible').val(status);
-                $('[name=visible]').val(status);
             });
+
 
             layui.use(['form', 'jquery', 'common', 'dtree'], function () {
                 let form = layui.form;
@@ -116,6 +124,12 @@
                     url: "/menu/menuTree",
                     selectInputName: {nodeId: 'parentId'},
                     select: true
+                });
+
+                form.on('switch(visible)', function (obj) {
+                    var status = obj.elem.checked ? 1 : 0;
+                    $('#visible').val(status);
+                    $('[name=visible]').val(status);
                 });
 
                 form.on('radio(isCatalog)', function (obj) {

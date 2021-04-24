@@ -9,11 +9,13 @@
         <result column="href" jdbcType="VARCHAR" property="href"/>
         <result column="icon" jdbcType="VARCHAR" property="icon"/>
         <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="open_type" jdbcType="VARCHAR" property="openType"/>
         <result column="visible" jdbcType="INTEGER" property="visible"/>
+        <result column="checkArr" jdbcType="VARCHAR" property="checkArr"/>
         <result column="order_num" jdbcType="VARCHAR" property="orderNum"/>
     </resultMap>
     <sql id="Base_Column_List">
-        menu_id, title, parent_id, href, icon, `type`, order_num,visible
+        menu_id, title, parent_id, href, icon, `type`, order_num,visible,open_type
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
        select  zm.menu_id,
@@ -23,6 +25,7 @@
                zm.icon,
                zm.`type`,
                zm.order_num,
+               open_type,
                zm.visible,
                (
                    select title
@@ -31,6 +34,7 @@
                ) parentName
         from z_menu zm
         where zm.menu_id = #{menuId}
+             ORDER BY order_num
     </select>
     <select id="selectMenuList" resultMap="BaseResultMap">
         select
@@ -38,23 +42,43 @@
         from z_menu
         <where>
             <if test="title !=null and title !=''">title like concat('%',#{title},'%')</if>
-            <if test="orderNum !=null and orderNum !=''">order_num =#{orderNum}</if>
+            <if test="orderNum !=null and orderNum !=''">AND order_num =#{orderNum}</if>
         </where>
+        ORDER BY order_num
     </select>
     <select id="selectMenuTree" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from z_menu
         <where>
-            <if test="title !=null and title !=''">title like concat('%',#{title},'%')</if>
-            <if test="orderNum !=null and orderNum !=''">order_num =#{orderNum}</if>
+            visible = 1
+            <if test="title !=null and title !=''">AND title like concat('%',#{title},'%')</if>
+            <if test="orderNum !=null and orderNum !=''">AND order_num =#{orderNum}</if>
         </where>
+        ORDER BY order_num
+    </select>
+    <select id="checkArrMenuTree" resultMap="BaseResultMap">
+           select zm.menu_id,
+               zm.title,
+               zm.parent_id,
+               zm.href,
+               zm.icon,
+               zm.`type`,
+               zm.order_num,
+               zm.visible,
+               zm.open_type,
+               if(zrm.menu_id = zm.menu_id, '1', '0') checkArr
+        from z_menu zm
+                 left join z_role_menu zrm on zrm.menu_id = zm.menu_id
+        where visible = 1
+        ORDER BY zm.menu_id, parent_id, order_num
     </select>
     <select id="selectMenuListByRole" resultType="com.cjl.basic.zone.project.menu.domain.ZRoleMenu">
         select
         <include refid="Base_Column_List"/>
         from z_role_menu
         where z_role_id = #{roleId}
+        ORDER BY order_num
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from z_menu
@@ -85,6 +109,9 @@
             <if test="visible != null">
                 visible,
             </if>
+            <if test="openType != null">
+                open_type,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="title != null">
@@ -107,6 +134,9 @@
             </if>
             <if test="visible != null">
                 #{visible,jdbcType=INTEGER},
+            </if>
+            <if test="openType != null">
+                #{openType,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -133,6 +163,9 @@
             </if>
             <if test="visible != null">
                 visible = #{visible,jdbcType=INTEGER},
+            </if>
+            <if test="openType != null">
+                open_type = #{openType,jdbcType=INTEGER},
             </if>
         </set>
         <where>

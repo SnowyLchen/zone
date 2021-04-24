@@ -58,4 +58,11 @@ public interface IMenuService {
      * @return
      */
     List<ZMenuTree> selectMenuTree(ZMenu menu);
+
+    /**
+     * 查询角色菜单
+     * @param menu
+     * @return
+     */
+    List<ZMenuTree> checkArrMenuTree(ZMenu menu);
 }
