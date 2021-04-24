@@ -39,7 +39,7 @@
             initLevel: "1",
             // accordionUL:dtree.accordionUL("#tree"),
             method: 'get',
-            url: "/role/menuTree",
+            url: "/role/menuTree/" + $("[name=roleId]").val(),
             selectInputName: {nodeId: 'parentId'},
             checkbar: true
         });

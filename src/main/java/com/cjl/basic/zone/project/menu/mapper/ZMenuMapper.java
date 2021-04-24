@@ -60,5 +60,10 @@ public interface ZMenuMapper {
      */
     List<ZMenu> selectMenuTree(ZMenu menu);
 
-    List<ZMenu> checkArrMenuTree(ZMenu menu);
+    /**
+     * 查询角色对应菜单权限
+     * @param roleId
+     * @return
+     */
+    List<ZMenu> checkArrMenuTree(Integer roleId);
 }

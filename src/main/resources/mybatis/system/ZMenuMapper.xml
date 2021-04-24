@@ -69,7 +69,7 @@
                zm.open_type,
                if(zrm.menu_id = zm.menu_id, '1', '0') checkArr
         from z_menu zm
-                 left join z_role_menu zrm on zrm.menu_id = zm.menu_id
+                 left join z_role_menu zrm on zrm.menu_id = zm.menu_id AND zrm.role_id=#{roleId}
         where visible = 1
         ORDER BY zm.menu_id, parent_id, order_num
     </select>

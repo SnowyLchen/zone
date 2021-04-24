@@ -55,7 +55,7 @@ public class MenuServiceImpl implements IMenuService {
     }
 
     @Override
-    public List<ZMenuTree> checkArrMenuTree(ZMenu menu) {
-        return StringFormat.formatTreeData(menuMapper.checkArrMenuTree(menu));
+    public List<ZMenuTree> checkArrMenuTree(Integer roleId) {
+        return StringFormat.formatTreeData(menuMapper.checkArrMenuTree(roleId));
     }
 }

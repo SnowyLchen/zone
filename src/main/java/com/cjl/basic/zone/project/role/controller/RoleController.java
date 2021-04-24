@@ -82,8 +82,8 @@ public class RoleController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping("/menuTree")
-    public AjaxResult selectMenuTree(ZMenu menu) {
-        return AjaxResult.successTree(menuService.checkArrMenuTree(menu));
+    @RequestMapping("/menuTree/{roleId}")
+    public AjaxResult selectMenuTree(@PathVariable Integer roleId) {
+        return AjaxResult.successTree(menuService.checkArrMenuTree(roleId));
     }
 }
