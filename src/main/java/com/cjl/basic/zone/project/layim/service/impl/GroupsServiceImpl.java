@@ -1,11 +1,12 @@
 package com.cjl.basic.zone.project.layim.service.impl;
 
-import com.cjl.basic.zone.project.layim.mapper.GroupsMapper;
 import com.cjl.basic.zone.project.layim.entity.Group;
 import com.cjl.basic.zone.project.layim.entity.GroupMsg;
 import com.cjl.basic.zone.project.layim.entity.Groups;
 import com.cjl.basic.zone.project.layim.entity.Mine;
+import com.cjl.basic.zone.project.layim.mapper.GroupsMapper;
 import com.cjl.basic.zone.project.layim.service.GroupsService;
+import com.cjl.basic.zone.project.user.domain.User;
 import com.cjl.basic.zone.utils.IdGenerat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ import java.util.List;
 
 /**
  * @Author chen
- * @Date 2020/4/8 9:43
+ * @Date 2021/4/8 9:43
  * @Version 1.0
  */
 @Service
@@ -39,8 +40,7 @@ public class GroupsServiceImpl implements GroupsService {
 
     @Override
     public List<Mine> getGroupUsre(String id) {
-        return groupsMapper.getGroupUserById(id
-        );
+        return groupsMapper.getGroupUserById(id);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class GroupsServiceImpl implements GroupsService {
     }
 
     @Override
-    public List<Mine> getGroupChatLogMsg(GroupMsg groupMsg) {
+    public List<User> getGroupChatLogMsg(GroupMsg groupMsg) {
         return groupsMapper.getGroupChatLogMsg(groupMsg);
     }
 

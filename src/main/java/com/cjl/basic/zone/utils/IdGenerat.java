@@ -5,7 +5,7 @@ import java.util.Date;
 
 /**
  * @Author chen
- * @Date 2020/4/8 17:06
+ * @Date 2021/4/8 17:06
  * @Version 1.0
  */
 public class IdGenerat {

@@ -88,7 +88,7 @@ layui.use(['layim', 'flow'], function(){
         agree: function(othis){
             var li = othis.parents('li')
                 ,id = li.data('id');
-            layer.confirm('确定拒绝吗？', function(index){
+            layer.confirm('确定同意吗？', function(index){
                 $.post('/layim/add/agree', {
                     id: id //对方用户ID
                 }, function(res){

@@ -9,7 +9,7 @@ import java.util.Date;
 
 /**
  * @Author chen
- * @Date 2020/4/8 14:03
+ * @Date 2021/4/8 14:03
  * @Version 1.0
  */
 @AllArgsConstructor
@@ -18,7 +18,7 @@ import java.util.Date;
 @Accessors(chain = true)
 public class ChatMsg {
     private String id;
-    private String sendUserId;
+    private Integer sendUserId;
     private String reciveUserId;
     private String content;
     private Date createTime;

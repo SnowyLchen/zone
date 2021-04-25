@@ -6,9 +6,10 @@ import com.cjl.basic.zone.common.utils.SpringRedisUtil;
 import com.cjl.basic.zone.project.layim.entity.*;
 import com.cjl.basic.zone.project.layim.service.ChatMsgService;
 import com.cjl.basic.zone.project.layim.service.GroupsService;
-import com.cjl.basic.zone.project.layim.service.MineService;
+import com.cjl.basic.zone.project.user.service.IUserService;
 import com.cjl.basic.zone.utils.IdGenerat;
 import com.cjl.basic.zone.utils.LayimUtil;
+import com.cjl.basic.zone.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -25,19 +26,21 @@ import java.util.concurrent.ConcurrentHashMap;
  * @ServerEndpoint 可以把当前类变成websocket服务类
  */
 @Controller
-@ServerEndpoint(value = "/websocket/{userno}")
+@ServerEndpoint(value = "/websocket/{userno}/{operator}")
 public class ChatWebSocket {
 
     private static ChatMsgService chatMsgService;
     private static GroupsService groupsService;
-    private static MineService mineService;
+    //    private static MineService mineService;
+    private static IUserService userService;
+
     private static SpringRedisUtil redisTemplate;
 
     @Autowired
-    public void setChatService(ChatMsgService chatService, GroupsService groupsService, MineService mineService, SpringRedisUtil redisTemplate) {
+    public void setChatService(ChatMsgService chatService, GroupsService groupsService, IUserService userService, SpringRedisUtil redisTemplate) {
         ChatWebSocket.chatMsgService = chatService;
         ChatWebSocket.groupsService = groupsService;
-        ChatWebSocket.mineService = mineService;
+        ChatWebSocket.userService = userService;
         ChatWebSocket.redisTemplate = redisTemplate;
     }
 
@@ -48,7 +51,7 @@ public class ChatWebSocket {
     /**
      * concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。若要实现服务端与单一客户端通信的话，可以使用Map来存放，其中Key可以为用户标识
      */
-    private static ConcurrentHashMap<String, ChatWebSocket> webSocketSet = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<Integer, ChatWebSocket> webSocketSet = new ConcurrentHashMap<>();
 
     /**
      * 与某个客户端的连接会话，需要通过它来给客户端发送数据
@@ -57,7 +60,7 @@ public class ChatWebSocket {
     /**
      * 当前发消息的人员编号
      */
-    private String userno = "";
+    private Integer userno;
 
 
     /**
@@ -66,20 +69,23 @@ public class ChatWebSocket {
      * session 可选的参数。session为与某个客户端的连接会话，需要通过它来给客户端发送数据
      */
     @OnOpen
-    public void onOpen(@PathParam(value = "userno") String param, Session webSocketSession, EndpointConfig config) {
+    public void onOpen(@PathParam(value = "userno") Integer accountId, @PathParam("operator") String operator, Session webSocketSession, EndpointConfig config) {
         //接收到发送消息的人员编号
-        userno = param;
+        userno = accountId;
         this.webSocketSession = webSocketSession;
-        //加入map中
-        webSocketSet.put(param, this);
-        //在线数加1
-        addOnlineCount();
-        System.out.println("有新连接加入！当前在线人数为" + getOnlineCount());
+        if (StringUtils.isNotNull(operator) && "login".equals(operator)) {
+            //加入map中
+            webSocketSet.put(accountId, this);
+            //在线数加1
+            addOnlineCount();
+            System.out.println("有新连接加入！当前在线人数为" + getOnlineCount());
 //        System.out.println("OnOpen");
-        mineService.upUserMine(new Mine() {{
-            setId(userno);
-            setStatus("online");
-        }}); //更新用户的状态为在线
+            //更新用户的状态为在线
+            userService.updateUser(new Mine() {{
+                setAccountId(userno);
+                setStatus("online");
+            }});
+        }
         //获取离线消息
         getOnLineMsg();
         //获取消息盒子
@@ -104,10 +110,10 @@ public class ChatWebSocket {
                 String receiveId = chatMsgMap.get("receiveId").toString();
                 Date sendTime = new Date(Long.parseLong(chatMsgMap.get("sendTime").toString()));
                 //获取登录人信息 填充对象
-                Mine userInfo = mineService.getUserInfo(sendId);
+                Mine userInfo = userService.selectMineById(Integer.valueOf(sendId));
                 userInfo.setToid(receiveId);
                 userInfo.setContent(content);
-                userInfo.setSendtime(sendTime);
+                userInfo.setSendTime(sendTime);
                 userInfo.setTimeStamp(sendTime.getTime());
                 if (str.contains("friend")) {
                     userInfo.setType("friend");
@@ -176,18 +182,21 @@ public class ChatWebSocket {
      * 连接关闭调用的方法
      */
     @OnClose
-    public void onClose() {
-        if (!"".equals(userno)) {
-            //从set中删除
-            webSocketSet.remove(userno);
-            //在线数减1
-            subOnlineCount();
-            System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount());
-            System.out.println("onClose");
-            mineService.upUserMine(new Mine() {{
-                setId(userno);
-                setStatus("offline");
-            }}); //更新用户的状态为离线
+    public void onClose(@PathParam("operator") String operator) {
+        if (userno != null) {
+            if (StringUtils.isNotNull(operator) && "login".equals(operator)) {
+                //从set中删除
+                webSocketSet.remove(userno);
+                //在线数减1
+                subOnlineCount();
+                System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount());
+                System.out.println("onClose");
+                //更新用户的状态为离线
+                userService.updateUser(new Mine() {{
+                    setAccountId(userno);
+                    setStatus("offline");
+                }});
+            }
         }
     }
 
@@ -203,15 +212,15 @@ public class ChatWebSocket {
         //接收前台发送过来的消息
         JSONObject jsonObject = JSONObject.parseObject(mine);
         String msgtype = jsonObject.getString("msgType");
-        if (msgtype.equals("chatMsg")) {
+        if ("chatMsg".equals(msgtype)) {
             Mine message = jsonObject.toJavaObject(Mine.class);
             //查看是单反消息还是和群发消息
-            if (message.getType().equals("friend")) {
+            if ("friend".equals(message.getType())) {
                 sendToUser(message);
-            } else if (message.getType().equals("group")) {
+            } else if ("group".equals(message.getType())) {
                 sendAll(message);
             }
-        } else if (msgtype.equals("addAsk")) {
+        } else if ("addAsk".equals(msgtype)) {
             LayimAsk layimAsk = jsonObject.toJavaObject(LayimAsk.class);
             addAsk(layimAsk);
         }
@@ -232,13 +241,13 @@ public class ChatWebSocket {
             layimAsk.setContent(content);
         }
         String time = String.valueOf(System.currentTimeMillis());
-        Mine userInfo = mineService.getUserInfo(layimAsk.getFrom());
+        Mine userInfo = userService.selectMineById(Integer.valueOf(layimAsk.getFrom()));
         String uid = layimAsk.getUid();
         layimAsk.setId(IdGenerat.getGeneratID());
         layimAsk.setTime(time);
         layimAsk.setHref("");
         layimAsk.setUser(userInfo);
-        boolean onLine = webSocketSet.get(uid) != null;
+        boolean onLine = webSocketSet.get(Integer.valueOf(uid)) != null;
         //接收人在线直接发送
         if (onLine) {
             layimAsk.setRead("1");
@@ -259,7 +268,7 @@ public class ChatWebSocket {
                     setData(null);
                 }};
                 //转成json形式发送出去
-                webSocketSet.get(uid).sendMessage(JSONObject.toJSONString(socketMsgType));
+                webSocketSet.get(Integer.valueOf(uid)).sendMessage(JSONObject.toJSONString(socketMsgType));
             } else {//不在线
             }
         } catch (IOException e) {
@@ -275,9 +284,9 @@ public class ChatWebSocket {
      */
     public static void sendToUser(Mine message) {
         System.out.println("单点消息");
-        message.setSendtime(new Date());
-        Date date = message.getSendtime();
-        String id = message.getId();
+        message.setSendTime(new Date());
+        Date date = message.getSendTime();
+        Integer id = message.getAccountId();
         String content = message.getContent();
         String reviceUserId = message.getToid();
         //填充消息对象
@@ -299,7 +308,8 @@ public class ChatWebSocket {
                     setMsgType(SocketConstant.ON_LINE_MESSAGE);
                     setData(message);
                 }};
-                webSocketSet.get(reviceUserId).sendMessage(JSONObject.toJSONString(socketMsgType));//转成json形式发送出去
+                //转成json形式发送出去
+                webSocketSet.get(reviceUserId).sendMessage(JSONObject.toJSONString(socketMsgType));
             } else {//不在线
                 //放入redis处理不在线
                 Map<Object, Object> map = new HashMap<>();
@@ -324,29 +334,32 @@ public class ChatWebSocket {
      */
     private void sendAll(Mine message) {
         System.out.println("群消息");
-        message.setSendtime(new Date());
+        message.setSendTime(new Date());
         String revicegid = message.getToid();
-        Date date = message.getSendtime();
-        String id = message.getId();
+        Date date = message.getSendTime();
+        Integer id = message.getAccountId();
         String content = message.getContent();
-        List<Mine> userlist = groupsService.getGroupUsre(revicegid); //此群中的用户（包含自己）
+        //此群中的用户（包含自己）
+        List<Mine> userlist = groupsService.getGroupUsre(revicegid);
         groupsService.InsertGroupMsg(new GroupMsg() {{
-            setSendUserId(message.getId());
+            setSendUserId(String.valueOf(message.getAccountId()));
             setGroupId(message.getToid());
             setContent(message.getContent());
         }});
         try {
             for (Mine uid : userlist) {
-                String userId = uid.getId();
-                if (!userId.equals(message.getId())) {//（过滤掉自己）
-                    if (webSocketSet.get(userId) != null) {
+                Integer userId = uid.getAccountId();
+                //（过滤掉自己）
+                if (!userId.equals(message.getAccountId())) {
+                    if (webSocketSet.get(String.valueOf(userId)) != null) {
                         SocketMsgType socketMsgType = new SocketMsgType() {{
                             setCode(200);
                             setMsgType("发送成功");
                             setMsgType(SocketConstant.ON_LINE_MESSAGE);
                             setData(message);
                         }};
-                        webSocketSet.get(userId).sendMessage(JSONObject.toJSONString(socketMsgType));//转成json形式发送出去
+                        //转成json形式发送出去
+                        webSocketSet.get(String.valueOf(userId)).sendMessage(JSONObject.toJSONString(socketMsgType));
                     } else {//不在线
                         //放入redis处理不在线
                         Map<Object, Object> map = new HashMap<>();

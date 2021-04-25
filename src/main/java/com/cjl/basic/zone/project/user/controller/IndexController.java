@@ -38,7 +38,7 @@ public class IndexController extends BaseController {
     public String index(ModelMap mmap, HttpServletResponse response) {
         User user = ShiroAuthenticateUtils.getUserByToken();
         mmap.put("user", user);
-        mmap.put("accountId", "1571476959767947441");
+        mmap.put("accountId", ShiroAuthenticateUtils.getAccountId());
         mmap.put("copyrightYear", zoneConfig.getCopyrightYear());
         //当前用户是游客，需要获取当前的用户状态
         final String visitor = "visitor";

@@ -24,6 +24,13 @@
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
+        <result property="sign" column="sign"/>
+        <result property="status" column="status"/>
+        <!--        补充的属性-->
+        <result property="content" column="content"/>
+        <result property="type" column="type"/>
+        <result property="toid" column="toid"/>
+        <result property="sendTime" column="sendTime"/>
     </resultMap>
 
     <sql id="selectUserVo">
@@ -41,7 +48,9 @@
                    sex,
                    avatar,
                    create_time,
-                   update_time
+                   update_time,
+                   sign,
+                   status
             from z_users
     </sql>
     <sql id="UserVo">
@@ -56,7 +65,9 @@
                 zu.activated,
                 zu.salt,
                 zu.group_name,
-                zu.login_name
+                zu.login_name,
+                zu.sign,
+                zu.status
         from z_users zu
     </sql>
     <select id="selectUserList" resultMap="UserResultMap">
@@ -100,6 +111,8 @@
             <if test="createTime != null  ">create_time = #{createTime},</if>
             <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
             <if test="updateTime != null  ">update_time = #{updateTime},</if>
+            <if test="sign != null  ">sign = #{sign},</if>
+            <if test="status != null  ">status = #{status},</if>
         </trim>
         <where>
             <if test="accountId != null and accountId !='' ">and account_id=#{accountId}</if>
@@ -113,11 +126,7 @@
             update_time=#{date}
         where find_in_set(account_id, #{ids,jdbcType=VARCHAR})
     </update>
-    <delete id="deleteuser">
-        delete
-        from mfrs_account
-        where find_in_set(account_id, #{ids,jdbcType=VARCHAR})
-    </delete>
+
     <select id="checkRegisterExist" resultMap="UserResultMap">
         select login_time,email from z_users
         where
@@ -229,7 +238,9 @@
             <if test="createBy != null and createBy != ''">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null and updateBy != ''">update_by,</if>
-            <if test="updateTime != null">update_time</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="sign != null  ">sign,</if>
+            <if test="status != null  ">status</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userName != null">
@@ -274,7 +285,9 @@
             <if test="createBy != null and createBy != ''">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
-            <if test="updateTime != null">#{updateTime}</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="sign != null  ">#{sign},</if>
+            <if test="status != null  ">#{status}</if>
         </trim>
     </insert>
 

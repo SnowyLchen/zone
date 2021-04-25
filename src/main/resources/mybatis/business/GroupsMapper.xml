@@ -12,17 +12,8 @@
 
     </resultMap>
 
-    <resultMap id="userMap" type="com.cjl.basic.zone.project.layim.entity.Mine">
-        <id property="id" column="id" />
+    <resultMap id="userMap" type="com.cjl.basic.zone.project.layim.entity.Mine" extends="com.cjl.basic.zone.project.user.mapper.UserMapper.UserResultMap">
         <result property="username" column="user_name"/>
-        <result property="sign" column="sign"/>
-        <result property="avatar" column="avatar"/>
-        <result property="status" column="status"/>
-        <!--        补充的属性-->
-        <result property="content" column="content"/>
-        <result property="type" column="type"/>
-        <result property="toid" column="toid"/>
-        <result property="sendtime" column="create_time"/>
     </resultMap>
 
     <insert id="addGroupUser">

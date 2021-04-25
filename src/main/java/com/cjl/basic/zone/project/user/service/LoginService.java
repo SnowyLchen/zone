@@ -68,7 +68,7 @@ public class LoginService {
             throw new UserNotExistsException();
         }
 //        //6、判断用户是否禁用
-        if (UserStatus.DISABLE.getCode().equals(u.getStatus())) {
+        if (UserStatus.DISABLE.getCode().equals(u.getActivated())) {
             AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, u.getAccountId(), Constants.LOGIN_FAIL, MessageUtils.message("user.blocked", u.getRemark())));
             throw new UserBlockedException(u.getRemark());
         }

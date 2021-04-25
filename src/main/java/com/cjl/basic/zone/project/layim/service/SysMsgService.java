@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * @Author chen
- * @Date 2020/4/8 15:13
+ * @Date 2021/4/8 15:13
  * @Version 1.0
  */
 public interface SysMsgService {

@@ -9,7 +9,7 @@
     <div th:include="include::header"></div>
     <script th:inline="javascript">
         var basePath = [[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]];
-        var userid = [[${session.userId}]];
+        var accountId = [[${accountId}]];
     </script>
     <style>
         body .layim-chat-main {
@@ -27,7 +27,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">添加类型<span style="color: red;">*</span></label>
                     <div class="layui-inline" style="width: 195px">
-                        <select id="type" name="type" lay-verify="" >
+                        <select id="type" name="type" lay-verify="">
                             <option value>请选择添加类型</option>
                             <option value="0">好友</option>
                             <option value="1">群</option>
@@ -38,7 +38,8 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">id<span style="color: red;">*</span></label>
                     <div class="layui-input-block">
-                        <input id="friend" placeholder="请输入id" type="text" class="layui-input" lay-verify="required" required/>
+                        <input id="friend" placeholder="请输入id" type="text" class="layui-input" lay-verify="required"
+                               required/>
                     </div>
                 </div>
 
@@ -50,7 +51,7 @@
                 </div>
 
                 <div class="layui-form-item">
-                    <button class="layui-btn addLive" onclick="addAsk()" >&emsp;提交&emsp;</button>
+                    <button class="layui-btn addLive" onclick="addAsk()">&emsp;提交&emsp;</button>
                     <button class="layui-btn layui-btn-primary" type="button" id="backupPage">&emsp;返回&emsp;</button>
                 </div>
 

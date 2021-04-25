@@ -1,7 +1,7 @@
 //当前选中窗口的用户id
 var actuserid = "";
 //接入WebSocket
-var socket = new WebSocket('ws://localhost:8000/websocket/' + accountId);
+var socket = new WebSocket('ws://localhost:8000/websocket/' + accountId + "/login");
 //打开事件
 socket.onopen = function () {
     console.log("WebSocket 已打开");

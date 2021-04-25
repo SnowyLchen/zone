@@ -8,6 +8,7 @@ import com.cjl.basic.zone.common.utils.InsertOrUpdateUtils;
 import com.cjl.basic.zone.common.utils.StringUtils;
 import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.framework.shiro.service.PasswordService;
+import com.cjl.basic.zone.project.layim.entity.Mine;
 import com.cjl.basic.zone.project.user.domain.User;
 import com.cjl.basic.zone.project.user.mapper.UserMapper;
 import com.cjl.basic.zone.utils.dateutils.DateUtils;
@@ -45,11 +46,22 @@ public class UserServiceImpl implements IUserService {
         return userMapper.selectUserById(accountId);
     }
 
+    @Override
+    public Mine selectMineById(Integer accountId) {
+        User user = userMapper.selectUserById(accountId);
+        return new Mine() {{
+            setAccountId(user.getAccountId());
+            setStatus(user.getStatus());
+            setSign(user.getSign());
+            setUsername(user.getUserName());
+        }};
+    }
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int deleteUserByIds(String ids) {
-        if (ids.equals("1")){
+        if (ids.equals("1")) {
             throw new BaseException("不允许删除超级管理员");
         }
         ShiroAuthenticateUtils.clearByAccountIds(Convert.toIntArray(ids));

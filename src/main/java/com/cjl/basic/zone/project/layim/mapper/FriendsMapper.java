@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * @Author chen
- * @Date 2020/4/8 8:39
+ * @Date 2021/4/8 8:39
  * @Version 1.0
  */
 public interface FriendsMapper {

@@ -4,12 +4,13 @@ import com.cjl.basic.zone.project.layim.entity.Group;
 import com.cjl.basic.zone.project.layim.entity.GroupMsg;
 import com.cjl.basic.zone.project.layim.entity.Groups;
 import com.cjl.basic.zone.project.layim.entity.Mine;
+import com.cjl.basic.zone.project.user.domain.User;
 
 import java.util.List;
 
 /**
  * @Author chen
- * @Date 2020/4/8 8:53
+ * @Date 2021/4/8 8:53
  * @Version 1.0
  */
 public interface GroupsMapper {
@@ -51,7 +52,7 @@ public interface GroupsMapper {
      * @param groupMsg
      * @return
      */
-    List<Mine> getGroupChatLogMsg(GroupMsg groupMsg);
+    List<User> getGroupChatLogMsg(GroupMsg groupMsg);
 
     /**
      * 通过id获取群组信息

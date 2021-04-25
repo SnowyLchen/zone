@@ -1,5 +1,6 @@
 package com.cjl.basic.zone.project.user.service;
 
+import com.cjl.basic.zone.project.layim.entity.Mine;
 import com.cjl.basic.zone.project.user.domain.User;
 
 import java.util.List;
@@ -23,6 +24,13 @@ public interface IUserService {
      * @return 用户对象信息
      */
     User selectUserById(Integer accountId);
+    /**
+     * 通过用户ID查询用户Socket
+     *
+     * @param accountId 用户ID
+     * @return 用户对象信息
+     */
+    Mine selectMineById(Integer accountId);
 
     /**
      * 批量删除用户信息

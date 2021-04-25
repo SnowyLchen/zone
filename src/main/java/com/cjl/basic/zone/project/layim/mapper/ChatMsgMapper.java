@@ -1,13 +1,13 @@
 package com.cjl.basic.zone.project.layim.mapper;
 
 import com.cjl.basic.zone.project.layim.entity.ChatMsg;
-import com.cjl.basic.zone.project.layim.entity.Mine;
+import com.cjl.basic.zone.project.user.domain.User;
 
 import java.util.List;
 
 /**
  * @Author chen
- * @Date 2020/4/8 14:18
+ * @Date 2021/4/8 14:18
  * @Version 1.0
  */
 public interface ChatMsgMapper {
@@ -26,5 +26,5 @@ public interface ChatMsgMapper {
      * @param chatMsg
      * @return
      */
-    List<Mine> getChatMsgLog(ChatMsg chatMsg);
+    List<User> getChatMsgLog(ChatMsg chatMsg);
 }
