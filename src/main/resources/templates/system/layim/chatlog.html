@@ -6,7 +6,7 @@
     <meta name="renderer" content="webkit">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <link rel="stylesheet" type="text/css" th:href="@{/static/layui/css/layui.css}"/>
+    <div th:include="include::header"></div>
     <script th:inline="javascript">
         var basePath = [[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]];
         var userid = [[${session.userId}]];
@@ -40,8 +40,7 @@
   {{# }
 }); }}
 </textarea>
-<script type="application/javascript" th:src="@{/static/layui/jquery.min.js}"></script>
-<script type="application/javascript" th:src="@{/static/layui/layui.js}"></script>
-<script type="application/javascript" th:src="@{/static/js/chatlog.js}"></script>
+<div th:include="include::layIm"></div>
+<script type="application/javascript" th:src="@{/js/chatlog.js}"></script>
 </body>
 </html>
