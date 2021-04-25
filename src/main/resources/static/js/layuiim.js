@@ -4,7 +4,7 @@ var actuserid = "";
 var socket = new WebSocket('ws://localhost:8000/websocket/' + userid);
 //打开事件
 socket.onopen = function () {
-    console.log("Socket 已打开");
+    console.log("WebSocket 已打开");
     // socket.send("{\"msgType\":\"addAsk\",\"msg\":\"这是来自客户端的消息" + location.href + new Date() + "\"}");
 };
 
