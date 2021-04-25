@@ -65,7 +65,7 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
                 }
             }, 500);
         }
-        this.ajaxMsg = function (res,index) {
+        this.ajaxMsg = function (res, index) {
             top.layer.close(index);
             if (res.code === 0) {
                 layer.msg(res.msg, {icon: 1, time: 1000}, function () {
@@ -74,6 +74,22 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
             } else {
                 layer.msg(res.msg, {icon: 2, time: 1000});
             }
+        }
+        this.initLayIm = function () {
+            var config = {
+                url: 'layim/login',
+                dataType: 'json',
+                type: 'GET',
+                success: function (result) {
+                    debugger
+                    if (result.code == 0) {
+                        console.log('layIm初始化成功')
+                    } else {
+                        layer.msg(result.msg, {icon: 2, time: 1000});
+                    }
+                }
+            }
+            $.ajax(config)
         }
     }
     exports(MOD_NAME, common);

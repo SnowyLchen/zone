@@ -2,11 +2,13 @@ package com.cjl.basic.zone.project.layim.controller;
 
 import com.cjl.basic.zone.common.constant.SocketConstant;
 import com.cjl.basic.zone.common.utils.SpringRedisUtil;
+import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.project.layim.entity.*;
 import com.cjl.basic.zone.project.layim.service.*;
 import com.cjl.basic.zone.utils.LayimUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -17,7 +19,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @Author LiuZhao
+ * @Author chen
  * @Date 2020/4/8 9:46
  * @Version 1.0
  */
@@ -41,13 +43,11 @@ public class LayIMController {
     /**
      * 通过用户id进入个人界面
      *
-     * @param userId
-     * @param session
      * @return
      */
-    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-    public String layim(@PathVariable("userId") String userId, HttpSession session) {
-        session.setAttribute("userId", userId);
+    @GetMapping("/login")
+    public String layim(ModelMap map) {
+        map.put("accountId", ShiroAuthenticateUtils.getAccountId());
         return "system/layim/index";
     }
 
@@ -77,11 +77,11 @@ public class LayIMController {
     @GetMapping("/chat/log/{uid}")
     @ResponseBody
     public List<Mine> chatlog(@PathVariable("uid") String uid, HttpSession session) throws InterruptedException {
-        String userid = (String) session.getAttribute("userId");
-        Thread.sleep(1000);//模拟消息查询缓慢，让前台展示loading样式
-        ChatMsg chatmsg = new ChatMsg().setSendUserId(userid).setReciveUserId(uid);
-        List<Mine> mines = chatMsgService.getChatMsgLog(chatmsg);
-        return mines;
+        String accountId = String.valueOf(ShiroAuthenticateUtils.getAccountId());
+        //模拟消息查询缓慢，让前台展示loading样式
+        Thread.sleep(1000);
+        ChatMsg chatmsg = new ChatMsg().setSendUserId(accountId).setReciveUserId(uid);
+        return chatMsgService.getChatMsgLog(chatmsg);
     }
 
     /**
@@ -94,19 +94,21 @@ public class LayIMController {
     @GetMapping("/chat/log/group/{gid}")
     @ResponseBody
     public List<Mine> chatlog(@PathVariable("gid") String gid) throws InterruptedException {
-        Thread.sleep(1000);//模拟消息查询缓慢，让前台展示loading样式
+        //模拟消息查询缓慢，让前台展示loading样式
+        Thread.sleep(1000);
         return groupsService.getGroupChatLogMsg(new GroupMsg().setGroupId(gid));
     }
 
     @GetMapping("/add/ask/{uid}")
     @ResponseBody
     public List<Map<Object, Object>> addAskRecord(@PathVariable("uid") String uid, HttpSession session) throws InterruptedException {
-        String userid = (String) session.getAttribute("userId");
-        Thread.sleep(1000);//模拟消息查询缓慢，让前台展示loading样式
+        String accountId = String.valueOf(ShiroAuthenticateUtils.getAccountId());
+        //模拟消息查询缓慢，让前台展示loading样式
+        Thread.sleep(1000);
 
         List<Map<Object, Object>> layimAsks = new ArrayList<>();
         //从redis中取离线接收的消息
-        String prefix = userid + "_" + SocketConstant.ADD_ASK + "*";
+        String prefix = accountId + "_" + SocketConstant.ADD_ASK + "*";
         // 获取所有的key
         Set<String> keys = redisTemplate.keys(prefix);
 
@@ -132,9 +134,9 @@ public class LayIMController {
             }
         }
         //查系统消息
-        List<SysMsg> sysMsgs = sysMsgService.getSysMsgByUid(userid);
+        List<SysMsg> sysMsgs = sysMsgService.getSysMsgByUid(accountId);
         for (SysMsg sysMsg : sysMsgs) {
-            LayimAsk layimAsk = new LayimAsk().setId(sysMsg.getId()).setContent(sysMsg.getContent()).setUid(userid).setType("1")
+            LayimAsk layimAsk = new LayimAsk().setId(sysMsg.getId()).setContent(sysMsg.getContent()).setUid(accountId).setType("1")
                     .setTime(String.valueOf(sysMsg.getCreateTime().getTime())).setUser(new Mine().setId(""));
             Map<Object, Object> map = LayimUtil.beanToMap(layimAsk);
             layimAsks.add(map);
@@ -218,23 +220,23 @@ public class LayIMController {
     /**
      * 初始化layim
      *
-     * @param session
      * @return
      */
     @RequestMapping(value = "/init", method = RequestMethod.GET)
     @ResponseBody
-    public InitImVo init(HttpSession session) {
-        String userId = (String) session.getAttribute("userId");
+    public InitImVo init() {
+//        String userId = (String) session.getAttribute("userId");
+        String accountId = String.valueOf(ShiroAuthenticateUtils.getAccountId());
         InitImVo initImVo = new InitImVo();
         //个人信息
-        Mine mine = mineService.getUserInfo(userId);
+        Mine mine = mineService.getUserInfo(accountId);
         //好友列表
-        List<Mine> mineList = friendsService.getUserFriend(userId);
+        List<Mine> mineList = friendsService.getUserFriend(accountId);
         Friends friends = new Friends().setId("2").setGroupname("我的好友").setList(mineList);
         List<Friends> friendList = new ArrayList<>();
         friendList.add(friends);
         //群组信息
-        List<Groups> groupsList = groupsService.getUserGroups(userId);
+        List<Groups> groupsList = groupsService.getUserGroups(accountId);
         //Data数据
         ImData imData = new ImData();
         imData.setMine(mine);

@@ -1,7 +1,7 @@
 //当前选中窗口的用户id
 var actuserid = "";
 //接入WebSocket
-var socket = new WebSocket('ws://localhost:8000/websocket/' + userid);
+var socket = new WebSocket('ws://localhost:8000/websocket/' + accountId);
 //打开事件
 socket.onopen = function () {
     console.log("WebSocket 已打开");
@@ -52,7 +52,7 @@ layui.use('layim', function (layim) {
 
     });
     // //删除本地聊天数据
-    layui.data('layim', {key: userid, remove: true});
+    layui.data('layim', {key: accountId, remove: true});
     //监听发送的消息
     layim.on('sendMessage', function (res) {
         console.log(res)

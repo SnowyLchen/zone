@@ -22,7 +22,7 @@ public class User extends BaseEntity {
     private String loginName;
 
     /**
-     * 真实姓名
+     * 昵称
      */
     private String userName;
 
@@ -57,11 +57,6 @@ public class User extends BaseEntity {
     private String salt;
 
     /**
-     * 帐号状态（0正常 1停用）
-     */
-    private String status;
-
-    /**
      * 最后登陆IP
      */
     private String loginIp;
@@ -78,7 +73,86 @@ public class User extends BaseEntity {
      * 首页
      */
     private String homeUrl;
+    /**
+     * 帐号状态
+     */
     private String activated;
+    /**
+     * 我的签名
+     */
+    private String sign;
+    /**
+     * 在线状态 online：在线、hide：隐身
+     */
+    private String status;
+
+    //补充的属性
+    /**
+     * //聊天内容
+     */
+    private String content;
+    /**
+     * 消息类型
+     */
+    private String type;
+    /**
+     * 聊天窗口的选中的用户或者群组的id
+     */
+    private String toid;
+    /**
+     * 消息发送时间
+     */
+    private Date sendTime;
+
+    private Long timeStamp;
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getToid() {
+        return toid;
+    }
+
+    public void setToid(String toid) {
+        this.toid = toid;
+    }
+
+    public Date getSendTime() {
+        return sendTime;
+    }
+
+    public void setSendTime(Date sendTime) {
+        this.sendTime = sendTime;
+    }
+
+    public Long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(Long timeStamp) {
+        this.timeStamp = timeStamp;
+    }
 
     public String getActivated() {
         return activated;

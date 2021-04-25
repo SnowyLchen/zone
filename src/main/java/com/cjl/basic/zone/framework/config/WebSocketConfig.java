@@ -6,7 +6,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 /**
- * @Author LiuZhao
+ * @Author chen
  * @Date 2020/4/7 22:34
  * @Version 1.0
  */

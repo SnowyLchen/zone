@@ -4,22 +4,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title> Admin Layui </title>
-    <!-- 依 赖 样 式 -->
-    <link rel="stylesheet" href="component/pear/css/pear.css"/>
-    <!-- 加 载 样 式-->
-    <link rel="stylesheet" href="admin/css/load.css"/>
-    <!-- 布 局 样 式 -->
-    <link rel="stylesheet" href="admin/css/admin.css"/>
+    <div th:include="include::header"></div>
     <!-- 主 题 更 换 -->
     <style id="pearadmin-bg-color"></style>
+    <script th:inline="javascript">
+        var basePath = [[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]];
+        var accountId = [[${accountId}]];
+        console.log('accountId=' + accountId)
+    </script>
     <!-- 头 部 结 束 -->
 </head>
 <!-- 结 构 代 码 -->
 <body class="layui-layout-body pear-admin" style="height: 2000px">
 <!-- 头部 -->
 <div id="header" class="header"></div>
-
-
+<div id="layIm" class="layIm"></div>
 </body>
 <div th:include="include::footer"></div>
 <!-- 框 架 初 始 化 -->
@@ -27,6 +26,7 @@
     $(function () {
         // 加载头部
         $('#header').load('header')
+        $('#layIm').load('layim/login')
     })
     layui.use(['admin', 'jquery', "convert"], function () {
         var admin = layui.admin,
@@ -41,6 +41,8 @@
         admin.setConfigPath("config/pear.config.yml");
         // Admin 框架初始化
         admin.render();
+        //加载layIm
+        // common.initLayIm();
     })
 </script>
 </html>
