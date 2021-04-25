@@ -61,6 +61,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/assets/**", "anon");
         filterChainDefinitionMap.put("/admin/**", "anon");
         filterChainDefinitionMap.put("/component/**", "anon");
+        filterChainDefinitionMap.put("/layui/**", "anon");
         filterChainDefinitionMap.put("/adminTpl/**", "anon");
         filterChainDefinitionMap.put("/ajax/**", "anon");
         filterChainDefinitionMap.put("/css/**", "anon");
@@ -76,6 +77,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/register", "anon");
         filterChainDefinitionMap.put("/goRegister", "anon");
+        filterChainDefinitionMap.put("/layim", "anon");
+        filterChainDefinitionMap.put("/websocket/**", "anon");
         // 系统权限列表
 //        filterChainDefinitionMap.putAll(SpringUtils.getBean(IMenuService.class).selectPermsAll());
         // swagger

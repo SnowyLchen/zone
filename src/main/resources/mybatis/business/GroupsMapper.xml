@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cjl.basic.zone.project.layim.mapper.GroupsMapper">
+
+
+    <resultMap id="groupMap" type="com.cjl.basic.zone.project.layim.entity.Groups">
+        <id property="id" column="id" />
+        <result property="groupname" column="group_name"/>
+        <result property="owner" column="owner"/>
+        <result property="avatar" column="avatar"/>
+        <result property="createTime" column="create_time"/>
+
+    </resultMap>
+
+    <resultMap id="userMap" type="com.cjl.basic.zone.project.layim.entity.Mine">
+        <id property="id" column="id" />
+        <result property="username" column="user_name"/>
+        <result property="sign" column="sign"/>
+        <result property="avatar" column="avatar"/>
+        <result property="status" column="status"/>
+        <!--        补充的属性-->
+        <result property="content" column="content"/>
+        <result property="type" column="type"/>
+        <result property="toid" column="toid"/>
+        <result property="sendtime" column="create_time"/>
+    </resultMap>
+
+    <insert id="addGroupUser">
+        insert into layim_group_mine
+        (id,gid,uid,create_time,status)
+        values (#{id},#{gid},#{uid},#{createTime},#{status})
+    </insert>
+
+    <select id="getUserGroups" resultMap="groupMap">
+        select lg.* from layim_group lg
+        inner join layim_group_mine lgm on lgm.gid=lg.id
+        where lgm.uid=#{userId}
+    </select>
+
+    <select id="getGroupUserById" resultMap="userMap">
+        select lm.* from  layim_mine lm
+        inner join layim_group_mine lgm on lgm.uid=lm.id
+        where lgm.gid=#{id}
+    </select>
+
+    <sql id="groupMsg">
+        id,group_id,send_user_id,content,create_time,status
+    </sql>
+
+    <insert id="InsertGroupMsg">
+        insert into layim_group_msg
+        (<include refid="groupMsg" />)
+        values (#{id},#{groupId},#{sendUserId},#{content},#{createTime},#{status})
+    </insert>
+
+    <select id="getGroupChatLogMsg" resultMap="userMap">
+        SELECT * FROM layim_mine lm
+        INNER JOIN layim_group_msg lgmsg on lgmsg.send_user_id=lm.id
+        WHERE lgmsg.group_id=#{groupId}
+        ORDER BY lgmsg.create_time asc
+    </select>
+
+    <select id="getById" resultMap="groupMap">
+        select * from layim_group
+        where  id=#{id}
+    </select>
+</mapper>

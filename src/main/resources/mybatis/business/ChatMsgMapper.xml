@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cjl.basic.zone.project.layim.mapper.ChatMsgMapper">
+
+    <resultMap id="chatMap" type="com.cjl.basic.zone.project.layim.entity.ChatMsg">
+        <id property="id" column="id" />
+        <result property="sendUserId" column="send_user_id"/>
+        <result property="reciveUserId" column="recive_user_id"/>
+        <result property="content" column="content"/>
+        <result property="createTime" column="create_time"/>
+        <result property="msgType" column="msg_type"/>
+    </resultMap>
+
+    <resultMap id="userMap" type="com.cjl.basic.zone.project.layim.entity.Mine">
+        <id property="id" column="id" />
+        <result property="username" column="user_name"/>
+        <result property="sign" column="sign"/>
+        <result property="avatar" column="avatar"/>
+        <result property="status" column="status"/>
+<!--        补充的属性-->
+        <result property="content" column="content"/>
+        <result property="type" column="type"/>
+        <result property="toid" column="toid"/>
+        <result property="sendtime" column="create_time"/>
+    </resultMap>
+
+<!--    //补充的属性-->
+<!--    private String content;   //聊天内容-->
+<!--    private String type; //消息类型-->
+<!--    private String toid; //聊天窗口的选中的用户或者群组的id-->
+<!--    private Date sendtime;  //消息发送时间-->
+
+
+    <sql id="chatMsg">
+        id,send_user_id, recive_user_id,content,create_time, msg_type
+    </sql>
+
+    <insert id="insertChatmsg" >
+    insert into layim_chat_msg
+    (<include refid="chatMsg" />)
+    values (#{id},#{sendUserId}, #{reciveUserId},#{content},#{createTime},#{msgType})
+  </insert>
+
+    <select id="getChatMsgLog" resultMap="userMap">
+        SELECT lm.id,lm.user_name,lm.avatar,lcm.content,lcm.create_time  FROM layim_mine lm
+        INNER JOIN layim_chat_msg lcm on lcm.send_user_id=lm.id
+        where (lcm.send_user_id=#{sendUserId} and lcm.recive_user_id=#{reciveUserId}) or
+				(lcm.recive_user_id=#{sendUserId} and lcm.send_user_id=#{reciveUserId})
+        ORDER BY lcm.create_time asc
+    </select>
+
+
+</mapper>

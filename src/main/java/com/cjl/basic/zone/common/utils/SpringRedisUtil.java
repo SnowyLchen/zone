@@ -248,7 +248,7 @@ public class SpringRedisUtil {
      * @param map 对应多个键值
      * @return true 成功 false 失败
      */
-    public boolean hashSetAll(String key, Map<String, Object> map) {
+    public boolean hashSetAll(String key, Map<Object, Object> map) {
         try {
             redisTemplate.opsForHash().putAll(getAppRedisKey(key), map);
             return true;

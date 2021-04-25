@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cjl.basic.zone.project.layim.mapper.FriendsMapper">
+
+    <resultMap id="userMap" type="com.cjl.basic.zone.project.layim.entity.Mine">
+        <id property="id" column="id" />
+        <result property="username" column="user_name"/>
+        <result property="sign" column="sign"/>
+        <result property="avatar" column="avatar"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <insert id="addFriend">
+        insert into  layim_friend
+        (id,user_id,f_user_id,create_time)
+        values (#{id},#{uid},#{fid},#{createTime})
+    </insert>
+
+
+    <select id="getUserFriend" resultMap="userMap">
+        select lm.* from layim_mine lm
+        inner join layim_friend lf on lf.f_user_id=lm.id
+        where lf.user_id=#{userId}
+    </select>
+</mapper>

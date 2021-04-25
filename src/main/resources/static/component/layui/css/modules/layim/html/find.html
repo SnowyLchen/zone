@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>发现</title>
+
+<!--<link rel="stylesheet" href="http://local.res.layui.com/layui/src/css/layui.css">-->
+  <link rel="stylesheet" type="text/css" th:href="@{/static/layui/css/layui.css}"/>
+  <script th:inline="javascript">
+    var basePath = [[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]];
+    var userid = [[${session.userId}]];
+  </script>
+</head>
+<body>
+
+<div style="margin: 15px;">
+  <div class="layui-fluid " style="">
+    <div class="layui-card">
+      <div class="layui-card-body">
+
+
+          <div class="layui-form-item">
+            <label class="layui-form-label">id<span style="color: red;">*</span></label>
+            <div class="layui-input-block">
+              <input id="friend" name="name" placeholder="请输入id" type="text" class="layui-input" lay-verify="required" required/>
+            </div>
+          </div>
+
+        <div class="layui-form-item">
+          <label class="layui-form-label">附加消息<span style="color: red;">*</span></label>
+          <div class="layui-input-block">
+            <textarea id="content" placeholder="请输入附加消息" class="layui-textarea"></textarea>
+          </div>
+        </div>
+
+        <div class="layui-form-item">
+          <label class="layui-form-label">添加类型<span style="color: red;">*</span></label>
+          <div class="layui-input-block">
+            <select id="type" name="type">
+              <option value>请选择添加类型</option>
+              <option value="0">好友</option>
+              <option value="1">群</option>
+            </select>
+          </div>
+        </div>
+
+
+          <div class="layui-form-item">
+              <button class="layui-btn addLive" onclick="addAsk()" >&emsp;提交&emsp;</button>
+              <button class="layui-btn layui-btn-primary" type="button" id="backupPage">&emsp;返回&emsp;</button>
+            </div>
+
+      </div>
+    </div>
+  </div>
+
+
+    <!--  <blockquote class="layui-elem-quote">此为自定义的【查找】页面，因需求不一，所以官方暂不提供该模版结构与样式，实际使用时，可移至该文件到你的项目中，对页面自行把控。-->
+<!--  <br>文件所在目录（相对于layui.js）：/css/modules/layim/html/find.html</blockquote>-->
+</div>
+
+
+<script type="application/javascript" th:src="@{/static/layui/jquery.min.js}"></script>
+<script type="application/javascript" th:src="@{/static/layui/layui.js}"></script>
+<!--<script src="http://local.res.layui.com/layui/src/layui.js"></script>-->
+
+<script>
+  function addAsk(){
+    var id=$("#name").val();
+    var content=$("#content").val();
+
+  }
+
+
+
+layui.use(['layim', 'laypage'], function(){
+  var layim = layui.layim
+  ,layer = layui.layer
+  ,laytpl = layui.laytpl
+  ,$ = layui.jquery
+  ,laypage = layui.laypage;
+  
+  //一些添加好友请求之类的交互参见文档
+  
+});
+</script>
+</body>
+</html>
