@@ -6,11 +6,13 @@ import com.cjl.basic.zone.common.utils.SpringRedisUtil;
 import com.cjl.basic.zone.project.layim.entity.*;
 import com.cjl.basic.zone.project.layim.service.ChatMsgService;
 import com.cjl.basic.zone.project.layim.service.GroupsService;
+import com.cjl.basic.zone.project.user.domain.User;
 import com.cjl.basic.zone.project.user.service.IUserService;
 import com.cjl.basic.zone.utils.IdGenerat;
 import com.cjl.basic.zone.utils.LayimUtil;
 import com.cjl.basic.zone.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
 import javax.websocket.*;
@@ -35,6 +37,8 @@ public class ChatWebSocket {
     private static IUserService userService;
 
     private static SpringRedisUtil redisTemplate;
+    @Value("${application.cache.prefix}")
+    private String cachePrefix;
 
     @Autowired
     public void setChatService(ChatMsgService chatService, GroupsService groupsService, IUserService userService, SpringRedisUtil redisTemplate) {
@@ -142,7 +146,7 @@ public class ChatWebSocket {
      */
     public void getMsgBox() {
         //从redis中取离线接收的消息
-        String prefix = userno + "_" + SocketConstant.ADD_ASK + "*";
+        String prefix = "intelligent-observation:" + userno + "_" + SocketConstant.ADD_ASK;
         // 获取所有的key
         Set<String> keys = redisTemplate.keys(prefix);
         //未读消息个数
@@ -223,6 +227,15 @@ public class ChatWebSocket {
         } else if ("addAsk".equals(msgtype)) {
             LayimAsk layimAsk = jsonObject.toJavaObject(LayimAsk.class);
             addAsk(layimAsk);
+
+        } else if ("statusChange".equals(msgtype)) {
+            Mine m = jsonObject.toJavaObject(Mine.class);
+            // 变换状态
+            System.out.println("用户：" + m.getUsername() + "->动作：切换状态" + m.getStatus());
+            userService.updateUser(new User() {{
+                setAccountId(m.getId());
+                setStatus(m.getStatus());
+            }});
         }
     }
 
@@ -286,7 +299,7 @@ public class ChatWebSocket {
         System.out.println("单点消息");
         message.setSendTime(new Date());
         Date date = message.getSendTime();
-        Integer id = message.getAccountId();
+        Integer id = message.getId() == null ? message.getAccountId() : message.getId();
         String content = message.getContent();
         String reviceUserId = message.getToid();
         //填充消息对象
@@ -301,7 +314,7 @@ public class ChatWebSocket {
         chatMsgService.insertChatmsg(chatMsg);
         try {
             //接收人在线直接发送
-            if (webSocketSet.get(reviceUserId) != null) {
+            if (webSocketSet.get(Integer.valueOf(reviceUserId)) != null) {
                 SocketMsgType socketMsgType = new SocketMsgType() {{
                     setCode(200);
                     setMsgType("发送成功");
@@ -309,7 +322,7 @@ public class ChatWebSocket {
                     setData(message);
                 }};
                 //转成json形式发送出去
-                webSocketSet.get(reviceUserId).sendMessage(JSONObject.toJSONString(socketMsgType));
+                webSocketSet.get(Integer.valueOf(reviceUserId)).sendMessage(JSONObject.toJSONString(socketMsgType));
             } else {//不在线
                 //放入redis处理不在线
                 Map<Object, Object> map = new HashMap<>();

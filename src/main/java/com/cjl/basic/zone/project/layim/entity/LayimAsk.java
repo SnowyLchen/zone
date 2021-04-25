@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -16,8 +17,8 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-public class LayimAsk {
-
+public class LayimAsk implements Serializable {
+    private static final long serialVersionUID = -4035754716493701436L;
     private String id;
     private String uid;
     private String from;

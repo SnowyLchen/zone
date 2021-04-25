@@ -1,6 +1,7 @@
 package com.cjl.basic.zone.project.layim.mapper;
 
 import com.cjl.basic.zone.project.layim.entity.Friend;
+import com.cjl.basic.zone.project.layim.entity.Friends;
 import com.cjl.basic.zone.project.layim.entity.Mine;
 import org.apache.ibatis.annotations.Param;
 
@@ -29,5 +30,10 @@ public interface FriendsMapper {
      */
     List<Mine> getUserFriend(@Param("userId") String userId);
 
-
+    /**
+     * 查询用户分组列表
+     * @param accountId
+     * @return
+     */
+    List<Friends> getFriendGroupList(Integer accountId);
 }

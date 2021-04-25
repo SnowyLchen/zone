@@ -19,5 +19,9 @@ import java.util.List;
 public class Friends {
     private String groupname;//好友分组名
     private String id;//分组ID
+    /**
+     * 用户id
+     */
+    private Integer accountId;
     private List<Mine> list;//分组下的好友列表
 }

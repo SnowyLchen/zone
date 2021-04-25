@@ -29,8 +29,8 @@
     </select>
 
     <select id="getGroupUserById" resultMap="userMap">
-        select lm.* from  layim_mine lm
-        inner join layim_group_mine lgm on lgm.uid=lm.id
+        select lm.* from  z_users lm
+        inner join layim_group_mine lgm on lgm.uid=lm.account_id
         where lgm.gid=#{id}
     </select>
 
@@ -45,8 +45,8 @@
     </insert>
 
     <select id="getGroupChatLogMsg" resultMap="userMap">
-        SELECT * FROM layim_mine lm
-        INNER JOIN layim_group_msg lgmsg on lgmsg.send_user_id=lm.id
+        SELECT * FROM z_users lm
+        INNER JOIN layim_group_msg lgmsg on lgmsg.send_user_id=lm.account_id
         WHERE lgmsg.group_id=#{groupId}
         ORDER BY lgmsg.create_time asc
     </select>

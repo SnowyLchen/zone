@@ -13,5 +13,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Accessors(chain = true)
 public class Mine extends User implements Serializable {
+    private static final long serialVersionUID = -4035754716493701436L;
+    private Integer id;
     private String username;//我的昵称
+    private Integer groupId;
+    private String gName;
 }

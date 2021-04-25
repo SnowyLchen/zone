@@ -2,11 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cjl.basic.zone.project.layim.mapper.FriendsMapper">
 
-    <resultMap id="userMap" type="com.cjl.basic.zone.project.layim.entity.Mine" extends="com.cjl.basic.zone.project.user.mapper.UserMapper.UserResultMap">
+    <resultMap id="userMap" type="com.cjl.basic.zone.project.layim.entity.Mine"
+               extends="com.cjl.basic.zone.project.user.mapper.UserMapper.UserResultMap">
         <result property="username" column="user_name"/>
         <result property="sign" column="sign"/>
         <result property="avatar" column="avatar"/>
         <result property="status" column="status"/>
+        <result property="groupId" column="f_group_id"/>
+        <result property="gName" column="gName"/>
+        <result property="id" column="id"/>
+    </resultMap>
+    <resultMap id="friendMap" type="com.cjl.basic.zone.project.layim.entity.Friends">
+        <result property="groupname" column="group_name"/>
+        <result property="id" column="id"/>
+        <result property="accountId" column="account_id"/>
     </resultMap>
 
     <insert id="addFriend">
@@ -17,8 +26,18 @@
 
 
     <select id="getUserFriend" resultMap="userMap">
-        select lm.* from layim_mine lm
-        inner join layim_friend lf on lf.f_user_id=lm.id
-        where lf.user_id=#{userId}
+       select lm.*, lf.f_group_id, lfg.group_name gName,lm.account_id id
+        FROM z_users lm
+                 INNER JOIN layim_friend lf
+                            ON lf.f_user_id = lm.account_id
+                 left join layim_friend_groupname lfg on lf.f_group_id = lfg.id
+        WHERE lf.user_id = #{userId}
+    </select>
+    <select id="getFriendGroupList" resultMap="friendMap">
+        select lfg.*
+        from layim_friend_groupname lfg
+                 left join layim_friend lf on lf.f_group_id = lfg.id
+        where lfg.account_id = #{accountId}
+        group by lfg.id
     </select>
 </mapper>

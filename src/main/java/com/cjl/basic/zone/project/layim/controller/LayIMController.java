@@ -247,9 +247,16 @@ public class LayIMController {
         Mine user = userService.selectMineById(accountId);
         //好友列表
         List<Mine> mineList = friendsService.getUserFriend(String.valueOf(accountId));
-        Friends friends = new Friends().setId("2").setGroupname("我的好友").setList(mineList);
-        List<Friends> friendList = new ArrayList<>();
-        friendList.add(friends);
+        List<Friends> friendList = friendsService.getFriendGroupList(accountId);
+        for (Friends f : friendList) {
+            for (Mine mine : mineList) {
+                if (mine.getGroupId().toString().equals(f.getId())) {
+                    f.setGroupname(mine.getGName());
+                    f.setList(mineList);
+                    break;
+                }
+            }
+        }
         //群组信息
         List<Groups> groupsList = groupsService.getUserGroups(String.valueOf(accountId));
         //Data数据

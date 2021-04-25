@@ -49,12 +49,14 @@ public class UserServiceImpl implements IUserService {
     @Override
     public Mine selectMineById(Integer accountId) {
         User user = userMapper.selectUserById(accountId);
-        return new Mine() {{
-            setAccountId(user.getAccountId());
-            setStatus(user.getStatus());
-            setSign(user.getSign());
-            setUsername(user.getUserName());
-        }};
+        Mine mine = new Mine();
+        mine.setAccountId(user.getAccountId());
+        mine.setId(user.getAccountId());
+        mine.setStatus(user.getStatus());
+        mine.setSign(user.getSign());
+        mine.setAvatar(user.getAvatar());
+        mine.setUsername(user.getUserName());
+        return mine;
     }
 
 

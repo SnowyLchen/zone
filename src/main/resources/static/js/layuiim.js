@@ -1,7 +1,9 @@
 //当前选中窗口的用户id
 var actuserid = "";
+var isLogin = localStorage.getItem('isLogin') == '1' ? '/login' : '/other';
+console.log('登录？' + isLogin);
 //接入WebSocket
-var socket = new WebSocket('ws://localhost:8000/websocket/' + accountId + "/login");
+var socket = new WebSocket('ws://localhost:8000/websocket/' + accountId + isLogin);
 //打开事件
 socket.onopen = function () {
     console.log("WebSocket 已打开");
@@ -130,6 +132,7 @@ layui.use('layim', function (layim) {
     var msgbox = 5;
     //事件名：ready，用于监听LayIM初始化就绪
     layim.on('ready', function (options) {
+        localStorage.setItem('isLogin', '0')
         // layim.msgbox(msgbox); //模拟消息盒子有新消息，实际使用时，一般是动态获得
         //console.log(options);
         //do something
@@ -157,5 +160,18 @@ layui.use('layim', function (layim) {
             //     ,content: '贤心加入群聊'
             // });
         }
+    });
+    //监听聊天窗口的切换
+    layim.on('online', function (res) {
+        console.log(res)
+        var mine = res.j.mine; //包含发送的消息及登录用户信息
+        var object = new Object();
+        object["username"] = mine.username;
+        object["id"] = mine.id;
+        object["status"] = res.status;
+        object["msgType"] = "statusChange";
+        var jsonData = JSON.stringify(object);
+        // 发送给websocket
+        socket.send(jsonData);
     });
 });

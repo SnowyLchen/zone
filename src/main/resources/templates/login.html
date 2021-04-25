@@ -77,6 +77,7 @@
                 done: function (data) {
                     if (data.code === 0) {
                         popup.success(data.msg);
+                        localStorage.setItem('isLogin', '1');
                         window.top.location.href = '/index';
                     } else {
                         popup.failure(data.msg);

@@ -1,6 +1,7 @@
 package com.cjl.basic.zone.project.layim.service.impl;
 
 import com.cjl.basic.zone.project.layim.entity.Friend;
+import com.cjl.basic.zone.project.layim.entity.Friends;
 import com.cjl.basic.zone.project.layim.entity.Mine;
 import com.cjl.basic.zone.project.layim.entity.SysMsg;
 import com.cjl.basic.zone.project.layim.mapper.FriendsMapper;
@@ -62,5 +63,10 @@ public class FriendsServiceImpl implements FriendsService {
     @Override
     public List<Mine> getUserFriend(String userId) {
         return friendsMapper.getUserFriend(userId);
+    }
+
+    @Override
+    public List<Friends> getFriendGroupList(Integer accountId) {
+        return friendsMapper.getFriendGroupList(accountId);
     }
 }

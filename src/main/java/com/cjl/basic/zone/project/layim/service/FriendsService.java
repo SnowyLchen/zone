@@ -1,6 +1,7 @@
 package com.cjl.basic.zone.project.layim.service;
 
 import com.cjl.basic.zone.project.layim.entity.Friend;
+import com.cjl.basic.zone.project.layim.entity.Friends;
 import com.cjl.basic.zone.project.layim.entity.Mine;
 
 import java.util.List;
@@ -28,4 +29,12 @@ public interface FriendsService {
      * @return
      */
     List<Mine> getUserFriend(String userId);
+
+    /**
+     * 查询用户分组列表
+     * @param accountId
+     * @return
+     */
+    List<Friends> getFriendGroupList(Integer accountId);
+
 }
