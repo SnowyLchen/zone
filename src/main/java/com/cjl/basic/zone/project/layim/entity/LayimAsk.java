@@ -18,7 +18,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Accessors(chain = true)
 public class LayimAsk implements Serializable {
-    private static final long serialVersionUID = -4035754716493701436L;
+    private static final long serialVersionUID = -5119611695181898456L;
     private String id;
     private String uid;
     private String from;
