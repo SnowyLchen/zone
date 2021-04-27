@@ -1,5 +1,5 @@
 var isLogin = localStorage.getItem('isLogin') === '1';
-var wsUrl = 'ws://localhost:8000/websocket/' + accountId + (isLogin ? '/login' : '/other');
+var wsUrl = 'ws://localhost:8000/websocket/' + accountId;
 console.log('登录?' + isLogin);
 //接入WebSocket
 var socket;
@@ -34,7 +34,7 @@ var webSocketInit = function () {
     };
     //连接建立,发送信息
     socket.onopen = function () {
-        console.log("webSocket 启动" + new Date())
+        console.log("webSocket 启动" + new Date());
         //心跳检测启动
         heartCheck.start();//业务发送之后启动心跳检测机制
     };
@@ -133,7 +133,7 @@ layui.use('layim', function (layim) {
         console.log(res)
         var mine = res.mine; //包含发送的消息及登录用户信息
         var to = res.to;
-        var object = new Object();
+        var object = {};
         object["username"] = mine.username;
         object["avatar"] = mine.avatar;
         object["id"] = mine.id;
@@ -238,9 +238,10 @@ layui.use('layim', function (layim) {
     layim.on('online', function (res) {
         console.log(res)
         var mine = res.j.mine; //包含发送的消息及登录用户信息
-        var object = new Object();
+        var object = {};
         object["username"] = mine.username;
         object["id"] = mine.id;
+        object["loginName"] = mine.loginName;
         object["status"] = res.status;
         object["msgType"] = "statusChange";
         var jsonData = JSON.stringify(object);

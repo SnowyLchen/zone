@@ -56,6 +56,7 @@ public class UserServiceImpl implements IUserService {
         mine.setSign(user.getSign());
         mine.setAvatar(user.getAvatar());
         mine.setUsername(user.getUserName());
+        mine.setLoginName(user.getLoginName());
         return mine;
     }
 

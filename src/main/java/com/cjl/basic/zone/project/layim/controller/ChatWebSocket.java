@@ -3,7 +3,6 @@ package com.cjl.basic.zone.project.layim.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.cjl.basic.zone.common.constant.SocketConstant;
 import com.cjl.basic.zone.common.utils.SpringRedisUtil;
-import com.cjl.basic.zone.common.utils.StringUtils;
 import com.cjl.basic.zone.project.layim.entity.*;
 import com.cjl.basic.zone.project.layim.service.ChatMsgService;
 import com.cjl.basic.zone.project.layim.service.GroupsService;
@@ -29,7 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @ServerEndpoint 可以把当前类变成websocket服务类
  */
 @Controller
-@ServerEndpoint(value = "/websocket/{accountId}/{operator}")
+@ServerEndpoint(value = "/websocket/{accountId}")
 public class ChatWebSocket {
 
     private static ChatMsgService chatMsgService;
@@ -72,7 +71,7 @@ public class ChatWebSocket {
      * session 可选的参数。session为与某个客户端的连接会话，需要通过它来给客户端发送数据
      */
     @OnOpen
-    public void onOpen(@PathParam(value = "accountId") Integer uId, @PathParam("operator") String operator, Session webSocketSession, EndpointConfig config) {
+    public void onOpen(@PathParam(value = "accountId") Integer uId, Session webSocketSession, EndpointConfig config) {
         //接收到发送消息的人员编号
         accountId = uId;
         this.webSocketSession = webSocketSession;
@@ -81,13 +80,16 @@ public class ChatWebSocket {
         //在线数加1
         addOnlineCount();
         System.out.println("有新连接加入！当前在线人数为" + getOnlineCount());
-        if (StringUtils.isNotNull(operator) && "login".equals(operator)) {
-            //更新用户的状态为在线
-            userService.updateUser(new Mine() {{
-                setAccountId(accountId);
-                setStatus("online");
-            }});
+        String prefix = accountId + "_" + SocketConstant.CHANGE_STATUS;
+        String status = "online";
+        if (redisTemplate.hasKey(prefix)) {
+            status = Objects.toString(redisTemplate.get(prefix));
         }
+        Mine mine = new Mine();
+        mine.setAccountId(accountId);
+        mine.setStatus(status);
+        //更新用户的状态
+        userService.updateUser(mine);
         //获取离线消息
         getOnLineMsg();
         //获取消息盒子
@@ -153,7 +155,7 @@ public class ChatWebSocket {
         if (keys.size() != 0) {
             //遍历key
             for (String str : keys) {
-                str = str.replace("intelligent-observation:", "");
+                str = str.replace("zone:", "");
                 //获取消息数据
                 Map<Object, Object> addAsk = redisTemplate.hashGetAll(str);
                 String read = addAsk.get("read").toString();
@@ -185,7 +187,7 @@ public class ChatWebSocket {
      * 连接关闭调用的方法
      */
     @OnClose
-    public void onClose(@PathParam("operator") String operator) {
+    public void onClose() {
         if (accountId != null) {
             //从set中删除
             webSocketSet.remove(accountId);
@@ -202,7 +204,7 @@ public class ChatWebSocket {
 
 
     /**
-     * //给指定的人发消息
+     * 给指定的人发消息
      *
      * @param session 可选的参数
      */
@@ -225,12 +227,15 @@ public class ChatWebSocket {
             addAsk(layimAsk);
         } else if ("statusChange".equals(msgtype)) {
             Mine m = jsonObject.toJavaObject(Mine.class);
+            String prefix = m.getLoginName() + ":" + accountId + "_" + SocketConstant.CHANGE_STATUS;
             // 变换状态
             System.out.println("用户：" + m.getUsername() + "->动作：切换状态" + m.getStatus());
             userService.updateUser(new User() {{
                 setAccountId(m.getId());
                 setStatus(m.getStatus());
             }});
+            // 同时将状态存入redis
+            redisTemplate.set(prefix, m.getStatus());
         } else if ("heartCheck".equals(msgtype)) {
             System.out.println(jsonObject.getString("service"));
         }
