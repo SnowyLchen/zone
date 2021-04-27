@@ -351,8 +351,9 @@
     }, D = function () {
         var i = {
             username: j.mine ? j.mine.username : "访客",
-            avatar: j.mine ? j.mine.avatar : layui.cache.dir + "css/pc/layim/skin/logo.jpg",
+            avatar: j.mine ? j.mine.avatar : layui.cache.dir + "component/layui/css/pc/layim/skin/logo.jpg",
             id: j.mine ? j.mine.id : null,
+            loginName: j.mine ? j.mine.loginName : null,
             mine: !0
         }, a = _(), e = a.elem.find(".layim-chat-main ul"), l = j.base.maxLength || 3e3;
         if (i.content = a.textarea.val(), "" !== i.content.replace(/\s/g, "")) {
@@ -361,6 +362,7 @@
             var s = {mine: i, to: a.data}, o = {
                 username: s.mine.username,
                 avatar: s.mine.avatar,
+                loginName: s.mine.loginName,
                 id: s.to.id,
                 type: s.to.type,
                 content: s.mine.content,

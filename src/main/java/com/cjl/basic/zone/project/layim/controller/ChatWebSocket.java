@@ -270,7 +270,7 @@ public class ChatWebSocket {
             layimAsk.setRead("0");
         }
         Map<Object, Object> map = LayimUtil.beanToMap(layimAsk);
-        String key = uid + "_" + SocketConstant.ADD_ASK + "_" + time + "_" + layimAsk.getId() + "_friend";
+        String key = userInfo.getLoginName() + ":" + uid + "_" + SocketConstant.ADD_ASK + "_" + time + "_" + layimAsk.getId() + "_friend";
         redisTemplate.hashSetAll(key, map);
 
         try {
@@ -329,13 +329,13 @@ public class ChatWebSocket {
                 //放入redis处理不在线
                 Map<Object, Object> map = new HashMap<>();
                 String time = String.valueOf(date.getTime());
-                String Key = reviceUserId + "_" + SocketConstant.ON_LINE_MESSAGE + "_" + time + "_friend";
+                String key = message.getLoginName() + reviceUserId + "_" + SocketConstant.ON_LINE_MESSAGE + "_" + time + "_friend";
                 map.put("receiveId", reviceUserId);
                 map.put("sendId", id);
                 map.put("content", content);
                 map.put("sendTime", date.getTime());
 //                map.put("msgType",message.getContent());
-                redisTemplate.hashSetAll(Key, map);
+                redisTemplate.hashSetAll(key, map);
             }
         } catch (IOException e) {
             e.printStackTrace();

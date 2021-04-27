@@ -137,6 +137,7 @@ layui.use('layim', function (layim) {
         object["username"] = mine.username;
         object["avatar"] = mine.avatar;
         object["id"] = mine.id;
+        object["loginName"] = mine.loginName;
         object["content"] = mine.content;
         object["toid"] = to.id;
         object["type"] = to.type;
