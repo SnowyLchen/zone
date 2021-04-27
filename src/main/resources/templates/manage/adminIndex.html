@@ -49,10 +49,18 @@
 <script>
     $(function () {
         // 加载头部
-        $('#header').load('admin/header')
+        $('#header').load('adminHeader')
+        $.ajax({
+            url: 'websocket/1',
+            dataType: 'json',
+            type: 'get',
+            success: function (data) {
+
+                console.log(data)
+            }
+        })
     })
     layui.use(['admin', 'jquery', "convert"], function () {
-        debugger
         var admin = layui.admin,
             $ = layui.jquery,
             convert = layui.convert;

@@ -5,9 +5,9 @@ import com.cjl.basic.zone.project.layim.mapper.ChatMsgMapper;
 import com.cjl.basic.zone.project.layim.service.ChatMsgService;
 import com.cjl.basic.zone.project.user.domain.User;
 import com.cjl.basic.zone.utils.IdGenerat;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Service
 public class ChatMsgServiceImpl implements ChatMsgService {
-    @Autowired
+    @Resource
     private ChatMsgMapper chatMsgMapper;
 
     @Override

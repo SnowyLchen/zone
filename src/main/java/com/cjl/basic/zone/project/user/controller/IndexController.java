@@ -84,7 +84,7 @@ public class IndexController extends BaseController {
     /**
      * 系统首页切换
      */
-    @GetMapping("/admin/header")
+    @GetMapping("/adminHeader")
     public String admin(ModelMap mmap) {
         return "manage/header";
     }

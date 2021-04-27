@@ -54,13 +54,17 @@ public class ChatWebSocket {
      * concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。若要实现服务端与单一客户端通信的话，可以使用Map来存放，其中Key可以为用户标识
      */
     private static ConcurrentHashMap<Integer, ChatWebSocket> webSocketSet = new ConcurrentHashMap<>();
+    /**
+     * 用于存放每个客户端信息
+     */
+    private static ConcurrentHashMap<String, Mine> webSocketInfo = new ConcurrentHashMap<>();
 
     /**
      * 与某个客户端的连接会话，需要通过它来给客户端发送数据
      */
     private Session webSocketSession;
     /**
-     * 当前发消息的人员编号
+     * 当前发消息的用户id
      */
     private Integer accountId;
 
@@ -72,15 +76,16 @@ public class ChatWebSocket {
      */
     @OnOpen
     public void onOpen(@PathParam(value = "accountId") Integer uId, Session webSocketSession, EndpointConfig config) {
-        //接收到发送消息的人员编号
+        //接收到发送消息的用户id
         accountId = uId;
         this.webSocketSession = webSocketSession;
         //加入map中
         webSocketSet.put(accountId, this);
+        webSocketInfo.put(cachePrefix + accountId, userService.selectMineById(accountId));
         //在线数加1
         addOnlineCount();
         System.out.println("有新连接加入！当前在线人数为" + getOnlineCount());
-        String prefix = accountId + "_" + SocketConstant.CHANGE_STATUS;
+        String prefix = SocketConstant.CHANGE_STATUS + ":" + accountId + "_" + SocketConstant.CHANGE_STATUS;
         String status = "online";
         if (redisTemplate.hasKey(prefix)) {
             status = Objects.toString(redisTemplate.get(prefix));
@@ -101,12 +106,13 @@ public class ChatWebSocket {
      */
     private void getOnLineMsg() {
         //从redis中取离线接收的消息
-        String prefix = accountId + "_" + SocketConstant.ON_LINE_MESSAGE + "*";
+        String prefix = cachePrefix + SocketConstant.ON_LINE_MESSAGE + ":" + accountId + "_" + SocketConstant.ON_LINE_MESSAGE + "*";
         // 获取所有的key
         Set<String> keys = redisTemplate.keys(prefix);
         if (keys.size() != 0) {
             //遍历key
             for (String str : keys) {
+                str = str.replace(cachePrefix, "");
                 //获取消息数据
                 Map<Object, Object> chatMsgMap = redisTemplate.hashGetAll(str);
                 String sendId = chatMsgMap.get("sendId").toString();
@@ -124,6 +130,16 @@ public class ChatWebSocket {
                 } else if (str.contains("group")) {
                     userInfo.setType("group");
                 }
+                //填充消息对象
+                ChatMsg chatMsg = new ChatMsg() {{
+                    setMsgType("0");
+                    setReciveUserId(receiveId);
+                    setSendUserId(Integer.parseInt(sendId));
+                    setContent(content);
+                    setCreateTime(sendTime);
+                }};
+                //发消息
+                chatMsgService.insertChatmsg(chatMsg);
                 try {
                     //转成json形式发送出去
                     SocketMsgType socketMsgType = new SocketMsgType() {{
@@ -132,8 +148,8 @@ public class ChatWebSocket {
                         setMsgType(SocketConstant.ON_LINE_MESSAGE);
                         setData(userInfo);
                     }};
-                    webSocketSet.get(accountId).sendMessage(JSONObject.toJSONString(socketMsgType));
-                    redisTemplate.delete(str);
+                    webSocketSet.get(Integer.valueOf(receiveId)).sendMessage(JSONObject.toJSONString(socketMsgType));
+//                    redisTemplate.delete(str);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -146,7 +162,7 @@ public class ChatWebSocket {
      */
     public void getMsgBox() {
         //从redis中取离线接收的消息
-        String prefix = cachePrefix + accountId + "_" + SocketConstant.ADD_ASK;
+        String prefix = cachePrefix + SocketConstant.ADD_ASK + ":" + accountId + "_" + SocketConstant.ADD_ASK;
         // 获取所有的key
         Set<String> keys = redisTemplate.keys(prefix);
         //未读消息个数
@@ -155,7 +171,7 @@ public class ChatWebSocket {
         if (keys.size() != 0) {
             //遍历key
             for (String str : keys) {
-                str = str.replace("zone:", "");
+                str = str.replace(cachePrefix, "");
                 //获取消息数据
                 Map<Object, Object> addAsk = redisTemplate.hashGetAll(str);
                 String read = addAsk.get("read").toString();
@@ -204,7 +220,7 @@ public class ChatWebSocket {
 
 
     /**
-     * 给指定的人发消息
+     * 监听接受消息
      *
      * @param session 可选的参数
      */
@@ -227,7 +243,7 @@ public class ChatWebSocket {
             addAsk(layimAsk);
         } else if ("statusChange".equals(msgtype)) {
             Mine m = jsonObject.toJavaObject(Mine.class);
-            String prefix = m.getLoginName() + ":" + accountId + "_" + SocketConstant.CHANGE_STATUS;
+            String prefix = SocketConstant.CHANGE_STATUS + ":" + accountId + "_" + SocketConstant.CHANGE_STATUS;
             // 变换状态
             System.out.println("用户：" + m.getUsername() + "->动作：切换状态" + m.getStatus());
             userService.updateUser(new User() {{
@@ -270,7 +286,7 @@ public class ChatWebSocket {
             layimAsk.setRead("0");
         }
         Map<Object, Object> map = LayimUtil.beanToMap(layimAsk);
-        String key = userInfo.getLoginName() + ":" + uid + "_" + SocketConstant.ADD_ASK + "_" + time + "_" + layimAsk.getId() + "_friend";
+        String key = SocketConstant.ADD_ASK + ":" + uid + "_" + SocketConstant.ADD_ASK + "_" + time + "_" + layimAsk.getId() + "_friend";
         redisTemplate.hashSetAll(key, map);
 
         try {
@@ -290,7 +306,6 @@ public class ChatWebSocket {
             e.printStackTrace();
         }
     }
-
 
     /**
      * 给指定的人发送消息
@@ -329,7 +344,7 @@ public class ChatWebSocket {
                 //放入redis处理不在线
                 Map<Object, Object> map = new HashMap<>();
                 String time = String.valueOf(date.getTime());
-                String key = message.getLoginName() + reviceUserId + "_" + SocketConstant.ON_LINE_MESSAGE + "_" + time + "_friend";
+                String key = SocketConstant.ON_LINE_MESSAGE + ":" + reviceUserId + "_" + SocketConstant.ON_LINE_MESSAGE + "_" + time + "_friend";
                 map.put("receiveId", reviceUserId);
                 map.put("sendId", id);
                 map.put("content", content);
@@ -366,7 +381,7 @@ public class ChatWebSocket {
                 Integer userId = uid.getAccountId();
                 //（过滤掉自己）
                 if (!userId.equals(message.getAccountId())) {
-                    if (webSocketSet.get(String.valueOf(userId)) != null) {
+                    if (webSocketSet.get(userId) != null) {
                         SocketMsgType socketMsgType = new SocketMsgType() {{
                             setCode(200);
                             setMsgType("发送成功");
@@ -374,12 +389,12 @@ public class ChatWebSocket {
                             setData(message);
                         }};
                         //转成json形式发送出去
-                        webSocketSet.get(String.valueOf(userId)).sendMessage(JSONObject.toJSONString(socketMsgType));
+                        webSocketSet.get(userId).sendMessage(JSONObject.toJSONString(socketMsgType));
                     } else {//不在线
                         //放入redis处理不在线
                         Map<Object, Object> map = new HashMap<>();
                         String time = String.valueOf(date.getTime());
-                        String Key = userId + "_" + SocketConstant.ON_LINE_MESSAGE + "_" + time + "_group";
+                        String Key = SocketConstant.ON_LINE_MESSAGE + ":" + userId + "_" + SocketConstant.ON_LINE_MESSAGE + "_" + time + "_group";
                         map.put("receiveId", revicegid);
                         map.put("sendId", id);
                         map.put("content", content);
@@ -398,8 +413,9 @@ public class ChatWebSocket {
      * 自定义消息
      */
     public static void addFriend(String fid, Mine mine) throws IOException {
+        Integer friendId = Integer.valueOf(fid);
         //在线
-        if (webSocketSet.get(fid) != null) {
+        if (webSocketSet.get(friendId) != null) {
             try {
                 SocketMsgType socketMsgType = new SocketMsgType() {{
                     setCode(200);
@@ -409,11 +425,11 @@ public class ChatWebSocket {
                 }};
                 //这里可以设定只推送给这个sid的，为null则全部推送
                 if (mine != null) {
-                    webSocketSet.get(fid).sendMessage(JSONObject.toJSONString(socketMsgType));
+                    webSocketSet.get(friendId).sendMessage(JSONObject.toJSONString(socketMsgType));
                 } else {
                     socketMsgType.setMsg("添加好友失败");
                     socketMsgType.setData("0");
-                    webSocketSet.get(fid).sendMessage(JSONObject.toJSONString(socketMsgType));
+                    webSocketSet.get(friendId).sendMessage(JSONObject.toJSONString(socketMsgType));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -421,7 +437,7 @@ public class ChatWebSocket {
         } else {
             //不在线
             String time = String.valueOf(System.currentTimeMillis());
-            String Key = fid + "_" + SocketConstant.ADD_ASK + "_" + time;
+            String Key = SocketConstant.ADD_ASK + ":" + fid + "_" + SocketConstant.ADD_ASK + "_" + time;
             Map<Object, Object> map = new HashMap<>();
             map.put("read", "0");
             redisTemplate.hashSetAll(Key, map);
@@ -465,6 +481,10 @@ public class ChatWebSocket {
 
     public static synchronized void subOnlineCount() {
         ChatWebSocket.onlineCount--;
+    }
+
+    public static synchronized String getPrefixName(Integer accountId) {
+        return webSocketInfo.get(cachePrefix + accountId).getLoginName() + ":";
     }
 
 }

@@ -77,8 +77,6 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/register", "anon");
         filterChainDefinitionMap.put("/goRegister", "anon");
-        filterChainDefinitionMap.put("/layim", "anon");
-        filterChainDefinitionMap.put("/websocket/**", "anon");
         // 系统权限列表
 //        filterChainDefinitionMap.putAll(SpringUtils.getBean(IMenuService.class).selectPermsAll());
         // swagger
@@ -102,6 +100,7 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
+
 
     /**
      * 安全管理器
@@ -129,7 +128,6 @@ public class ShiroConfig {
         return securityManager;
     }
 
-    //
     @Bean
     public ShiroRedisCacheManager shiroRedisCacheManager(RedisTemplate redisTemplate, @Value("${application.cache.prefix}") String prefix) {
         return new ShiroRedisCacheManager(redisTemplate, prefix);
