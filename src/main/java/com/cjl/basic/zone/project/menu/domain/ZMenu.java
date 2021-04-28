@@ -51,8 +51,22 @@ public class ZMenu extends BaseEntity implements Serializable {
      * 排序
      */
     private String orderNum;
-
+    /**
+     * 是否被选中
+     */
     private String checkArr;
+    /**
+     * 角色id
+     */
+    private Integer roleId;
+
+    public Integer getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
+    }
 
     public String getCheckArr() {
         return checkArr;

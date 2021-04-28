@@ -12,10 +12,11 @@
         <result column="open_type" jdbcType="VARCHAR" property="openType"/>
         <result column="visible" jdbcType="INTEGER" property="visible"/>
         <result column="checkArr" jdbcType="VARCHAR" property="checkArr"/>
+        <result column="role_id" jdbcType="INTEGER" property="roleId"/>
         <result column="order_num" jdbcType="VARCHAR" property="orderNum"/>
     </resultMap>
     <sql id="Base_Column_List">
-        menu_id, title, parent_id, href, icon, `type`, order_num,visible,open_type
+        menu_id, title, parent_id, href, icon, `type`, order_num,visible,open_type, '0' checkArr
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
        select  zm.menu_id,
@@ -58,21 +59,22 @@
         ORDER BY order_num,parent_id
     </select>
     <select id="selectUserMenu" resultMap="BaseResultMap">
-      select zm.menu_id,
-           zm.title,
-           zm.parent_id,
-           zm.href,
-           zm.icon,
-           zm.`type`,
-           zm.order_num,
-           zm.visible,
-           zm.open_type
-    from z_menu zm
-             left join z_role_menu zrm on zrm.menu_id = zm.menu_id
-             left join z_role zr on zr.z_role_id = zrm.role_id
-    left join z_users zu on zu.account_id=zr.ac
-    where zm.visible = 1
-    AND zr.ac
+          select zm.menu_id,
+               zm.title,
+               zm.parent_id,
+               zm.href,
+               zm.icon,
+               zm.`type`,
+               zm.order_num,
+               zm.visible,
+               zrm.role_id,
+               zm.open_type
+        from z_menu zm
+                 left join z_role_menu zrm on zrm.menu_id = zm.menu_id
+                 left join z_role zr on zr.z_role_id = zrm.role_id
+                 left join z_user_role zur on zrm.role_id = zur.role_id
+        where zm.visible = 1
+          AND zur.account_id=#{accountId}
     </select>
     <select id="checkArrMenuTree" resultMap="BaseResultMap">
            select zm.menu_id,

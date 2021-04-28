@@ -13,8 +13,17 @@ public class ZMenuTree {
     private String openType;
     private String href;
     private Integer parentId;
+    private Integer roleId;
     private String checkArr = "0";
     private List<ZMenuTree> children;
+
+    public Integer getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
+    }
 
     public String getCheckArr() {
         return checkArr;

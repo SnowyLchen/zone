@@ -62,14 +62,13 @@ public class IndexController extends BaseController {
     @GetMapping("/system/menu")
     @ResponseBody
     public List<ZMenuTree> menu(ModelMap mmap) {
-        List<ZMenuTree> menu = new ArrayList<>();
-        List<ZMenuTree> zMenuTrees = menuService.selectUserMenu(ShiroAuthenticateUtils.getAccountId());
-        for (ZMenuTree zMenuTree : zMenuTrees) {
-            if (StringUtils.isNotNull(zMenuTree.getChildren())) {
-                menu.add(zMenuTree);
-            }
-        }
-        return menu;
+//        List<ZMenuTree> menu = new ArrayList<>();
+        //        for (ZMenuTree zMenuTree : zMenuTrees) {
+//            if (StringUtils.isNotNull(zMenuTree.getChildren())) {
+//                menu.add(zMenuTree);
+//            }
+//        }
+        return menuService.selectUserMenu(ShiroAuthenticateUtils.getAccountId());
     }
 
     /**
@@ -77,6 +76,8 @@ public class IndexController extends BaseController {
      */
     @GetMapping("/header")
     public String console(ModelMap mmap) {
+        User user = ShiroAuthenticateUtils.getUserByToken();
+        mmap.put("user", user);
         return "space/header";
     }
 
@@ -85,6 +86,8 @@ public class IndexController extends BaseController {
      */
     @GetMapping("/adminHeader")
     public String admin(ModelMap mmap) {
+        User user = ShiroAuthenticateUtils.getUserByToken();
+        mmap.put("user", user);
         return "manage/header";
     }
 

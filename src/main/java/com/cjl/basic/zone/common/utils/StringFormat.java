@@ -160,6 +160,7 @@ public class StringFormat {
                     firstTree.setOpenType(zMenu.getOpenType());
                     firstTree.setHref(zMenu.getHref());
                     firstTree.setCheckArr(zMenu.getCheckArr());
+                    firstTree.setRoleId(zMenu.getRoleId());
                     treeList.add(firstTree);
                 }
             } else {
@@ -178,6 +179,7 @@ public class StringFormat {
                                     childTree.setType(zMenu.getType());
                                     childTree.setHref(zMenu.getHref());
                                     childTree.setCheckArr(zMenu.getCheckArr());
+                                    childTree.setRoleId(zMenu.getRoleId());
                                     children.add(childTree);
                                 }
                                 tree.setChildren(children);
@@ -195,6 +197,7 @@ public class StringFormat {
                                         childTree.setType(zMenu.getType());
                                         childTree.setHref(zMenu.getHref());
                                         childTree.setCheckArr(zMenu.getCheckArr());
+                                        childTree.setRoleId(zMenu.getRoleId());
                                         children.add(childTree);
                                     }
                                     child.setChildren(children);

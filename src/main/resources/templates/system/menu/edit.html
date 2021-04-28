@@ -27,14 +27,14 @@
                     <label class="layui-form-label">类型</label>
                     <div class="layui-col-sm5">
                         <input type="radio" name="type" value="0" lay-filter="isCatalog" title="目录"
-                               th:checked="${menu?.type==0}">
+                               th:checked="${menu?.type==0}" th:disabled="${menu?.type==0}">
                         <input type="radio" name="type" value="1" lay-filter="isCatalog" title="菜单"
-                               th:checked="${menu?.type==1}">
+                               th:checked="${menu?.type==1}" th:disabled="${menu?.type==0}">
                         <input type="radio" name="type" value="2" lay-filter="isCatalog" title="按钮"
-                               th:checked="${menu?.type==2}">
+                               th:checked="${menu?.type==2}" th:disabled="${menu?.type==0}">
                     </div>
                 </div>
-                <div class="layui-form-item" th:if="${menu?.type==1 or menu?.type==2}" id="cata">
+                <div class="layui-form-item" th:if="${menu?.type!=0}" id="cata">
                     <label class="layui-form-label">上级菜单</label>
                     <div class="layui-input-block">
                         <input type="hidden" name="parentId" th:value="${menu?.parentId}"/>
@@ -108,21 +108,26 @@
                 let $ = layui.jquery;
                 let common = layui.common,
                     dtree = layui.dtree;
+                //
+                // function treeRender() {
+                //     dtree.render({
+                //         elem: "#tree",
+                //         initLevel: "1",
+                //         method: 'get',
+                //         url: "/menu/menuTree",
+                //         selectInputName: {nodeId: 'parentId'},
+                //         select: true
+                //     });
+                // }
                 var type = [[${menu?.type}]];
-                if (type === '1' || type === '2') {
-                    dtree.render({
-                        elem: "#tree",
-                        initLevel: "1",
-                        method: 'get',
-                        url: "/menu/menuTree",
-                        selectInputName: {nodeId: 'parentId'},
-                        select: true
-                    });
+                if (type == '0') {
+                    debugger
+                    // $('[name=type]').attr('disabled', '');
                 }
-
                 form.on('radio(isCatalog)', function (obj) {
                     var isCatalog = obj.value;
                     if (isCatalog !== '0') {
+                        // treeRender()
                         $("#cata").show();
                     } else {
                         $("#cata").hide();

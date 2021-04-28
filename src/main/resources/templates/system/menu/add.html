@@ -117,15 +117,18 @@
                 let $ = layui.jquery;
                 let common = layui.common,
                     dtree = layui.dtree;
-                dtree.render({
-                    elem: "#tree",
-                    initLevel: "1",
-                    method: 'get',
-                    url: "/menu/menuTree",
-                    selectInputName: {nodeId: 'parentId'},
-                    select: true
-                });
 
+                function treeRender() {
+                    dtree.render({
+                        elem: "#tree",
+                        initLevel: "1",
+                        method: 'get',
+                        url: "/menu/menuTree",
+                        selectInputName: {nodeId: 'parentId'},
+                        select: true
+                    });
+                }
+                treeRender()
                 form.on('switch(visible)', function (obj) {
                     var status = obj.elem.checked ? 1 : 0;
                     $('#visible').val(status);
@@ -138,6 +141,7 @@
                         $("#cata").show();
                     } else {
                         $("#cata").hide();
+                        dtree.reload('tree')
                         $("[name=parentId]").val(0);
                     }
                 });

@@ -159,6 +159,15 @@
             });
         });
 
+        window.add = function () {
+            layer.open({
+                type: 2,
+                title: '新增',
+                shade: 0.1,
+                area: ['500px', '400px'],
+                content: MODULE_PATH + 'add'
+            });
+        }
 
         window.edit = function (obj) {
             layer.open({
