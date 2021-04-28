@@ -50,15 +50,6 @@
     $(function () {
         // 加载头部
         $('#header').load('adminHeader')
-        $.ajax({
-            url: 'websocket/1',
-            dataType: 'json',
-            type: 'get',
-            success: function (data) {
-
-                console.log(data)
-            }
-        })
     })
     layui.use(['admin', 'jquery', "convert"], function () {
         var admin = layui.admin,
