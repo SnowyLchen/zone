@@ -65,4 +65,11 @@ public interface IMenuService {
      * @return
      */
     List<ZMenuTree> checkArrMenuTree(Integer roleId);
+
+    /**
+     * 查询角色菜单
+     * @param accountId
+     * @return
+     */
+    List<ZMenuTree> selectUserMenu(Integer accountId);
 }

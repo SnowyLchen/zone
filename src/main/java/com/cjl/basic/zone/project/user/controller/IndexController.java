@@ -4,7 +4,6 @@ import com.cjl.basic.zone.common.utils.StringUtils;
 import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.framework.config.ZoneConfig;
 import com.cjl.basic.zone.framework.web.controller.BaseController;
-import com.cjl.basic.zone.project.menu.domain.ZMenu;
 import com.cjl.basic.zone.project.menu.domain.ZMenuTree;
 import com.cjl.basic.zone.project.menu.service.IMenuService;
 import com.cjl.basic.zone.project.user.domain.User;
@@ -64,7 +63,7 @@ public class IndexController extends BaseController {
     @ResponseBody
     public List<ZMenuTree> menu(ModelMap mmap) {
         List<ZMenuTree> menu = new ArrayList<>();
-        List<ZMenuTree> zMenuTrees = menuService.selectMenuTree(new ZMenu());
+        List<ZMenuTree> zMenuTrees = menuService.selectUserMenu(ShiroAuthenticateUtils.getAccountId());
         for (ZMenuTree zMenuTree : zMenuTrees) {
             if (StringUtils.isNotNull(zMenuTree.getChildren())) {
                 menu.add(zMenuTree);

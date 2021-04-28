@@ -149,7 +149,7 @@ public class ChatWebSocket {
                         setData(userInfo);
                     }};
                     webSocketSet.get(Integer.valueOf(receiveId)).sendMessage(JSONObject.toJSONString(socketMsgType));
-//                    redisTemplate.delete(str);
+                    redisTemplate.delete(str);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -55,7 +55,24 @@
             <if test="title !=null and title !=''">AND title like concat('%',#{title},'%')</if>
             <if test="orderNum !=null and orderNum !=''">AND order_num =#{orderNum}</if>
         </where>
-        ORDER BY order_num
+        ORDER BY order_num,parent_id
+    </select>
+    <select id="selectUserMenu" resultMap="BaseResultMap">
+      select zm.menu_id,
+           zm.title,
+           zm.parent_id,
+           zm.href,
+           zm.icon,
+           zm.`type`,
+           zm.order_num,
+           zm.visible,
+           zm.open_type
+    from z_menu zm
+             left join z_role_menu zrm on zrm.menu_id = zm.menu_id
+             left join z_role zr on zr.z_role_id = zrm.role_id
+    left join z_users zu on zu.account_id=zr.ac
+    where zm.visible = 1
+    AND zr.ac
     </select>
     <select id="checkArrMenuTree" resultMap="BaseResultMap">
            select zm.menu_id,
