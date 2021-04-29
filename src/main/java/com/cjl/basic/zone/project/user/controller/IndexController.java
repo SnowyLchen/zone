@@ -92,4 +92,12 @@ public class IndexController extends BaseController {
     public String profiles(ModelMap mmap) {
         return "system/person";
     }
+
+    /**
+     * 空白页
+     */
+    @GetMapping("/space")
+    public String space(ModelMap mmap) {
+        return "system/space";
+    }
 }

@@ -20,8 +20,8 @@
 
     <insert id="addFriend">
         insert into  layim_friend
-        (id,user_id,f_user_id,create_time)
-        values (#{id},#{uid},#{fid},#{createTime})
+        (id,user_id,f_user_id,create_time,f_group_id)
+        values (#{id},#{uid},#{fid},#{createTime},#{groupId})
     </insert>
 
 

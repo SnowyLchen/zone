@@ -2,7 +2,7 @@ var isLogin = localStorage.getItem('isLogin') === '1';
 var wsUrl = 'ws://localhost:8000/websocket/' + accountId;
 console.log('登录?' + isLogin);
 //开始创建webSocket连接
-createWebSocket(wsUrl);
+var socket = createWebSocket(wsUrl);
 
 layui.use('layim', function (layim) {
     //基础配置

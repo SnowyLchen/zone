@@ -1,5 +1,5 @@
 //接入WebSocket
-var socket;
+var socket
 //避免重复链接
 var lockReconnect = false,
     // 时间间隔
@@ -10,11 +10,13 @@ var createWebSocket = function (wsUrl) {
         //成功
         socket = new WebSocket(wsUrl);
         webSocketInit();//初始化webSocket连接函数
+        return socket;
     } catch (e) {
         //失败
         console.log('catch');
         //重连函数
         webSocketReconnect(wsUrl);
+        return null;
     }
 };
 //初始化方法，成功后执行

@@ -117,7 +117,7 @@ public class LayIMController {
 
         List<Map<Object, Object>> layimAsks = new ArrayList<>();
         //从redis中取离线接收的消息
-        String prefix = cachePrefix + accountId + "_" + SocketConstant.ADD_ASK;
+        String prefix = cachePrefix + SocketConstant.ADD_ASK + ":" + accountId + "_" + SocketConstant.ADD_ASK;
         // 获取所有的key
         Set<String> keys = redisTemplate.keys(prefix);
 

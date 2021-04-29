@@ -1,5 +1,8 @@
 //接入WebSocket
-var socket = new WebSocket('ws://localhost:8000/websocket/' + accountId + "/addAsk");
+var wsUrl = 'ws://localhost:8000/websocket/' + accountId;
+// var socket = new WebSocket('ws://192.168.1.194:8000/websocket/' + accountId + "/addAsk");
+//开始创建webSocket连接
+var socket = createWebSocket(wsUrl);
 //打开事件
 socket.onopen = function () {
     console.log("查找好友/群 Socket 已打开");

@@ -207,24 +207,55 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
         $.each(option.data, function (i, item) {
             var menuItem = '';
             var controlItem = '';
-            if (index === option.defaultMenu) {
-                controlItem = '<li pear-href="' + item.href + '" pear-title="' + item.title + '" pear-id="' + item.id +
-                    '" class="layui-this layui-nav-item"><a href="#">' + item.title + '</a></li>';
-                menuItem = '<ul  pear-id="' + item.id + '" lay-filter="' + option.elem +
-                    '" class="layui-nav arrow layui-nav-tree pear-nav-tree">';
-                // 兼容移动端
-                controlPe += '<li class="layui-nav-item"><a class="pe-title" href="javascript:;" >' + item.title + '</a>';
-                controlItemPe += '<dd  pear-href="' + item.href + '" pear-title="' + item.title + '" pear-id="' + item.id +
-                    '"><a href="javascript:void(0);">' + item.title + '</a></dd>';
+            console.log(option)
+            debugger
+            // 先判断角色id roleId=1 超级管理员，需要2级跳转 ->其它则需要1级跳转
+            if (item.roleId != null && item.roleId == 1) {
+                if (index === option.defaultMenu) {
+                    controlItem = '<li pear-href="' + item.href + '" pear-title="' + item.title + '" pear-id="' + item.id +
+                        '" class="layui-this layui-nav-item"><a href="#">' + item.title + '</a></li>';
+                    menuItem = '<ul  pear-id="' + item.id + '" lay-filter="' + option.elem +
+                        '" class="layui-nav arrow layui-nav-tree pear-nav-tree">';
+                    // 兼容移动端
+                    controlPe += '<li class="layui-nav-item"><a class="pe-title" href="javascript:;" >' + item.title + '</a>';
+                    controlItemPe += '<dd  pear-href="' + item.href + '" pear-title="' + item.title + '" pear-id="' + item.id +
+                        '"><a href="javascript:void(0);">' + item.title + '</a></dd>';
+                } else {
+                    controlItem = '<li  pear-href="' + item.href + '" pear-title="' + item.title + '" pear-id="' + item.id +
+                        '" class="layui-nav-item"><a href="#">' + item.title + '</a></li>';
+                    menuItem = '<ul style="display:none" pear-id="' + item.id + '" lay-filter="' + option.elem +
+                        '" class="layui-nav arrow layui-nav-tree pear-nav-tree">';
+                    controlItemPe += '<dd pear-href="' + item.href + '" pear-title="' + item.title + '" pear-id="' + item.id +
+                        '"><a href="javascript:void(0);">' + item.title + '</a></dd>';
+
+                }
             } else {
-                controlItem = '<li  pear-href="' + item.href + '" pear-title="' + item.title + '" pear-id="' + item.id +
-                    '" class="layui-nav-item"><a href="#">' + item.title + '</a></li>';
-                menuItem = '<ul style="display:none" pear-id="' + item.id + '" lay-filter="' + option.elem +
-                    '" class="layui-nav arrow layui-nav-tree pear-nav-tree">';
+                // 这是普通用户的菜单
+                // console.log(item)     // 创 建 菜 单 结 构
+                //                     content += '<a ' + target + ' class="' + className + '" menu-type="' + note.type + '" menu-url="' + note.href +
+                //                         '" menu-id="' + note.id +
+                //                         '" menu-title="' + note.title + '" href="' + href + '"><i class="' + note.icon +
+                //                         '"></i><span>' + note.title + '</span></a>';
 
-                controlItemPe += '<dd pear-href="' + item.href + '" pear-title="' + item.title + '" pear-id="' + item.id +
-                    '"><a href="javascript:void(0);">' + item.title + '</a></dd>';
+                if (index === option.defaultMenu) {
+                    controlItem = '<li pear-href="' + item.href + '" pear-title="' + item.title + '" pear-id="' + item.id +
+                        '" class="layui-this layui-nav-item"><a href="' + item.href + '">' + item.title + '</a></li>';
+                    menuItem = '<ul  pear-id="' + item.id + '" lay-filter="' + option.elem +
+                        '" class="layui-nav arrow layui-nav-tree pear-nav-tree">';
+                    // 兼容移动端
+                    controlPe += '<li class="layui-nav-item"><a class="pe-title" href="javascript:;" >' + item.title + '</a>';
+                    controlItemPe += '<dd  pear-href="' + item.href + '" pear-title="' + item.title + '" pear-id="' + item.id +
+                        '"><a href="javascript:void(0);">' + item.title + '</a></dd>';
+                } else {
+                    controlItem = '<li  pear-href="' + item.href + '" pear-title="' + item.title + '" pear-id="' + item.id +
+                        '" class="layui-nav-item"><a href="' + item.href + '">' + item.title + '</a></li>';
+                    menuItem = '<ul style="display:none" pear-id="' + item.id + '" lay-filter="' + option.elem +
+                        '" class="layui-nav arrow layui-nav-tree pear-nav-tree">';
 
+                    controlItemPe += '<dd pear-href="' + item.href + '" pear-title="' + item.title + '" pear-id="' + item.id +
+                        '"><a href="javascript:void(0);">' + item.title + '</a></dd>';
+
+                }
             }
             index++;
             var children = item.children ? item.children : [];
@@ -240,23 +271,18 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
                     target = "target='_blank'";
                     className = "";
                 }
-                // 先判断角色id roleId=1 超级管理员，需要2级跳转 ->其它则需要1级跳转
                 // 判 断 菜 单 类 型 0 是 不可跳转的目录 1 是 可 点 击 跳 转 的 菜 单
-                if (note.roleId != null && note.roleId == 1) {
-                    if (note.type == 0) {
-                        // 创 建 目 录 结 构
-                        content += '<a  href="' + href + '" ' + target + ' menu-type="' + note.type + '" menu-id="' + note.id +
-                            '" ><i class="' + note.icon + '"></i><span>' + note.title +
-                            '</span></a>';
-                    } else if (note.type == 1) {
-                        // 创 建 菜 单 结 构
-                        content += '<a ' + target + ' class="' + className + '" menu-type="' + note.type + '" menu-url="' + note.href +
-                            '" menu-id="' + note.id +
-                            '" menu-title="' + note.title + '" href="' + href + '"><i class="' + note.icon +
-                            '"></i><span>' + note.title + '</span></a>';
-                    }
-                } else if (note.roleId != 1) {
-                    console.log(item);
+                if (note.type == 0) {
+                    // 创 建 目 录 结 构
+                    content += '<a  href="' + href + '" ' + target + ' menu-type="' + note.type + '" menu-id="' + note.id +
+                        '" ><i class="' + note.icon + '"></i><span>' + note.title +
+                        '</span></a>';
+                } else if (note.type == 1) {
+                    // 创 建 菜 单 结 构
+                    content += '<a ' + target + ' class="' + className + '" menu-type="' + note.type + '" menu-url="' + note.href +
+                        '" menu-id="' + note.id +
+                        '" menu-title="' + note.title + '" href="' + href + '"><i class="' + note.icon +
+                        '"></i><span>' + note.title + '</span></a>';
                 }
                 content += loadchild(note);
                 content += '</li>';
