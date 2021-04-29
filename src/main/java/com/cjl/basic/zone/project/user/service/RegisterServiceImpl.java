@@ -41,7 +41,9 @@ public class RegisterServiceImpl implements IRegisterService {
         if (!StringUtils.isNull(u)) {
             throw new UserRegisterExistsException();
         }
+        // 写入默认的用户信息
         addDefaultUserInfo(user);
+        // 加入登录日志
         addAccountToLoginInfoTable(user);
         return 1;
     }

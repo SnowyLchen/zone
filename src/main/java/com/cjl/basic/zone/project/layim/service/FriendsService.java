@@ -32,9 +32,17 @@ public interface FriendsService {
 
     /**
      * 查询用户分组列表
+     *
      * @param accountId
      * @return
      */
     List<Friends> getFriendGroupList(Integer accountId);
 
+    /**
+     * 创建分组
+     *
+     * @param friends
+     * @return
+     */
+    int createGroup(Friends friends);
 }

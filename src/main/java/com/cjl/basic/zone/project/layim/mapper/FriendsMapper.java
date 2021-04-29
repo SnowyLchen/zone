@@ -31,7 +31,16 @@ public interface FriendsMapper {
     List<Mine> getUserFriend(@Param("userId") String userId);
 
     /**
+     * 创建分组
+     *
+     * @param friends
+     * @return
+     */
+    int createGroup(Friends friends);
+
+    /**
      * 查询用户分组列表
+     *
      * @param accountId
      * @return
      */

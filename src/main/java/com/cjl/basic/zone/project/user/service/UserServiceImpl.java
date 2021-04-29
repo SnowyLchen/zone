@@ -8,7 +8,10 @@ import com.cjl.basic.zone.common.utils.InsertOrUpdateUtils;
 import com.cjl.basic.zone.common.utils.StringUtils;
 import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.framework.shiro.service.PasswordService;
+import com.cjl.basic.zone.project.layim.entity.Friends;
 import com.cjl.basic.zone.project.layim.entity.Mine;
+import com.cjl.basic.zone.project.layim.service.FriendsService;
+import com.cjl.basic.zone.project.role.domain.ZUserRole;
 import com.cjl.basic.zone.project.user.domain.User;
 import com.cjl.basic.zone.project.user.mapper.UserMapper;
 import com.cjl.basic.zone.utils.dateutils.DateUtils;
@@ -34,6 +37,9 @@ public class UserServiceImpl implements IUserService {
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private FriendsService friendsService;
 
 
     @Override
@@ -153,33 +159,6 @@ public class UserServiceImpl implements IUserService {
     }
 
 
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public int register(User dto) {
-//        verificationUser(dto);
-        // 写入注册信息
-        User user = insertUserForRegister(dto);
-        Integer accountId = dto.getAccountId();
-        // 发送通知
-//        NoticeRecord noticeRecord = sendNoticeRecord(accountId);
-        return 1;
-    }
-
-//
-//    /**
-//     * 验证用户信息
-//     *
-//     * @param dto 用户信息
-//     */
-//    private void verificationUser(UserRolePictureDto dto) {
-//        if (Objects.isNull(dto.getRoleIds())) {
-//            throw new RuntimeException("请选择所属角色");
-//        }
-//        if (Objects.isNull(deptService.selectDeptById(dto.getDeptId().longValue()))) {
-//            throw new RuntimeException("部门信息被更改,请重新选择所属部门");
-//        }
-//    }
-
 //    /**
 //     * 发生注册通知
 //     *
@@ -197,12 +176,14 @@ public class UserServiceImpl implements IUserService {
 //        return noticeRecord1;
 //    }
 
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public User insertUserForRegister(User u) {
-        // 初始化一般用户时为禁用状态，需要管理员该账号才能正常使用
-        if (u.getGroupName() == null) {
-            u.setGroupName(UserConstants.USER_TYPE_ADMIN_NAME_FLAG);
+        if (u.getUserType() == null) {
+            // 设置账户类型
+            u.setUserType(UserConstants.USER_TYPE_ADMIN_NAME_FLAG);
+            // 设置主页链接
             u.setHomeUrl(UserConstants.USER_TYPE_ADMIN_URL);
         }
         if (u.getPassword() == null) {
@@ -213,6 +194,17 @@ public class UserServiceImpl implements IUserService {
         }
         InsertOrUpdateUtils.addInsertAttr(u);
         InsertOrUpdateUtils.requireGreaterThanI(userMapper.insertUser(u), "新增用户失败");
+        // 设置账号菜单权限
+        Integer accountId = u.getAccountId();
+        InsertOrUpdateUtils.requireGreaterThanI(userMapper.insertUserMenu(new ZUserRole() {{
+            setRoleId(2);
+            setAccountId(accountId);
+        }}), "新增用户默认菜单失败");
+        // 新增用户默认分组
+        InsertOrUpdateUtils.requireGreaterThanI(friendsService.createGroup(new Friends() {{
+            setAccountId(accountId);
+            setGroupname("我的好友");
+        }}), "新增用户默认分组失败");
         return u;
     }
 

@@ -7,7 +7,6 @@ import com.cjl.basic.zone.project.layim.entity.SysMsg;
 import com.cjl.basic.zone.project.layim.mapper.FriendsMapper;
 import com.cjl.basic.zone.project.layim.mapper.SysMsgMapper;
 import com.cjl.basic.zone.project.layim.service.FriendsService;
-import com.cjl.basic.zone.project.user.domain.User;
 import com.cjl.basic.zone.project.user.mapper.UserMapper;
 import com.cjl.basic.zone.utils.IdGenerat;
 import org.springframework.stereotype.Service;
@@ -68,5 +67,10 @@ public class FriendsServiceImpl implements FriendsService {
     @Override
     public List<Friends> getFriendGroupList(Integer accountId) {
         return friendsMapper.getFriendGroupList(accountId);
+    }
+
+    @Override
+    public int createGroup(Friends friends) {
+        return friendsMapper.createGroup(friends);
     }
 }

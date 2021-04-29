@@ -8,11 +8,6 @@ package com.cjl.basic.zone.common.constant;
 public class UserConstants {
 
     /**
-     * 已离职
-     */
-    public static final String QUIT_MFRS = "2";
-
-    /**
      * 超级管理员
      */
     public static final String USER_TYPE_SUPER_ADMIN = "1";
@@ -21,7 +16,6 @@ public class UserConstants {
     public static final String USER_TYPE_SUPER_ADMIN_URL = "adminIndex";
 
     /**
-     *
      * 管理员
      */
     public static final String USER_TYPE_ADMIN = "2";
@@ -58,11 +52,6 @@ public class UserConstants {
     public static final String ROLE_BLOCKED = "1";
 
     /**
-     * 组织机构正常状态
-     */
-    public static final String DEPT_NORMAL = "0";
-
-    /**
      * 账号名长度限制
      */
     public static final int USERNAME_MIN_LENGTH = 2;
@@ -86,12 +75,6 @@ public class UserConstants {
     public final static String USER_EMAIL_UNIQUE = "0";
     public final static String USER_EMAIL_NOT_UNIQUE = "1";
 
-    /**
-     * 组织机构是否唯一的返回结果码
-     */
-    public final static String DEPT_NAME_UNIQUE = "0";
-    public final static String DEPT_NAME_NOT_UNIQUE = "1";
-
 
     /**
      * 角色名称是否唯一的返回结果码
@@ -99,11 +82,6 @@ public class UserConstants {
     public final static String ROLE_NAME_UNIQUE = "0";
     public final static String ROLE_NAME_NOT_UNIQUE = "1";
 
-    /**
-     * 职位名称是否唯一的返回结果码
-     */
-    public final static String POST_NAME_UNIQUE = "0";
-    public final static String POST_NAME_NOT_UNIQUE = "1";
 
     /**
      * 角色权限是否唯一的返回结果码
@@ -111,11 +89,6 @@ public class UserConstants {
     public final static String ROLE_KEY_UNIQUE = "0";
     public final static String ROLE_KEY_NOT_UNIQUE = "1";
 
-    /**
-     * 职位编码是否唯一的返回结果码
-     */
-    public final static String POST_CODE_UNIQUE = "0";
-    public final static String POST_CODE_NOT_UNIQUE = "1";
 
     /**
      * 菜单名称是否唯一的返回结果码

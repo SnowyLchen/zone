@@ -18,7 +18,7 @@
         <result column="login_ip" jdbcType="VARCHAR" property="loginIp"/>
         <result column="login_date" jdbcType="TIMESTAMP" property="loginTime"/>
         <result column="del_flag" jdbcType="CHAR" property="delFlag"/>
-        <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="user_type" jdbcType="VARCHAR" property="userType"/>
         <result column="home_url" jdbcType="VARCHAR" property="homeUrl"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
@@ -41,7 +41,7 @@
                    login_time,
                    activated,
                    logged,
-                   group_name,
+                   user_type,
                    login_name,
                    phonenumber,
                    del_flag,
@@ -64,7 +64,7 @@
                 zu.login_time,
                 zu.activated,
                 zu.salt,
-                zu.group_name,
+                zu.user_type,
                 zu.login_name,
                 zu.sign,
                 zu.status
@@ -146,6 +146,10 @@
             and del_flag = 0
         </where>
     </select>
+    <insert id="insertUserMenu">
+        insert into z_user_role (account_id, role_id)
+        values (#{accountId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER})
+     </insert>
     <select id="selectUserDeptRoleByUserName" resultMap="UserResultMap">
         <include refid="UserVo"/>
         <where>
@@ -214,8 +218,8 @@
             <if test="activated != null">
                 activated,
             </if>
-            <if test="groupName != null">
-                group_name,
+            <if test="userType != null">
+                user_type,
             </if>
             <if test="loginName != null">
                 login_name,
@@ -261,8 +265,8 @@
             <if test="activated != null">
                 #{activated,jdbcType=INTEGER},
             </if>
-            <if test="groupName != null">
-                #{groupName,jdbcType=VARCHAR},
+            <if test="userType != null">
+                #{userType,jdbcType=VARCHAR},
             </if>
             <if test="loginName != null">
                 #{loginName,jdbcType=VARCHAR},

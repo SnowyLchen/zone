@@ -68,7 +68,7 @@ public class User extends BaseEntity {
     /**
      * 用户类型
      */
-    private String groupName;
+    private String userType;
     /**
      * 首页
      */
@@ -170,12 +170,12 @@ public class User extends BaseEntity {
         this.homeUrl = homeUrl;
     }
 
-    public String getGroupName() {
-        return groupName;
+    public String getUserType() {
+        return userType;
     }
 
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
     /**

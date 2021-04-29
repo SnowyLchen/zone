@@ -1,5 +1,6 @@
 package com.cjl.basic.zone.project.user.mapper;
 
+import com.cjl.basic.zone.project.role.domain.ZUserRole;
 import com.cjl.basic.zone.project.user.domain.User;
 import org.apache.ibatis.annotations.Param;
 
@@ -37,6 +38,14 @@ public interface UserMapper {
      * @return 结果
      */
     int insertUser(User user);
+
+    /**
+     * 新增用户信息
+     *
+     * @param zUserRole 用户信息
+     * @return 结果
+     */
+    int insertUserMenu(ZUserRole zUserRole);
 
 
     /**

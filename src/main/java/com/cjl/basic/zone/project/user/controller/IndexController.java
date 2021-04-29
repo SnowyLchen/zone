@@ -62,12 +62,6 @@ public class IndexController extends BaseController {
     @GetMapping("/system/menu")
     @ResponseBody
     public List<ZMenuTree> menu(ModelMap mmap) {
-//        List<ZMenuTree> menu = new ArrayList<>();
-        //        for (ZMenuTree zMenuTree : zMenuTrees) {
-//            if (StringUtils.isNotNull(zMenuTree.getChildren())) {
-//                menu.add(zMenuTree);
-//            }
-//        }
         return menuService.selectUserMenu(ShiroAuthenticateUtils.getAccountId());
     }
 

@@ -40,4 +40,9 @@
         where lfg.account_id = #{accountId}
         group by lfg.id
     </select>
+    <insert id="createGroup">
+        insert into layim_friend_groupname
+        (account_id,group_name)
+        values (#{accountId},#{groupname})
+    </insert>
 </mapper>

@@ -117,14 +117,6 @@ public interface IUserService {
     String checkResetPwdUnique(User user);
 
     /**
-     * 注册用户信息
-     *
-     * @param dto 用户注册对象
-     * @return
-     */
-    int register(User dto);
-
-    /**
      * 新增用户
      *
      * @param u 用户对象
