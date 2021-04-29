@@ -21,7 +21,7 @@
     <insert id="addFriend">
         insert into  layim_friend
         (id,user_id,f_user_id,create_time,f_group_id)
-        values (#{id},#{uid},#{fid},#{createTime},#{groupId})
+        values (#{id},#{uid},#{fid},#{createTime},#{gId})
     </insert>
 
 
@@ -39,6 +39,7 @@
                  left join layim_friend lf on lf.f_group_id = lfg.id
         where lfg.account_id = #{accountId}
         group by lfg.id
+        order by lfg.id
     </select>
     <insert id="createGroup">
         insert into layim_friend_groupname

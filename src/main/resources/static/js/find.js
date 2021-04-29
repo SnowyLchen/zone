@@ -29,16 +29,20 @@ function addAsk() {
     object["msgType"] = "addAsk";
     var jsonData = JSON.stringify(object);
     // 发送给websocket
-    socket.send(jsonData);
+    // socket.send(jsonData);
+    console.log("提交")
+    closeCurrentIndex();
 }
 
-layui.use(['layim', 'laypage'], function () {
-    var layim = layui.layim
-        , layer = layui.layer
-        , laytpl = layui.laytpl
-        , $ = layui.jquery
-        , laypage = layui.laypage;
-
-    //一些添加好友请求之类的交互参见文档
-
-});
+function closeCurrentIndex() {
+    layui.use(['layim', 'laypage'], function () {
+        var layim = layui.layim
+            , layer = layui.layer
+            , laytpl = layui.laytpl
+            , $ = layui.jquery
+            , laypage = layui.laypage;
+        // debugger
+        parent.layer.close(parent.layer.getFrameIndex(window.name))
+        //一些添加好友请求之类的交互参见文档
+    });
+}

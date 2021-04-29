@@ -21,4 +21,5 @@ public class Friend {
     private String uid;
     private String fid;
     private Date createTime;
+    private String gId;
 }

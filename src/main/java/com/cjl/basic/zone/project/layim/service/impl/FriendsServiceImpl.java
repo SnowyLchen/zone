@@ -37,11 +37,13 @@ public class FriendsServiceImpl implements FriendsService {
         friend.setId(IdGenerat.getGeneratID());
         friend.setCreateTime(new Date());
         String uid = friend.getUid();
+        //查询第一个分组列表
+        friend.setGId(friendsMapper.getFriendGroupList(Integer.parseInt(uid)).get(0).getId());
         String fid = friend.getFid();
         boolean addFriend = friendsMapper.addFriend(friend);
         if (addFriend) {
             //添加两天好友关系
-            boolean addFriend1 = friendsMapper.addFriend(new Friend().setId(IdGenerat.getGeneratID()).setUid(fid).setFid(uid).setCreateTime(friend.getCreateTime()));
+            boolean addFriend1 = friendsMapper.addFriend(new Friend().setId(IdGenerat.getGeneratID()).setUid(fid).setFid(uid).setCreateTime(friend.getCreateTime()).setGId(friendsMapper.getFriendGroupList(Integer.parseInt(fid)).get(0).getId()));
             if (addFriend1) {
                 //添加系统消息
                 String content = userMapper.selectUserById(Integer.valueOf(uid)).getUserName();

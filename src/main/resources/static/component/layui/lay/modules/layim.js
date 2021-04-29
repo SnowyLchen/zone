@@ -129,7 +129,7 @@
         }, j = e.extend(j, obj), i.brief ? layui.each(r.ready, function (i, a) {
             a && a(obj)
         }) : void (a.url ? S(a, create, "INIT") : create(a))
-    }, L = function (i) {
+    },layImMain, L = function (i) {
         return t.open({
             type: 1,
             area: ["260px", "520px"],
@@ -142,6 +142,25 @@
             resize: !1,
             content: i,
             success: function (i) {
+                layImMain=i;
+                // 右键菜单
+                layImMain.find('.layim-list-friend').on('contextmenu', '.layui-layim-list li', function (e) {
+                    debugger
+                    var othis = $(this);
+                    var id = othis[0].id;
+                    var html = '<ul id="contextmenu_' + othis[0].id + '" data-id="' + othis[0].id + '" data-index="' + othis.data('index') + '">';
+                    html += '<li layim-event="menu_chat"><i class="layui-icon" >&#xe611;</i>' + space_icon + '发送即时消息</li>';
+                    html += '<li layim-event="menu_profile"><i class="layui-icon">&#xe60a;</i>' + space_icon + '查看资料</li>';
+                    html += '<li layim-event="menu_history"><i class="layui-icon" >&#xe60e;</i>' + space_icon + '消息记录</li>';
+                    html += '<li layim-event="menu_nomsg">' + space_no_icon + '屏蔽消息</li>';
+                    html += '<li layim-event="menu_delete">' + space_no_icon + '删除好友</li>';
+                    html += '<li layim-event="menu_moveto">' + space_no_icon + '移动至</li></ul>';
+                    if (othis.hasClass('layim-null')) return;
+                    //注意一下这个方法
+                    showtips(html, this, id, 0, 0);
+                    //showtips(html, this, id, 160, 25);
+
+                });
                 x = i, R(i), j.base.right && i.css("margin-left", "-" + j.base.right), b && t.close(b.attr("times"));
                 var a = [], n = i.find(".layim-list-history");
                 n.find("li").each(function () {

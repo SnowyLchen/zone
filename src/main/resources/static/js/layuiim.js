@@ -44,7 +44,16 @@ layui.use('layim', function (layim) {
         , find: basePath + '/layim/add/find'  //发现页面地址，若不开启，剔除该项即可
         // ,chatLog: layui.cache.dir + 'css/modules/layim/html/chatlog.html' //聊天记录页面地址，若不开启，剔除该项即可
         , chatLog: basePath + '/layim/chat/log' //聊天记录界面
-
+        //,title: 'WebIM' //自定义主面板最小化时的标题
+        ,right: '10px' //主面板相对浏览器右侧距离
+        ,minRight: '90px' //聊天面板最小化时相对浏览器右侧距离
+        // ,initSkin: '5.jpg' //1-5 设置初始背景
+        //,skin: ['aaa.jpg'] //新增皮肤
+        // ,isfriend: true //是否开启好友
+        // ,isgroup: true //是否开启群组
+        // ,min: true //是否始终最小化主面板，默认false
+        //,voice: false //声音提醒，默认开启，声音文件为：default.mp3
+        ,morseClick:true
     });
     // //删除本地聊天数据
     layui.data('layim', {key: accountId, remove: true});
@@ -139,7 +148,7 @@ layui.use('layim', function (layim) {
         layim.msgbox(6);
         var type = res.data.type;
         if (type === 'friend') {
-            //layim.setChatStatus('<span style="color:#FF5722;">对方正在输入。。。</span>');
+            // layim.setChatStatus('<span style="color:#FF5722;">对方正在输入。。。</span>');
             if (res.data.status === "offline") {
                 layim.setChatStatus('<span style="color:#FF5722;">离线</span>'); //模拟标注好友在线状态
             } else if (res.data.status === "online") {
@@ -169,4 +178,36 @@ layui.use('layim', function (layim) {
         // 发送给websocket
         socket.send(jsonData);
     });
+    layim.on('sign', function(value){
+        console.log(value); //获得新的签名
+
+        //此时，你就可以通过Ajax将新的签名同步到数据库中了。
+    });
+    layim.on('setSkin', function(filename, src){
+        console.log(filename); //获得文件名，如：1.jpg
+        console.log(src); //获得背景路径，如：http://res.layui.com/layui/src/css/modules/layim/skin/1.jpg
+    });
+    layim.on('contextmenu', function(res){
+        console.log(res)
+    });
+    $(function () {
+        //好友右键菜单
+        $('#layui-layim-main').find('.layim-list-friend').on('contextmenu', '.layui-layim-list li', function (e) {
+            debugger
+            var othis = $(this);
+            var id = othis[0].id;
+            var html = '<ul id="contextmenu_' + othis[0].id + '" data-id="' + othis[0].id + '" data-index="' + othis.data('index') + '">';
+            html += '<li layim-event="menu_chat"><i class="layui-icon" >&#xe611;</i>' + space_icon + '发送即时消息</li>';
+            html += '<li layim-event="menu_profile"><i class="layui-icon">&#xe60a;</i>' + space_icon + '查看资料</li>';
+            html += '<li layim-event="menu_history"><i class="layui-icon" >&#xe60e;</i>' + space_icon + '消息记录</li>';
+            html += '<li layim-event="menu_nomsg">' + space_no_icon + '屏蔽消息</li>';
+            html += '<li layim-event="menu_delete">' + space_no_icon + '删除好友</li>';
+            html += '<li layim-event="menu_moveto">' + space_no_icon + '移动至</li></ul>';
+            if (othis.hasClass('layim-null')) return;
+            //注意一下这个方法
+            showtips(html, this, id, 0, 0);
+            //showtips(html, this, id, 160, 25);
+
+        });
+    })
 });

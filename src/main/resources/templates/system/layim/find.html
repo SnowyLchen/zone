@@ -20,47 +20,107 @@
 <body>
 <div style="margin: 15px;">
     <div class="layui-fluid " style="">
-        <div class="layui-card">
-            <div class="layui-card-body">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">添加类型<span style="color: red;">*</span></label>
+                            <div class="layui-input-inline" style="width: 195px">
+                                <select id="type" name="type" lay-verify="required">
+                                    <option value>请选择添加类型</option>
+                                    <option value="0">好友</option>
+                                    <option value="1">群</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">id<span style="color: red;">*</span></label>
+                            <div class="layui-input-block">
+                                <input id="friend" placeholder="请输入id" type="text" class="layui-input" lay-verify="required"
+                                       required/>
+                            </div>
+                        </div>
 
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">附加消息<span style="color: red;">*</span></label>
+                            <div class="layui-input-block">
+                                <textarea id="content" placeholder="请输入附加消息" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
 
-                <div class="layui-form-item">
-                    <label class="layui-form-label">添加类型<span style="color: red;">*</span></label>
-                    <div class="layui-inline" style="width: 195px">
-                        <select id="type" name="type" lay-verify="">
-                            <option value>请选择添加类型</option>
-                            <option value="0">好友</option>
-                            <option value="1">群</option>
-                        </select>
+                        <div class="layui-form-item">
+                            <button class="layui-btn addLive" onclick="addAsk()">&emsp;添加&emsp;</button>
+                            <button class="layui-btn layui-btn-primary" type="button" id="backupPage">&emsp;返回&emsp;</button>
+                        </div>
+
                     </div>
                 </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">id<span style="color: red;">*</span></label>
-                    <div class="layui-input-block">
-                        <input id="friend" placeholder="请输入id" type="text" class="layui-input" lay-verify="required"
-                               required/>
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">附加消息<span style="color: red;">*</span></label>
-                    <div class="layui-input-block">
-                        <textarea id="content" placeholder="请输入附加消息" class="layui-textarea"></textarea>
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <button class="layui-btn addLive" onclick="addAsk()">&emsp;提交&emsp;</button>
-                    <button class="layui-btn layui-btn-primary" type="button" id="backupPage">&emsp;返回&emsp;</button>
-                </div>
-
-            </div>
-        </div>
+<!--        <textarea title="用户模版" id="LAY_Friend" >-->
+<!--    {{# layui.each(d.data, function(index, item){ }}-->
+<!--        <div class="layui-col-sm4 layui-col-md4 layui-col-lg2">-->
+<!--     <div class="layui-card">-->
+<!--        <div class="avatar">-->
+<!--            <img class="layadmin-homepage-pad-img" src="{{ item.avatar }}"/>-->
+<!--        </div>-->
+<!--        <div class="units">-->
+<!--            <p>{{ item.userName }}({{ item.userCode }})</p>-->
+<!--            <p>{{ item.roleNames }}</p>-->
+<!--            <p>-->
+<!--                {{# if(item.isValid == 0){ }}-->
+<!--                    <button userId="{{ item.userId }}" class="addFriend layui-btn layui-btn-xs"-->
+<!--                            style="background-color:#7ADDD4;">&nbsp;&nbsp;<strong>+</strong>&nbsp;&nbsp;好友&nbsp;&nbsp;</button>-->
+<!--                {{# } else { }}-->
+<!--                    <span class="c_red">已经是好友</span>-->
+<!--                {{# } }}-->
+<!--            </p>-->
+<!--        </div>-->
+<!--     </div>-->
+<!--    </div>-->
+<!--    {{# }); }}-->
+<!--</textarea>-->
     </div>
 </div>
 <div th:include="include::layIm"></div>
 <script type="application/javascript" th:src="@{/js/webSocket.js}"></script>
 <script type="application/javascript" th:src="@{/js/find.js}"></script>
+<script>
+    // $.ajax({
+    //     type: "get",
+    //     url: "../json/friend.json",
+    //     async: true,
+    //     data: data,
+    //     success: function (data) {
+    //         var json = data;
+    //         var list = json.data;
+    //         if (list != null) {
+    //             // 数据转化为html格式
+    //             var html = laytpl(LAY_Friend.value).render({
+    //                 data: list
+    //             });
+    //             control.html(html);
+    //         } else {
+    //             control.append('<div style="color:#ccc; margin:150px 350px;">没有找到符合搜索条件的用户</div>');
+    //         }
+    //     }
+    // });
+    // /**
+    //  * 添加好友
+    //  */
+    // $(document).on('click', '.addFriend', function() {
+    //     var myBut = $(this);
+    //     var userId = myBut.attr("userId");
+    //     // 弹出添加好友验证界面
+    //     layim.add({
+    //         type: 'friend'
+    //         ,username: user.username
+    //         ,avatar: user.avatar
+    //         ,submit: function(group, remark, index){
+    //             layer.msg('好友申请已发送，请等待对方确认', { icon: 1 });
+    //             // 修改按钮
+    //             myBut.parent().html('<span class="c_red">已经提交申请</span>');
+    //             // 在这里插入你的推送信息代码
+    //         }
+    //     });
+    // });
+</script>
 </body>
 </html>
