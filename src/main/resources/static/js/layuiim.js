@@ -4,7 +4,8 @@ console.log('登录?' + isLogin);
 //开始创建webSocket连接
 var socket = createWebSocket(wsUrl);
 
-layui.use('layim', function (layim) {
+layui.use(['layim', 'jquery'], function (layim) {
+    let $ = layui.jquery;
     //基础配置
     layim.config({
         init: {
@@ -45,15 +46,15 @@ layui.use('layim', function (layim) {
         // ,chatLog: layui.cache.dir + 'css/modules/layim/html/chatlog.html' //聊天记录页面地址，若不开启，剔除该项即可
         , chatLog: basePath + '/layim/chat/log' //聊天记录界面
         //,title: 'WebIM' //自定义主面板最小化时的标题
-        ,right: '10px' //主面板相对浏览器右侧距离
-        ,minRight: '90px' //聊天面板最小化时相对浏览器右侧距离
+        , right: '10px' //主面板相对浏览器右侧距离
+        , minRight: '90px' //聊天面板最小化时相对浏览器右侧距离
         // ,initSkin: '5.jpg' //1-5 设置初始背景
         //,skin: ['aaa.jpg'] //新增皮肤
         // ,isfriend: true //是否开启好友
         // ,isgroup: true //是否开启群组
         // ,min: true //是否始终最小化主面板，默认false
         //,voice: false //声音提醒，默认开启，声音文件为：default.mp3
-        ,morseClick:true
+        , morseClick: true
     });
     // //删除本地聊天数据
     layui.data('layim', {key: accountId, remove: true});
@@ -178,36 +179,66 @@ layui.use('layim', function (layim) {
         // 发送给websocket
         socket.send(jsonData);
     });
-    layim.on('sign', function(value){
+    layim.on('sign', function (value) {
         console.log(value); //获得新的签名
 
         //此时，你就可以通过Ajax将新的签名同步到数据库中了。
     });
-    layim.on('setSkin', function(filename, src){
+    layim.on('setSkin', function (filename, src) {
         console.log(filename); //获得文件名，如：1.jpg
         console.log(src); //获得背景路径，如：http://res.layui.com/layui/src/css/modules/layim/skin/1.jpg
     });
-    layim.on('contextmenu', function(res){
+    layim.on('contextmenu', function (res) {
         console.log(res)
     });
-    $(function () {
-        //好友右键菜单
-        $('#layui-layim-main').find('.layim-list-friend').on('contextmenu', '.layui-layim-list li', function (e) {
-            debugger
-            var othis = $(this);
-            var id = othis[0].id;
-            var html = '<ul id="contextmenu_' + othis[0].id + '" data-id="' + othis[0].id + '" data-index="' + othis.data('index') + '">';
-            html += '<li layim-event="menu_chat"><i class="layui-icon" >&#xe611;</i>' + space_icon + '发送即时消息</li>';
-            html += '<li layim-event="menu_profile"><i class="layui-icon">&#xe60a;</i>' + space_icon + '查看资料</li>';
-            html += '<li layim-event="menu_history"><i class="layui-icon" >&#xe60e;</i>' + space_icon + '消息记录</li>';
-            html += '<li layim-event="menu_nomsg">' + space_no_icon + '屏蔽消息</li>';
-            html += '<li layim-event="menu_delete">' + space_no_icon + '删除好友</li>';
-            html += '<li layim-event="menu_moveto">' + space_no_icon + '移动至</li></ul>';
-            if (othis.hasClass('layim-null')) return;
-            //注意一下这个方法
-            showtips(html, this, id, 0, 0);
-            //showtips(html, this, id, 160, 25);
 
-        });
-    })
+    // 从数据库查找出所有群聊，依次遍历添加
+    // var imGroup = {
+    //     "id": 1,
+    //     "groupname": "我的好友2"
+    // };
+    // // 往主面板添加分组
+    // addFriendGroup(imGroup);
+    // // 更新缓存
+    // var cacheFriend = layim.cache().friend;
+    // cacheFriend.push(imGroup);
+    // layim.cache().friend = cacheFriend;
+    // // 往主面板添加分组
+    // var addFriendGroup = function (friendGroup) {
+    //     // 下面是自己手动把分组添加到列表中
+    //     var friendList_ul = document.getElementsByClassName("layim-list-friend")[0];
+    //     var li = document.createElement("li");
+    //     friendList_ul.appendChild(li);
+    //     var h5 = document.createElement("h5");
+    //     li.appendChild(h5);
+    //     h5.setAttribute("layim-event", "spread");
+    //     h5.setAttribute("lay-type", "false");
+    //     h5.setAttribute("groupid", friendGroup.id);
+    //     var i = document.createElement("i");
+    //     h5.appendChild(i);
+    //     i.setAttribute("class", "layui-icon");
+    //     i.innerText = '      ';
+    //     var span = document.createElement("span");
+    //     h5.appendChild(span);
+    //     span.innerText = friendGroup.groupname;
+    //     var em = document.createElement("em");
+    //     h5.appendChild(em);
+    //     var span1 = document.createElement("span");
+    //     em.appendChild(span1);
+    //     span1.innerText = '(';
+    //     var cite = document.createElement("cite");
+    //     em.appendChild(cite);
+    //     cite.setAttribute("class", "layim-count");
+    //     cite.innerText = ' 0';
+    //     var span2 = document.createElement("span");
+    //     em.appendChild(span2);
+    //     span2.innerText = ')';
+    //     var ul = document.createElement("ul");
+    //     li.appendChild(ul);
+    //     ul.setAttribute("class", "layui-layim-list");
+    //     var li2 = document.createElement("li");
+    //     ul.appendChild(li2);
+    //     li2.setAttribute("class", "layim-null");
+    //     li2.innerText = '该分组下暂无好友';
+    // };
 });
