@@ -4,26 +4,162 @@
     <meta charset="UTF-8">
     <title>首页</title>
     <div th:include="include::header"></div>
-    <style>
-        h1 {
-            margin-top: 200px;
-            color: #5FB878;
-        }
-
-        .layui-card-body {
-            text-align: center;
-            height: 500px;
-        }
-    </style>
+    <link th:href="@{/admin/css/other/console1.css}" rel="stylesheet"/>
 </head>
 <body class="pear-container">
 <!--内容-->
-<div class="layui-card">
-    <div class="layui-card-header"></div>
-    <div class="layui-card-body">
-        <h1><b>Space Page</b></h1>
+<div>
+    <div class="layui-row layui-col-space10">
+        <div class="layui-col-xs6 layui-col-md3">
+            <div class="layui-card left-pill">
+                <div class="layui-card-header">
+                    <div class="layui-row layui-col-space5">
+                        <div class="layui-col-xs8 layui-col-md4 top-panel-tips">
+                            照片
+                        </div>
+                        <div class="layui-col-xs8 layui-col-md4 top-panel-tips">
+                            日志
+                        </div>
+                        <div class="layui-col-xs4 layui-col-md4 top-panel-tips">
+                            动态
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-row layui-col-space5">
+                        <div class="layui-col-xs8 layui-col-md4 top-panel-number" style="color: #28333E;" id="value1">
+                            0
+                        </div>
+                        <div class="layui-col-xs8 layui-col-md4 top-panel-number" style="color: #28333E;" id="value3">
+                            0
+                        </div>
+                        <div class="layui-col-xs4 layui-col-md4 top-panel-number" style="color: red;" id="value4">
+                            0
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs6 layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header" style="padding-top: 5px">
+                    <input class="layui-input" type="text" placeholder="说点什么吧" autocomplete="off" readonly
+                           id="showActiveContent">
+                </div>
+                <div class="layui-card-body" id="activeContent" hidden>
+                    <textarea name="" id="edit" cols="30" rows="10"></textarea>
+                    <div class="layui-btn-group" style="margin-top: 10px;text-align: right">
+                        <button class="layui-btn" lay-event="getContent" id="commit">发表</button>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">全部动态</div>
+                <div class="layui-card-body">
+                    <dl class="layuiadmin-card-status">
+                        <dd>
+                            <div class="layui-status-img"><a href="javascript:;"><img
+                                    style="width: 32px;height: 32px;border-radius: 50px;"
+                                    src="../../admin/images/avatar.jpg"></a></div>
+                            <div>
+                                <p>动态
+                                </p>
+                                <span>几秒前</span>
+                            </div>
+                        </dd>
+                        <dd>
+                            <div class="layui-status-img"><a href="javascript:;"><img
+                                    style="width: 32px;height: 32px;border-radius: 50px;"
+                                    src="../../admin/images/avatar.jpg"></a></div>
+                            <div>
+                                <p>简 在 <a lay-href="https://gitee.com/Jmysy/Pear-Admin-Layui">Pear Admin 专区</a> 进行了 <a
+                                        lay-href="http://fly.layui.com/vipclub/list/layuiadmin/column/quiz/">提问</a></p>
+                                <span>2天前</span>
+                            </div>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs6 layui-col-md3">
+            <div class="layui-card top-panel">
+                <div class="layui-card-header">本月签到次数</div>
+                <div class="layui-card-body">
+                    <div class="layui-row layui-col-space5">
+                        <div class="layui-col-xs4 layui-col-md4 top-panel-tips">
+                            签到
+                        </div>
+                        <div class="layui-col-xs8 layui-col-md8 top-panel-number" style="color: #28333E;" id="value2">
+                            0
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div th:include="include::footer"></div>
+<script>
+    layui.use(['tinymce', 'util', 'code', 'layer', 'echarts', 'element', 'count', 'topBar'], function () {
+        var $ = layui.jquery,
+            layer = layui.layer,
+            element = layui.element,
+            count = layui.count,
+            echarts = layui.echarts,
+            tinymce = layui.tinymce,
+            util = layui.util;
+        layui.code();
+        var edit;
+        $(document).click(function (e) {
+            e = window.event || e;
+            var obj = e.srcElement || e.target;
+            if ($(obj).is("#showActiveContent") || $(obj).is("#activeContent") || $(obj).is("#commit")) {
+                edit = tinymce.render({
+                    elem: "#edit",
+                    height: 400
+                });
+                $("#activeContent").show();
+            } else {
+                $("#activeContent").hide();
+            }
+        });
+
+        util.event('lay-event', {
+            getContent: function () {
+                console.log(edit.getContent())
+                layer.msg("展开控制台查看")
+            }
+        });
+
+
+        count.up("value1", {
+            time: 4000,
+            num: 10,
+            bit: 0,
+            regulator: 50
+        })
+
+        count.up("value2", {
+            time: 4000,
+            num: 10,
+            bit: 0,
+            regulator: 50
+        })
+
+        count.up("value3", {
+            time: 4000,
+            num: 10,
+            bit: 0,
+            regulator: 50
+        })
+
+        count.up("value4", {
+            time: 4000,
+            bit: 0,
+            num: 20,
+            regulator: 50
+        })
+    });
+</script>
 </body>
 </html>
