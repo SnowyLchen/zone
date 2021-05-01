@@ -44,10 +44,10 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
             }
 
             this.menuRender = function (param) {
-                debugger
                 if (param.role == '1') {
                     sideMenu = pearMenu.render({
                         elem: 'sideMenu',
+                        role: param.role,
                         async: param.menu.async !== undefined ? param.menu.async : true,
                         theme: "dark-theme",
                         height: '100%',
@@ -67,6 +67,7 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                 } else {
                     sideMenu = pearMenu.render({
                         elem: 'content',
+                        role: param.role,
                         async: param.menu.async !== undefined ? param.menu.async : true,
                         theme: "dark-theme",
                         height: '100%',
@@ -149,7 +150,6 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                     debugger
                     bodyTab = pearTab.render(config);
                     bodyTab.click(function (id) {
-                        debugger
                         if (!param.tab.keepState) {
                             bodyTab.refresh(false);
                         }
@@ -157,10 +157,16 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                         sideMenu.selectItem(id);
                     })
 
-                    sideMenu.click(function (dom, data) {
-                        debugger
+                    sideMenu.click(param.role, function (dom, data) {
                         if (param.role != '1') {
-                            sideMenu.menuSpaceClickEvent(bodyTab, data, {control: 'control'});
+                            bodyFrame = pearFrame.render({
+                                elem: 'spaceContent',
+                                title: data.menuPath,
+                                url: data.menuUrl,
+                                width: '100%',
+                                height: '100%'
+                            });
+                            bodyFrame.changePage(data.menuUrl, data.menuPath, true);
                         } else {
                             bodyTab.addTabOnly({
                                 id: data.menuId,
@@ -182,7 +188,6 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                     });
 
                     sideMenu.click(function (dom, data) {
-                        debugger
                         bodyFrame.changePage(data.menuUrl, data.menuPath, true);
                         compatible()
                     })

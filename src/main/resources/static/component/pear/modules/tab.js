@@ -193,7 +193,6 @@ layui.define(['jquery', 'element'], function (exports) {
 
     /** 添 加 唯 一 选 项 卡 */
     pearTab.prototype.addTabOnly = function (opt, time) {
-
         var title = '';
         if (opt.close) {
 

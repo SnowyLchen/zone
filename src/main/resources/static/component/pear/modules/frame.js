@@ -29,7 +29,6 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
     } 
 	
 	pearFrame.prototype.changePage = function(url,title,loading){
-    	debugger
 		if(loading){
 			var loading = $("#"+this.option.elem).find(".pear-frame-loading");
 			

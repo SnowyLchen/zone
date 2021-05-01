@@ -13,6 +13,7 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
     pearMenu.prototype.render = function (opt) {
         var option = {
             elem: opt.elem,
+            role: opt.role,
             async: opt.async,
             parseData: opt.parseData,
             url: opt.url,
@@ -43,18 +44,38 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
         return new pearMenu(opt);
     }
 
-    pearMenu.prototype.click = function (clickEvent) {
+    pearMenu.prototype.click = function (roleId, clickEvent) {
         var _this = this;
-        debugger
-        $("body").on("click", "#" + _this.option.elem + " .site-demo-active", function () {
-        // $("#control .pear-nav-control").on("click", "[pear-id]", function () {
+        var elem;
+        if (roleId == '1') {
+            elem = "#" + _this.option.elem + " .site-demo-active"
+        } else {
+            elem = '#control > ul.layui-nav.pear-nav-control.pc.layui-hide-xs > li.layui-nav-item.layui-this'
+        }
+        $("body").on("click", elem, function () {
             var dom = $(this);
+            console.log(dom.attr('pear-id'))
+            debugger
+            var menuId, menuTitle, menuPath, menuIcon, menuUrl;
+            if (roleId == '1') {
+                menuId = dom.attr("menu-id");
+                menuTitle = dom.attr("menu-title");
+                menuPath = dom.attr("menu-title");
+                menuIcon = dom.attr("menu-icon");
+                menuUrl = dom.attr("menu-url");
+            } else {
+                menuId = dom.attr("pear-id");
+                menuTitle = dom.attr("pear-title");
+                menuPath = dom.attr("pear-title");
+                menuIcon = dom.attr("pear-icon");
+                menuUrl = dom.attr("pear-href");
+            }
             var data = {
-                menuId: dom.attr("menu-id"),
-                menuTitle: dom.attr("menu-title"),
-                menuPath: dom.attr("menu-title"),
-                menuIcon: dom.attr("menu-icon"),
-                menuUrl: dom.attr("menu-url")
+                menuId: menuId,
+                menuTitle: menuTitle,
+                menuPath: menuPath,
+                menuIcon: menuIcon,
+                menuUrl: menuUrl
             };
             var doms = hash(dom);
             if (doms.text() != '') {
@@ -142,16 +163,23 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
      * @param data
      * @param option
      */
-    pearMenu.prototype.menuSpaceClickEvent = function (contentTab, data, option) {
+    pearMenu.prototype.menuSpaceClickEvent = function (pearFrame, data, option) {
         $("#" + option.control + " .pear-nav-control").on("click", "[pear-id]", function () {
             debugger
-            contentTab.addTabOnly({
-                id: 10000,
-                title: 'data.menuTitle',
-                url: 'space',
-                icon: 'data.menuIcon',
-                close: true
-            }, 300);
+            bodyFrame = pearFrame.render({
+                elem: 'content',
+                title: '工作空间 / 首页',
+                url: param.tab.index.href,
+                width: '100%',
+                height: '100%'
+            });
+            // contentTab.addTabOnly({
+            //     id: data.menuId,
+            //     title: data.menuTitle,
+            //     url: data.menuUrl,
+            //     icon: data.menuIcon,
+            //     close: true
+            // }, 300);
         });
     }
 
@@ -309,21 +337,20 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
         $("#" + option.control).html(control);
         $("#" + option.control).append(controlPe);
         $("#" + option.elem).html(menu);
-        menuAdminClickEvent();
-
-        // this.menuSpaceClickEvent();
+        if (option.role == '1') {
+            menuAdminClickEvent();
+        }
 
         /**
          * 后台管理菜单点击事件
          */
         function menuAdminClickEvent() {
             $("#" + option.control + " .pear-nav-control").on("click", "[pear-id]", function () {
-                debugger
-                menuAdminClick(option,this)
+                menuAdminClick(option, this)
             });
         }
 
-        function menuAdminClick(option,_this) {
+        function menuAdminClick(option, _this) {
             $("#" + option.elem).find(".pear-nav-tree").css({
                 display: 'none'
             });
