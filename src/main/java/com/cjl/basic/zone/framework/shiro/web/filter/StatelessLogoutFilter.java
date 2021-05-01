@@ -6,7 +6,7 @@ import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.framework.manager.AsyncManager;
 import com.cjl.basic.zone.framework.manager.factory.AsyncFactory;
 import com.cjl.basic.zone.framework.shiro.jwt.StatelessWebUtils;
-import com.cjl.basic.zone.project.user.domain.User;
+import com.cjl.basic.zone.project.manage.user.domain.User;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.LogoutFilter;

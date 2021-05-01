@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cjl.basic.zone.project.dict.mapper.DictTypeMapper">
+<mapper namespace="com.cjl.basic.zone.project.manage.dict.mapper.DictTypeMapper">
 
-    <resultMap type="com.cjl.basic.zone.project.dict.domain.DictType" id="DictTypeResult">
+    <resultMap type="com.cjl.basic.zone.project.manage.dict.domain.DictType" id="DictTypeResult">
         <id property="dictId" column="dict_id"/>
         <result property="dictName" column="dict_name"/>
         <result property="dictType" column="dict_type"/>
@@ -22,7 +22,7 @@
 		from mfrs_dict_type
     </sql>
 
-    <select id="selectDictTypeList" parameterType="com.cjl.basic.zone.project.dict.domain.DictType"
+    <select id="selectDictTypeList" parameterType="com.cjl.basic.zone.project.manage.dict.domain.DictType"
             resultMap="DictTypeResult">
         <include refid="selectDictTypeVo"/>
         where del_flag = '0'
@@ -59,7 +59,7 @@
     </select>
 
 
-    <update id="updateDictType" parameterType="com.cjl.basic.zone.project.dict.domain.DictType">
+    <update id="updateDictType" parameterType="com.cjl.basic.zone.project.manage.dict.domain.DictType">
         update mfrs_dict_type
         <set>
             <if test="dictName != null">dict_name = #{dictName},</if>
@@ -73,7 +73,7 @@
         where dict_id = #{dictId}
     </update>
 
-    <insert id="insertDictType" parameterType="com.cjl.basic.zone.project.dict.domain.DictType" keyProperty="dictId">
+    <insert id="insertDictType" parameterType="com.cjl.basic.zone.project.manage.dict.domain.DictType" keyProperty="dictId">
         insert into mfrs_dict_type
         <trim prefix="(" suffixOverrides="," suffix=")">
             <if test="dictName != null and dictName != ''">dict_name,</if>

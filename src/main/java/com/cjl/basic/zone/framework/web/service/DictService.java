@@ -1,8 +1,8 @@
 package com.cjl.basic.zone.framework.web.service;
 
 import com.cjl.basic.zone.common.utils.SpringRedisUtil;
-import com.cjl.basic.zone.project.dict.domain.DictData;
-import com.cjl.basic.zone.project.dict.service.IDictDataService;
+import com.cjl.basic.zone.project.manage.dict.domain.DictData;
+import com.cjl.basic.zone.project.manage.dict.service.IDictDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

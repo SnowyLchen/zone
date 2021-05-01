@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.cjl.basic.zone.framework.web.domain.AjaxResult;
-import com.cjl.basic.zone.project.area.domain.CityCode;
+import com.cjl.basic.zone.project.manage.area.domain.CityCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;

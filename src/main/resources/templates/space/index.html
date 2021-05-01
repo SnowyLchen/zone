@@ -29,16 +29,10 @@
     <div id="header" class="header"></div>
     <!--    加载layim-->
     <div id="layIm" class="layIm"></div>
-<!--    <div class="layui-side layui-bg-black">-->
-<!--        &lt;!&ndash; 侧 边 菜 单 &ndash;&gt;-->
-<!--        <div class="layui-side-scroll">-->
-<!--            <div id="sideMenu"></div>-->
-<!--        </div>-->
-<!--    </div>-->
     <!-- 视 图 页 面 -->
     <div class="layui-body">
         <!-- 内 容 页 面 -->
-        <div id="spaceContent"></div>
+        <div id="spaceContent" class="spaceContent"></div>
     </div>
 </div>
 <!-- 遮 盖 层 -->
@@ -54,9 +48,8 @@
 <!-- 框 架 初 始 化 -->
 <script>
     $(function () {
-        $('.layui-body').css({
-            'left':'0px'
-        });
+        // $('.layui-body').css('left', '9%')
+        $('.layui-body').css('left', '0px')
 
         // 加载头部
         $('#header').load('header')
@@ -75,7 +68,7 @@
         // 重新设置配置文件读取路径，默认为同级目录下的 pear.config.json
         admin.setConfigPath("config/pear.config.yml");
         // Admin 框架初始化
-        admin.render(undefined,'21');
+        admin.render(undefined, '21');
     })
 </script>
 </html>

@@ -1,7 +1,7 @@
 package com.cjl.basic.zone.common.utils;
 
-import com.cjl.basic.zone.project.menu.domain.ZMenu;
-import com.cjl.basic.zone.project.menu.domain.ZMenuTree;
+import com.cjl.basic.zone.project.manage.menu.domain.ZMenu;
+import com.cjl.basic.zone.project.manage.menu.domain.ZMenuTree;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

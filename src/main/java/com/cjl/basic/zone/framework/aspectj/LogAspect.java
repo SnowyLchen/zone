@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.cjl.basic.zone.common.utils.ServletUtils;
 import com.cjl.basic.zone.framework.aspectj.lang.annotation.Log;
 import com.cjl.basic.zone.framework.web.domain.AjaxResult;
-import com.cjl.basic.zone.project.operlog.domain.OperLog;
+import com.cjl.basic.zone.project.manage.operlog.domain.OperLog;
 import com.cjl.basic.zone.utils.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;

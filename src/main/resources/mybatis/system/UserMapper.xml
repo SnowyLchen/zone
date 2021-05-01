@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cjl.basic.zone.project.user.mapper.UserMapper">
+<mapper namespace="com.cjl.basic.zone.project.manage.user.mapper.UserMapper">
 
-    <resultMap id="UserResultMap" type="com.cjl.basic.zone.project.user.domain.User">
+    <resultMap id="UserResultMap" type="com.cjl.basic.zone.project.manage.user.domain.User">
         <id column="account_id" jdbcType="INTEGER" property="accountId"/>
         <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
         <result column="user_name" jdbcType="VARCHAR" property="userName"/>
@@ -92,7 +92,7 @@
         </where>
     </select>
 
-    <update id="updateUser" parameterType="com.cjl.basic.zone.project.user.domain.User">
+    <update id="updateUser" parameterType="com.cjl.basic.zone.project.manage.user.domain.User">
         update z_users
         <trim prefix="SET" suffixOverrides=",">
             <if test="loginName != null  and loginName != ''  ">login_name = #{loginName},</if>
@@ -173,7 +173,7 @@
           and status != 2
     </select>
 
-    <update id="updateUserSelf" parameterType="com.cjl.basic.zone.project.user.domain.User">
+    <update id="updateUserSelf" parameterType="com.cjl.basic.zone.project.manage.user.domain.User">
         update mfrs_account
         <trim prefix="SET" suffixOverrides=",">
             <if test="loginIp != null  and loginIp != ''  ">login_ip = #{loginIp},</if>
@@ -196,7 +196,7 @@
     </update>
 
 
-    <insert id="insertUser" parameterType="com.cjl.basic.zone.project.user.domain.User" useGeneratedKeys="true"
+    <insert id="insertUser" parameterType="com.cjl.basic.zone.project.manage.user.domain.User" useGeneratedKeys="true"
             keyProperty="accountId" keyColumn="account_id">
         insert into z_users
         <trim prefix="(" suffix=")" suffixOverrides=",">
