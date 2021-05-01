@@ -12,13 +12,13 @@
 
         .layui-card-body {
             text-align: center;
-            height: 500px;
         }
 
         /*    隐藏表格工具栏元素、表头元素*/
-        .layui-table-tool,.layui-table-header {
+        .layui-table-tool, .layui-table-header {
             display: none;
         }
+
     </style>
 </head>
 <body class="pear-container">
@@ -30,9 +30,9 @@
                 <li class="layui-this">我的日志</li>
                 <li>私密日志</li>
             </ul>
-            <div class="layui-tab-content" style="height: 100px;">
+            <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
-                    <div class="layui-row layui-col-space1">
+                    <div class="layui-row layui-col-space10">
                         <!--我的日志左边部分-->
                         <div class="layui-col-sm10">
                             <!--左边部分第一行-->
@@ -43,16 +43,54 @@
                             </div>
                             <!--左边部分第二行-->
                             <div class="layui-row">
-                                <div class="layui-card">
-                                    <div class="layui-card-body">
-                                        <table id="user-table" lay-filter="user-table"></table>
-                                    </div>
+                                <div class="layui-col-sm12">
+                                    <table id="user-table" lay-filter="user-table"></table>
                                 </div>
                             </div>
                         </div>
                         <!--我的日志右边部分-->
                         <div class="layui-col-sm2">
-
+                            <div class="layui-bg-gray" style="padding: 10px;">
+                                <!--右边部分第一行-->
+                                <div class="layui-row layui-col-space15">
+                                    <div class="layui-col-md12">
+                                        <div class="layui-card">
+                                            <div class="layui-card-header">日志分类</div>
+                                            <div class="layui-card-body">
+                                                <ul style="text-align: left">
+                                                    <li>日志1</li>
+                                                    <li>日志2</li>
+                                                    <li>日志3</li>
+                                                    <li>日志4</li>
+                                                    <li>日志5</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--右边部分第二行-->
+                                <div class="layui-row layui-col-space15">
+                                    <div class="layui-col-md12">
+                                        <div class="layui-card">
+                                            <div class="layui-card-header">搜索日志</div>
+                                            <div class="layui-card-body">
+                                                <input type="text" name="title" autocomplete="off" placeholder="请输入关键字" class="layui-input">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--右边部分第三行-->
+                                <div class="layui-row layui-col-space15">
+                                    <div class="layui-col-md12">
+                                        <div class="layui-card">
+                                            <div class="layui-card-header">评论审核</div>
+                                            <div class="layui-card-body">
+                                                56456
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
