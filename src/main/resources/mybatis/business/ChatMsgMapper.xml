@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cjl.basic.zone.project.layim.mapper.ChatMsgMapper">
+<mapper namespace="com.cjl.basic.zone.project.manage.layim.mapper.ChatMsgMapper">
 
-    <resultMap id="chatMap" type="com.cjl.basic.zone.project.layim.entity.ChatMsg">
+    <resultMap id="chatMap" type="com.cjl.basic.zone.project.manage.layim.entity.ChatMsg">
         <id property="id" column="id" />
         <result property="sendUserId" column="send_user_id"/>
         <result property="reciveUserId" column="recive_user_id"/>
@@ -11,7 +11,7 @@
         <result property="msgType" column="msg_type"/>
     </resultMap>
 
-    <resultMap id="userMap" type="com.cjl.basic.zone.project.layim.entity.Mine" extends="com.cjl.basic.zone.project.user.mapper.UserMapper.UserResultMap">
+    <resultMap id="userMap" type="com.cjl.basic.zone.project.manage.layim.entity.Mine" extends="com.cjl.basic.zone.project.manage.user.mapper.UserMapper.UserResultMap">
         <result property="username" column="user_name"/>
     </resultMap>
 

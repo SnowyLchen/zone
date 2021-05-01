@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cjl.basic.zone.project.role.mapper.ZRoleMapper">
-    <resultMap id="BaseResultMap" type="com.cjl.basic.zone.project.role.domain.ZRole">
+<mapper namespace="com.cjl.basic.zone.project.manage.role.mapper.ZRoleMapper">
+    <resultMap id="BaseResultMap" type="com.cjl.basic.zone.project.manage.role.domain.ZRole">
         <id column="z_role_id" jdbcType="INTEGER" property="roleId"/>
         <result column="z_role_name" jdbcType="VARCHAR" property="roleName"/>
         <result column="z_role_key" jdbcType="VARCHAR" property="roleKey"/>
@@ -44,7 +44,7 @@
     </delete>
 
     <insert id="insertSelective" keyColumn="z_role_id" keyProperty="zRoleId"
-            parameterType="com.cjl.basic.zone.project.role.domain.ZRole" useGeneratedKeys="true">
+            parameterType="com.cjl.basic.zone.project.manage.role.domain.ZRole" useGeneratedKeys="true">
         insert into z_role
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="roleName != null">
@@ -105,7 +105,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.cjl.basic.zone.project.role.domain.ZRole">
+    <update id="updateByPrimaryKeySelective" parameterType="com.cjl.basic.zone.project.manage.role.domain.ZRole">
         update z_role
         <set>
             <if test="roleName != null">

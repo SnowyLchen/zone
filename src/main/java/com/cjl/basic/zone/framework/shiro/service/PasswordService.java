@@ -7,7 +7,7 @@ import com.cjl.basic.zone.common.utils.MessageUtils;
 import com.cjl.basic.zone.common.utils.SpringRedisUtil;
 import com.cjl.basic.zone.framework.manager.AsyncManager;
 import com.cjl.basic.zone.framework.manager.factory.AsyncFactory;
-import com.cjl.basic.zone.project.user.domain.User;
+import com.cjl.basic.zone.project.manage.user.domain.User;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

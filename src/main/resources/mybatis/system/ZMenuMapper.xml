@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cjl.basic.zone.project.menu.mapper.ZMenuMapper">
-    <resultMap id="BaseResultMap" type="com.cjl.basic.zone.project.menu.domain.ZMenu">
+<mapper namespace="com.cjl.basic.zone.project.manage.menu.mapper.ZMenuMapper">
+    <resultMap id="BaseResultMap" type="com.cjl.basic.zone.project.manage.menu.domain.ZMenu">
         <id column="menu_id" jdbcType="INTEGER" property="menuId"/>
         <result column="title" jdbcType="VARCHAR" property="title"/>
         <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
@@ -92,7 +92,7 @@
         where visible = 1
         ORDER BY zm.menu_id, parent_id, order_num
     </select>
-    <select id="selectMenuListByRole" resultType="com.cjl.basic.zone.project.menu.domain.ZRoleMenu">
+    <select id="selectMenuListByRole" resultType="com.cjl.basic.zone.project.manage.menu.domain.ZRoleMenu">
         select
         <include refid="Base_Column_List"/>
         from z_role_menu
@@ -104,7 +104,7 @@
     where menu_id = #{menuId,jdbcType=INTEGER}
   </delete>
     <insert id="insertSelective" keyColumn="menu_id" keyProperty="menuId"
-            parameterType="com.cjl.basic.zone.project.menu.domain.ZMenu" useGeneratedKeys="true">
+            parameterType="com.cjl.basic.zone.project.manage.menu.domain.ZMenu" useGeneratedKeys="true">
         insert into z_menu
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="title != null">
@@ -159,7 +159,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.cjl.basic.zone.project.menu.domain.ZMenu">
+    <update id="updateByPrimaryKeySelective" parameterType="com.cjl.basic.zone.project.manage.menu.domain.ZMenu">
         update z_menu
         <set>
             <if test="title != null">
