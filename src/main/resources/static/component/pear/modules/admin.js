@@ -24,12 +24,12 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                 configPath = path;
             }
 
-            this.render = function (initConfig) {
+            this.render = function (initConfig, roleId) {
                 debugger
                 if (initConfig !== undefined) {
-                    applyConfig(initConfig);
+                    applyConfig(initConfig, roleId);
                 } else {
-                    applyConfig(pearAdmin.readConfig());
+                    applyConfig(pearAdmin.readConfig(), roleId);
                 }
             }
 
@@ -45,24 +45,45 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
 
             this.menuRender = function (param) {
                 debugger
-                sideMenu = pearMenu.render({
-                    elem: 'sideMenu',
-                    async: param.menu.async !== undefined ? param.menu.async : true,
-                    theme: "dark-theme",
-                    height: '100%',
-                    control: param.menu.control ? 'control' : false, // control
-                    defaultMenu: 0,
-                    accordion: param.menu.accordion,
-                    url: param.menu.data,
-                    data: param.menu.data, //async为false时，传入菜单数组
-                    parseData: false,
-                    change: function () {
-                        compatible();
-                    },
-                    done: function () {
-                        sideMenu.selectItem(param.menu.select);
-                    }
-                });
+                if (param.role == '1') {
+                    sideMenu = pearMenu.render({
+                        elem: 'sideMenu',
+                        async: param.menu.async !== undefined ? param.menu.async : true,
+                        theme: "dark-theme",
+                        height: '100%',
+                        control: param.menu.control ? 'control' : false, // control
+                        defaultMenu: 0,
+                        accordion: param.menu.accordion,
+                        url: param.menu.data,
+                        data: param.menu.data, //async为false时，传入菜单数组
+                        parseData: false,
+                        change: function () {
+                            compatible();
+                        },
+                        done: function () {
+                            sideMenu.selectItem(param.menu.select);
+                        }
+                    });
+                } else {
+                    sideMenu = pearMenu.render({
+                        elem: 'content',
+                        async: param.menu.async !== undefined ? param.menu.async : true,
+                        theme: "dark-theme",
+                        height: '100%',
+                        control: param.menu.control ? 'control' : false, // control
+                        defaultMenu: 0,
+                        accordion: param.menu.accordion,
+                        url: param.menu.data,
+                        data: param.menu.data, //async为false时，传入菜单数组
+                        parseData: false,
+                        change: function () {
+                            compatible();
+                        },
+                        done: function () {
+                            sideMenu.selectItem(param.menu.select);
+                        }
+                    });
+                }
             }
 
             this.bodyRender = function (param) {
@@ -83,25 +104,52 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                     }, 600)
                 })
                 if (param.tab.muiltTab) {
-                    bodyTab = pearTab.render({
-                        elem: 'content',
-                        roll: true,
-                        tool: true,
-                        width: '100%',
-                        height: '100%',
-                        index: 0,
-                        tabMax: param.tab.tabMax,
-                        closeEvent: function (id) {
-                            sideMenu.selectItem(id);
-                        },
-                        data: [{
-                            id: param.tab.index.id,
-                            url: param.tab.index.href,
-                            title: param.tab.index.title,
-                            close: false
-                        }]
-                    });
+                    var config = {};
+                    if (param.role == '1') {
+                        config = {
+                            elem: 'content',
+                            roll: true,
+                            tool: true,
+                            width: '100%',
+                            height: '100%',
+                            role: param.role,
+                            index: 0,
+                            tabMax: param.tab.tabMax,
+                            closeEvent: function (id) {
+                                sideMenu.selectItem(id);
+                            },
+                            data: [{
+                                id: param.tab.index.id,
+                                url: param.tab.index.href,
+                                title: param.tab.index.title,
+                                close: false
+                            }]
+                        }
+
+                    } else {
+                        config = {
+                            elem: 'spaceContent',
+                            roll: false,
+                            tool: false,
+                            width: '100%',
+                            role: param.role,
+                            height: '100%',
+                            index: 0,
+                            tabMax: 2,
+                            closeEvent: function (id) {
+                                sideMenu.selectItem(id);
+                            }, data: [{
+                                id: param.tab.index.id,
+                                url: param.tab.index.href,
+                                title: param.tab.index.title,
+                                close: false
+                            }]
+                        }
+                    }
+                    debugger
+                    bodyTab = pearTab.render(config);
                     bodyTab.click(function (id) {
+                        debugger
                         if (!param.tab.keepState) {
                             bodyTab.refresh(false);
                         }
@@ -110,13 +158,18 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                     })
 
                     sideMenu.click(function (dom, data) {
-                        bodyTab.addTabOnly({
-                            id: data.menuId,
-                            title: data.menuTitle,
-                            url: data.menuUrl,
-                            icon: data.menuIcon,
-                            close: true
-                        }, 300);
+                        debugger
+                        if (param.role != '1') {
+                            sideMenu.menuSpaceClickEvent(bodyTab, data, {control: 'control'});
+                        } else {
+                            bodyTab.addTabOnly({
+                                id: data.menuId,
+                                title: data.menuTitle,
+                                url: data.menuUrl,
+                                icon: data.menuIcon,
+                                close: true
+                            }, 300);
+                        }
                         compatible();
                     })
                 } else {
@@ -129,6 +182,7 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                     });
 
                     sideMenu.click(function (dom, data) {
+                        debugger
                         bodyFrame.changePage(data.menuUrl, data.menuPath, true);
                         compatible()
                     })
@@ -360,8 +414,9 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
             pearAdmin.colorSet(color.color);
         });
 
-        function applyConfig(param) {
+        function applyConfig(param, roleId) {
             debugger
+            param.role = roleId;
             config = param;
             pearAdmin.logoRender(param);
             pearAdmin.menuRender(param);

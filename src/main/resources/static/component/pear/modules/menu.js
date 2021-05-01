@@ -3,7 +3,8 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
 
     var MOD_NAME = 'menu',
         $ = layui.jquery,
-        element = layui.element;
+        element = layui.element,
+        pearTab = layui.tab;
 
     var pearMenu = function (opt) {
         this.option = opt;
@@ -44,8 +45,9 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
 
     pearMenu.prototype.click = function (clickEvent) {
         var _this = this;
+        debugger
         $("body").on("click", "#" + _this.option.elem + " .site-demo-active", function () {
-            debugger
+        // $("#control .pear-nav-control").on("click", "[pear-id]", function () {
             var dom = $(this);
             var data = {
                 menuId: dom.attr("menu-id"),
@@ -82,6 +84,7 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
     }
 
     pearMenu.prototype.selectItem = function (pearId) {
+        debugger
         if (this.option.control != false) {
             $("#" + this.option.elem + " a[menu-id='" + pearId + "']").parents(".layui-side-scroll ").find("ul").css({
                 display: "none"
@@ -131,6 +134,25 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
             }, 400);
             isHoverMenu(true, config);
         }
+    };
+
+    /**
+     * 空间前端菜单点击事件
+     * @param contentTab
+     * @param data
+     * @param option
+     */
+    pearMenu.prototype.menuSpaceClickEvent = function (contentTab, data, option) {
+        $("#" + option.control + " .pear-nav-control").on("click", "[pear-id]", function () {
+            debugger
+            contentTab.addTabOnly({
+                id: 10000,
+                title: 'data.menuTitle',
+                url: 'space',
+                icon: 'data.menuIcon',
+                close: true
+            }, 300);
+        });
     }
 
     function getData(url) {
@@ -197,6 +219,7 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
     }
 
     function createMenuAndControl(option) {
+        debugger
         var control = '<ul class="layui-nav  pear-nav-control pc layui-hide-xs">';
         var controlPe = '<ul class="layui-nav pear-nav-control layui-hide-sm">';
         // 声 明 头 部
@@ -208,12 +231,13 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
             var menuItem = '';
             var controlItem = '';
             console.log(option)
-            debugger
             // 先判断角色id roleId=1 超级管理员，需要2级跳转 ->其它则需要1级跳转
             if (item.roleId != null && item.roleId == 1) {
                 if (index === option.defaultMenu) {
                     controlItem = '<li pear-href="' + item.href + '" pear-title="' + item.title + '" pear-id="' + item.id +
                         '" class="layui-this layui-nav-item"><a href="#">' + item.title + '</a></li>';
+                    console.log(option.elem)
+                    debugger
                     menuItem = '<ul  pear-id="' + item.id + '" lay-filter="' + option.elem +
                         '" class="layui-nav arrow layui-nav-tree pear-nav-tree">';
                     // 兼容移动端
@@ -231,27 +255,16 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
                 }
             } else {
                 // 这是普通用户的菜单
-                // console.log(item)     // 创 建 菜 单 结 构
-                //                     content += '<a ' + target + ' class="' + className + '" menu-type="' + note.type + '" menu-url="' + note.href +
-                //                         '" menu-id="' + note.id +
-                //                         '" menu-title="' + note.title + '" href="' + href + '"><i class="' + note.icon +
-                //                         '"></i><span>' + note.title + '</span></a>';
-
                 if (index === option.defaultMenu) {
                     controlItem = '<li pear-href="' + item.href + '" pear-title="' + item.title + '" pear-id="' + item.id +
-                        '" class="layui-this layui-nav-item"><a href="' + item.href + '">' + item.title + '</a></li>';
-                    menuItem = '<ul  pear-id="' + item.id + '" lay-filter="' + option.elem +
-                        '" class="layui-nav arrow layui-nav-tree pear-nav-tree">';
+                        '" class="layui-this layui-nav-item"><a href="#">' + item.title + '</a></li>';
                     // 兼容移动端
                     controlPe += '<li class="layui-nav-item"><a class="pe-title" href="javascript:;" >' + item.title + '</a>';
                     controlItemPe += '<dd  pear-href="' + item.href + '" pear-title="' + item.title + '" pear-id="' + item.id +
                         '"><a href="javascript:void(0);">' + item.title + '</a></dd>';
                 } else {
                     controlItem = '<li  pear-href="' + item.href + '" pear-title="' + item.title + '" pear-id="' + item.id +
-                        '" class="layui-nav-item"><a href="' + item.href + '">' + item.title + '</a></li>';
-                    menuItem = '<ul style="display:none" pear-id="' + item.id + '" lay-filter="' + option.elem +
-                        '" class="layui-nav arrow layui-nav-tree pear-nav-tree">';
-
+                        '" class="layui-nav-item"><a href="#">' + item.title + '</a></li>';
                     controlItemPe += '<dd pear-href="' + item.href + '" pear-title="' + item.title + '" pear-id="' + item.id +
                         '"><a href="javascript:void(0);">' + item.title + '</a></dd>';
 
@@ -298,39 +311,33 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
         $("#" + option.elem).html(menu);
         menuAdminClickEvent();
 
+        // this.menuSpaceClickEvent();
+
         /**
          * 后台管理菜单点击事件
          */
         function menuAdminClickEvent() {
             $("#" + option.control + " .pear-nav-control").on("click", "[pear-id]", function () {
-                $("#" + option.elem).find(".pear-nav-tree").css({
-                    display: 'none'
-                });
-                $("#" + option.elem).find(".pear-nav-tree[pear-id='" + $(this).attr("pear-id") + "']").css({
-                    display: 'block'
-                });
-                $("#" + option.control).find(".pe-title").html($(this).attr("pear-title"));
-                $("#" + option.control).find("")
-                option.change($(this).attr("pear-id"), $(this).attr("pear-title"), $(this).attr("pear-href"))
-            })
+                debugger
+                menuAdminClick(option,this)
+            });
+        }
+
+        function menuAdminClick(option,_this) {
+            $("#" + option.elem).find(".pear-nav-tree").css({
+                display: 'none'
+            });
+            $("#" + option.elem).find(".pear-nav-tree[pear-id='" + $(_this).attr("pear-id") + "']").css({
+                display: 'block'
+            });
+            $("#" + option.control).find(".pe-title").html($(_this).attr("pear-title"));
+            $("#" + option.control).find("")
+            option.change($(_this).attr("pear-id"), $(_this).attr("pear-title"), $(_this).attr("pear-href"))
         }
 
         /**
-         * 空间页面菜单点击事件
+         * 空间菜单点击事件 在外面定义
          */
-        function menuClickEvent() {
-            $("#" + option.control + " .pear-nav-control").on("click", "[pear-id]", function () {
-                $("#" + option.elem).find(".pear-nav-tree").css({
-                    display: 'none'
-                });
-                $("#" + option.elem).find(".pear-nav-tree[pear-id='" + $(this).attr("pear-id") + "']").css({
-                    display: 'block'
-                });
-                $("#" + option.control).find(".pe-title").html($(this).attr("pear-title"));
-                $("#" + option.control).find("")
-                option.change($(this).attr("pear-id"), $(this).attr("pear-title"), $(this).attr("pear-href"))
-            })
-        }
     }
 
     /** 加载子菜单 (递归)*/

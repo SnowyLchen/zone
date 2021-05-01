@@ -15,10 +15,33 @@
     <!-- 头 部 结 束 -->
 </head>
 <!-- 结 构 代 码 -->
-<body class="layui-layout-body pear-admin" style="height: 2000px">
-<!-- 头部 -->
-<div id="header" class="header"></div>
-<div id="layIm" class="layIm"></div>
+<body class="layui-layout-body pear-admin">
+<!-- 布 局 框 架 -->
+<div class="layui-layout layui-layout-admin">
+    <!-- 头部 -->
+    <div id="header" class="header"></div>
+    <!--    加载layim-->
+    <div id="layIm" class="layIm"></div>
+<!--    <div class="layui-side layui-bg-black">-->
+<!--        &lt;!&ndash; 侧 边 菜 单 &ndash;&gt;-->
+<!--        <div class="layui-side-scroll">-->
+<!--            <div id="sideMenu"></div>-->
+<!--        </div>-->
+<!--    </div>-->
+    <!-- 视 图 页 面 -->
+    <div class="layui-body">
+        <!-- 内 容 页 面 -->
+        <div id="spaceContent"></div>
+    </div>
+</div>
+<!-- 遮 盖 层 -->
+<div class="pear-cover"></div>
+<!-- 移 动 端 便 捷 操 作 -->
+<div class="pear-collasped-pe collaspe"><a href="#" class="layui-icon layui-icon-shrink-right"></a></div>
+<!-- 加 载 动 画-->
+<div class="loader-main">
+    <div class="loader"></div>
+</div>
 </body>
 <div th:include="include::footer"></div>
 <!-- 框 架 初 始 化 -->
@@ -41,7 +64,7 @@
         // 重新设置配置文件读取路径，默认为同级目录下的 pear.config.json
         admin.setConfigPath("config/pear.config.yml");
         // Admin 框架初始化
-        admin.render();
+        admin.render(undefined,'21');
     })
 </script>
 </html>

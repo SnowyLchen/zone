@@ -32,6 +32,7 @@
                             ON lf.f_user_id = lm.account_id
                  left join layim_friend_groupname lfg on lf.f_group_id = lfg.id
         WHERE lf.user_id = #{userId}
+        group by lm.account_id
     </select>
     <select id="getFriendGroupList" resultMap="friendMap">
         select lfg.*
