@@ -25,7 +25,7 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
             }
 
             this.render = function (initConfig, roleId) {
-                debugger
+
                 if (initConfig !== undefined) {
                     applyConfig(initConfig, roleId);
                 } else {
@@ -147,7 +147,7 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                             }]
                         }
                     }
-                    debugger
+
                     bodyTab = pearTab.render(config);
                     bodyTab.click(function (id) {
                         if (!param.tab.keepState) {
@@ -278,7 +278,7 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
         };
 
         function collaspe() {
-            debugger
+
             sideMenu.collaspe();
             const admin = $(".pear-admin");
             const left = $(".layui-icon-spread-left")
@@ -420,7 +420,7 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
         });
 
         function applyConfig(param, roleId) {
-            debugger
+
             param.role = roleId;
             config = param;
             pearAdmin.logoRender(param);

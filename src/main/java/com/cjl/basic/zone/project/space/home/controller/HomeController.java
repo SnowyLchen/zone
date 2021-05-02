@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/home")
@@ -32,6 +33,7 @@ public class HomeController {
      *
      * @return
      */
+    @ResponseBody
     @RequestMapping("/getSignIn")
     public AjaxResult getSignIn() {
         Integer accountId = ShiroAuthenticateUtils.getAccountId();
@@ -43,6 +45,7 @@ public class HomeController {
      *
      * @return
      */
+    @ResponseBody
     @RequestMapping("/signIn")
     public AjaxResult signInfo(ZSignIn zSignIn) {
         Integer accountId = ShiroAuthenticateUtils.getAccountId();

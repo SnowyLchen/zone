@@ -19,7 +19,9 @@ public class ZSignInServiceImpl implements IZSignInService {
 
     @Override
     public int insertSignInfo(ZSignIn record) {
-        return zSignInMapper.insertSignInfo(record);
+        // 插入签到信息
+        zSignInMapper.insertSignInfo(record);
+        return 1;
     }
 
     @Override

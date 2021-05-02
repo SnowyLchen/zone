@@ -200,7 +200,7 @@ layui.define(['layer', 'table'], function (exports) {
         reload: function (dom) {
             table.reload(dom)
             // this.render()
-            debugger
+
         }
     };
 

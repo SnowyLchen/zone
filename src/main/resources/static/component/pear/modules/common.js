@@ -61,13 +61,13 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
          * @param option
          *
          * */
-        this.submit = function (option, callback) {
+        this.ajax = function (option, callback) {
             $.ajax({
                 url: option.url ? option.url : '',
                 data: option.data ? option.data : [],
                 dataType: 'json',
                 type: option.type ? option.type : 'get',
-                success: callback != null ? callback(result) : function (result) {
+                success: callback != null ? callback : function (result) {
                     if (result.code == 0) {
                         layer.msg(result.msg, {icon: 1, time: 1000});
                     } else {
@@ -102,7 +102,7 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
                 dataType: 'json',
                 type: 'GET',
                 success: function (result) {
-                    debugger
+
                     if (result.code == 0) {
                         console.log('layIm初始化成功')
                     } else {

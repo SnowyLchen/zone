@@ -45,7 +45,7 @@
 //     toRegister: function () {
 //         var $register = $('#register');
 //         $register.on('click', function () {
-//             debugger
+//
 //             var $registerForm = $('#form-register');
 //             var $btn = $(this)
 //             $btn.button('请稍后...');

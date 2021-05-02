@@ -18,7 +18,7 @@
     }
 
     .toast-top-center {
-        margin-top: calc(50% - 850px);
+        margin-top: calc(50% - 750px);
     }
 </style>
 <body class="pear-container">
@@ -219,33 +219,36 @@
         });
         util.event('lay-event', {
             getContent: function () {
-                layer.msg(edit.getContent())
-                // var option = {
-                //     url: 'home/signIn',
-                //     type: 'post',
-                //     data: {
-                //         content: edit.getContent()
-                //     }
-                // }
-                // common.submit(option, function (res) {
-                //     if (res.code == 0) {
-                //         notice.success(res.msg)
-                //     } else {
-                //         notice.error(res.msg)
-                //     }
-                //
-                // })
+                if (edit.getContent() == '' || edit.getContent() == undefined) {
+                    notice.info('你得说点儿什么~')
+                }
+                var option = {
+                    url: 'home/signIn',
+                    type: 'post',
+                    data: {
+                        content: edit.getContent()
+                    }
+                }
+                common.ajax(option, function (res) {
+                    if (res.code == 0) {
+                        notice.success(res.msg)
+                    } else {
+                        notice.error(res.msg)
+                    }
+                })
             }
         });
     }
 
     function signIn(button, notice, common) {
         $("#signIn").on('click', function () {
+            $("#signIn").attr('disabled', true);
             button.load({
                 elem: '[load]',
-                time: 600,
+                time: 500,
                 done: function () {
                     notice.info("发表点什么呗")
+                    $("#signIn").attr('disabled', false);
                     $("#activeContent").show();
                 }
             })

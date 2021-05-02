@@ -47,7 +47,7 @@ layui.use(['echarts'], function() {
 	        show:true,
 	        position:'top',
 	        formatter:function(params){
-	            debugger
+
 	            return params.value+'%'
 	        }
 	    },

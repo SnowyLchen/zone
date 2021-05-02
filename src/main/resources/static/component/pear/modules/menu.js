@@ -55,7 +55,7 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
         $("body").on("click", elem, function () {
             var dom = $(this);
             console.log(dom.attr('pear-id'))
-            debugger
+
             var menuId, menuTitle, menuPath, menuIcon, menuUrl;
             if (roleId == '1') {
                 menuId = dom.attr("menu-id");
@@ -105,7 +105,7 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
     }
 
     pearMenu.prototype.selectItem = function (pearId) {
-        debugger
+
         if (this.option.control != false) {
             $("#" + this.option.elem + " a[menu-id='" + pearId + "']").parents(".layui-side-scroll ").find("ul").css({
                 display: "none"
@@ -165,7 +165,7 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
      */
     pearMenu.prototype.menuSpaceClickEvent = function (pearFrame, data, option) {
         $("#" + option.control + " .pear-nav-control").on("click", "[pear-id]", function () {
-            debugger
+
             bodyFrame = pearFrame.render({
                 elem: 'content',
                 title: '工作空间 / 首页',
@@ -247,7 +247,7 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
     }
 
     function createMenuAndControl(option) {
-        debugger
+
         var control = '<ul class="layui-nav  pear-nav-control pc layui-hide-xs">';
         var controlPe = '<ul class="layui-nav pear-nav-control layui-hide-sm">';
         // 声 明 头 部
@@ -265,7 +265,7 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
                     controlItem = '<li pear-href="' + item.href + '" pear-title="' + item.title + '" pear-id="' + item.id +
                         '" class="layui-this layui-nav-item"><a href="#">' + item.title + '</a></li>';
                     console.log(option.elem)
-                    debugger
+
                     menuItem = '<ul  pear-id="' + item.id + '" lay-filter="' + option.elem +
                         '" class="layui-nav arrow layui-nav-tree pear-nav-tree">';
                     // 兼容移动端
@@ -415,7 +415,7 @@ layui.define(['table', 'jquery', 'element'], function (exports) {
 
     function downShow(option) {
         $("body #" + option.elem).on("click", "a[menu-type='0']", function () {
-            debugger
+
             if (!$("#" + option.elem).is(".pear-nav-mini")) {
                 var superEle = $(this).parent();
                 var ele = $(this).next('.layui-nav-child');
