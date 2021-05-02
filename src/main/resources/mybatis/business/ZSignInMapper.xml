@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cjl.basic.zone.project.space.home.mapper.ZSignInMapper">
+    <resultMap id="BaseResultMap" type="com.cjl.basic.zone.project.space.home.domain.ZSignIn">
+        <id column="si_id" jdbcType="INTEGER" property="siId"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="date" jdbcType="VARCHAR" property="date"/>
+        <result column="account_id" jdbcType="INTEGER" property="accountId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    si_id, `type`, `date`, account_id
+  </sql>
+    <select id="selectSignInfoByAccountId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from z_sign_in
+        where account_id = #{accountId}
+    </select>
+    <select id="selectSignInfoList" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from z_sign_in
+        where account_id = #{accountId}
+    </select>
+    <insert id="insertSignInfo" keyColumn="si_id" keyProperty="siId"
+            parameterType="com.cjl.basic.zone.project.space.home.domain.ZSignIn" useGeneratedKeys="true">
+        insert into z_sign_in
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null">
+                `type`,
+            </if>
+            <if test="date != null">
+                `date`,
+            </if>
+            <if test="accountId != null">
+                account_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="date != null">
+                #{date,jdbcType=VARCHAR},
+            </if>
+            <if test="accountId != null">
+                #{accountId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateSignInfo" parameterType="com.cjl.basic.zone.project.space.home.domain.ZSignIn">
+        update z_sign_in
+        <set>
+            <if test="type != null">
+                `type` = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="date != null">
+                `date` = #{date,jdbcType=VARCHAR},
+            </if>
+            <if test="accountId != null">
+                account_id = #{accountId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where si_id = #{siId,jdbcType=INTEGER}
+    </update>
+</mapper>

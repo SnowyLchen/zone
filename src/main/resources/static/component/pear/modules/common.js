@@ -55,6 +55,27 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
                 }
             })
         }
+
+        /**
+         * ajax提交
+         * @param option
+         *
+         * */
+        this.submit = function (option, callback) {
+            $.ajax({
+                url: option.url ? option.url : '',
+                data: option.data ? option.data : [],
+                dataType: 'json',
+                type: option.type ? option.type : 'get',
+                success: callback != null ? callback(result) : function (result) {
+                    if (result.code == 0) {
+                        layer.msg(result.msg, {icon: 1, time: 1000});
+                    } else {
+                        layer.msg(result.msg, {icon: 2, time: 1000});
+                    }
+                }
+            })
+        }
         this.enableMsg = function (index, data, msg) {
             setTimeout(function () {
                 top.layer.close(index);

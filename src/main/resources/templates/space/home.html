@@ -6,132 +6,171 @@
     <div th:include="include::header"></div>
     <link th:href="@{/admin/css/other/console1.css}" rel="stylesheet"/>
 </head>
+<style>
+    .laydate-theme-xxx {
+        border: none;
+        background-color: #ffffff;
+    }
+
+    .layui-laydate .layui-this {
+        background-color: black !important;
+        color: #fff !important;
+    }
+
+    .toast-top-center {
+        margin-top: calc(50% - 850px);
+    }
+</style>
 <body class="pear-container">
 <!--内容-->
-<div>
-    <div class="layui-row layui-col-space10">
-        <div class="layui-col-xs6 layui-col-md3">
-            <div class="layui-card left-pill">
-                <div class="layui-card-header">
-                    <div class="layui-row layui-col-space5">
-                        <div class="layui-col-xs8 layui-col-md4 top-panel-tips">
-                            照片
-                        </div>
-                        <div class="layui-col-xs8 layui-col-md4 top-panel-tips">
-                            日志
-                        </div>
-                        <div class="layui-col-xs4 layui-col-md4 top-panel-tips">
-                            动态
-                        </div>
+<div class="layui-row layui-col-space10">
+    <div class="layui-col-xs6 layui-col-md3">
+        <div class="layui-card top-panel">
+            <div class="layui-card-header">
+                <div class="layui-row layui-col-space5">
+                    <div class="layui-col-xs8 layui-col-md4 top-panel-tips">
+                        照片
+                    </div>
+                    <div class="layui-col-xs8 layui-col-md4 top-panel-tips">
+                        日志
+                    </div>
+                    <div class="layui-col-xs4 layui-col-md4 top-panel-tips">
+                        动态
                     </div>
                 </div>
-                <div class="layui-card-body">
-                    <div class="layui-row layui-col-space5">
-                        <div class="layui-col-xs8 layui-col-md4 top-panel-number" style="color: #28333E;" id="value1">
-                            0
-                        </div>
-                        <div class="layui-col-xs8 layui-col-md4 top-panel-number" style="color: #28333E;" id="value3">
-                            0
-                        </div>
-                        <div class="layui-col-xs4 layui-col-md4 top-panel-number" style="color: red;" id="value4">
-                            0
-                        </div>
+            </div>
+            <div class="layui-card-body">
+                <div class="layui-row layui-col-space5">
+                    <div class="layui-col-xs8 layui-col-md4 top-panel-number" style="color: #28333E;" id="value1">
+                        0
+                    </div>
+                    <div class="layui-col-xs8 layui-col-md4 top-panel-number" style="color: #28333E;" id="value3">
+                        0
+                    </div>
+                    <div class="layui-col-xs4 layui-col-md4 top-panel-number" style="color: red;" id="value4">
+                        0
                     </div>
                 </div>
             </div>
         </div>
-        <div class="layui-col-xs6 layui-col-md6">
-            <div class="layui-card">
-                <div class="layui-card-header" style="padding-top: 5px">
-                    <input class="layui-input" type="text" placeholder="说点什么吧" autocomplete="off" readonly
-                           id="showActiveContent">
-                </div>
-                <div class="layui-card-body" id="activeContent" hidden>
-                    <textarea name="" id="edit" cols="30" rows="10"></textarea>
-                    <div class="layui-btn-group" style="margin-top: 10px;text-align: right">
-                        <button class="layui-btn" lay-event="getContent" id="commit">发表</button>
+        <div class="layui-card top-panel">
+            <div class="layui-card-header">个人资料</div>
+            <div class="layui-card-body" style="height: 120px">
+                <div class="layui-row">
+                    <div class="layui-col-xs8 layui-col-md4 top-panel-number" style="color: #28333E;" id="value1">
+                        0
+                    </div>
+                    <div class="layui-col-xs8 layui-col-md4 top-panel-number" style="color: #28333E;" id="value3">
+                        0
+                    </div>
+                    <div class="layui-col-xs4 layui-col-md4 top-panel-number" style="color: red;" id="value4">
+                        0
                     </div>
                 </div>
-            </div>
-            <div class="layui-card">
-                <div class="layui-card-header">全部动态</div>
-                <div class="layui-card-body">
-                    <dl class="layuiadmin-card-status">
-                        <dd>
-                            <div class="layui-status-img"><a href="javascript:;"><img
-                                    style="width: 32px;height: 32px;border-radius: 50px;"
-                                    src="../../admin/images/avatar.jpg"></a></div>
-                            <div>
-                                <p>动态
-                                </p>
-                                <span>几秒前</span>
-                            </div>
-                        </dd>
-                        <dd>
-                            <div class="layui-status-img"><a href="javascript:;"><img
-                                    style="width: 32px;height: 32px;border-radius: 50px;"
-                                    src="../../admin/images/avatar.jpg"></a></div>
-                            <div>
-                                <p>简 在 <a lay-href="https://gitee.com/Jmysy/Pear-Admin-Layui">Pear Admin 专区</a> 进行了 <a
-                                        lay-href="http://fly.layui.com/vipclub/list/layuiadmin/column/quiz/">提问</a></p>
-                                <span>2天前</span>
-                            </div>
-                        </dd>
-                    </dl>
+                <div class="layui-row">
+                    <div class="layui-col-xs8 layui-col-md4 top-panel-number" style="color: #28333E;" id="value1">
+                        0
+                    </div>
+                    <div class="layui-col-xs8 layui-col-md4 top-panel-number" style="color: #28333E;" id="value3">
+                        0
+                    </div>
+                    <div class="layui-col-xs4 layui-col-md4 top-panel-number" style="color: red;" id="value4">
+                        0
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="layui-col-xs6 layui-col-md3">
-            <div class="layui-card top-panel">
-                <div class="layui-card-header">本月签到次数</div>
-                <div class="layui-card-body">
-                    <div class="layui-row layui-col-space5">
-                        <div class="layui-col-xs4 layui-col-md4 top-panel-tips">
-                            签到
+    </div>
+    <div class="layui-col-xs6 layui-col-md6">
+        <div class="layui-card">
+            <div class="layui-card-header" style="padding-top: 5px">
+                <input class="layui-input" type="text" placeholder="说点什么吧" autocomplete="off" readonly
+                       id="showActiveContent">
+            </div>
+            <div class="layui-card-body" id="activeContent" hidden>
+                <textarea name="" id="edit" cols="30" rows="10"></textarea>
+                <div class="layui-btn-group" style="margin-top: 10px;position: relative;left: 830px">
+                    <button class="pear-btn pear-btn-success" lay-event="getContent" id="commit">发表</button>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card">
+            <div class="layui-card-header">全部动态</div>
+            <div class="layui-card-body">
+                <dl class="layuiadmin-card-status">
+                    <dd>
+                        <div class="layui-status-img"><a href="javascript:;"><img
+                                style="width: 32px;height: 32px;border-radius: 50px;"
+                                src="../../admin/images/avatar.jpg"></a></div>
+                        <div>
+                            <p>动态
+                            </p>
+                            <span>几秒前</span>
                         </div>
-                        <div class="layui-col-xs8 layui-col-md8 top-panel-number" style="color: #28333E;" id="value2">
-                            0
+                    </dd>
+                    <dd>
+                        <div class="layui-status-img"><a href="javascript:;"><img
+                                style="width: 32px;height: 32px;border-radius: 50px;"
+                                src="../../admin/images/avatar.jpg"></a></div>
+                        <div>
+                            <p>简 在 <a lay-href="https://gitee.com/Jmysy/Pear-Admin-Layui">Pear Admin 专区</a> 进行了 <a
+                                    lay-href="http://fly.layui.com/vipclub/list/layuiadmin/column/quiz/">提问</a></p>
+                            <span>2天前</span>
                         </div>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs6 layui-col-md3">
+        <div class="layui-card top-panel">
+            <div class="layui-card-header">本月签到次数</div>
+            <div class="layui-card-body">
+                <div class="layui-row layui-col-space5">
+                    <div class="layui-col-xs4 layui-col-md4 top-panel-tips">
+                        <button class="pear-btn pear-btn-primary" plain="" id="signIn" load> 签到</button>
                     </div>
+                    <div class="layui-col-xs8 layui-col-md8 top-panel-number" style="color: #28333E;" id="value2">
+                        0
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card top-panel">
+            <div class="layui-card-header">签到日历</div>
+            <div class="layui-card-body" style="height: 400px">
+                <div class="layui-row layui-col-space5">
+                    <div id="test2"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <div th:include="include::footer"></div>
+<script th:src="@{component/layui/lay/modules/laydate.js}"></script>
 <script>
-    layui.use(['tinymce', 'util', 'code', 'layer', 'echarts', 'element', 'count', 'topBar'], function () {
-        var $ = layui.jquery,
-            layer = layui.layer,
-            element = layui.element,
-            count = layui.count,
-            echarts = layui.echarts,
-            tinymce = layui.tinymce,
-            util = layui.util;
-        layui.code();
-        var edit;
-        $(document).click(function (e) {
-            e = window.event || e;
-            var obj = e.srcElement || e.target;
-            if ($(obj).is("#showActiveContent") || $(obj).is("#activeContent") || $(obj).is("#commit")) {
-                edit = tinymce.render({
-                    elem: "#edit",
-                    height: 400
-                });
-                $("#activeContent").show();
-            } else {
-                $("#activeContent").hide();
+    function initDate(laydate) {
+        var ins1 = laydate.render({
+            elem: '#test2'
+            , position: 'static'
+            , showBottom: false
+            , theme: 'xxx'
+            , calendar: true
+            , mark: {
+                '2021-5-15': '' //具体日期
+                , '2017-8-20': '预发' //如果为空字符，则默认显示数字+徽章
+                , '2021-5-21': '发布'
+            }, done: function (value, date) {
+                if (date.year === 2021 && date.month === 5 && date.date === 14) { //点击2017年8月15日，弹出提示语
+                    ins1.hint('中国人民抗日战争胜利72周年');
+                }
+            }, ready: function (date) {
+                console.log(date); //得到初始的日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
             }
         });
+    }
 
-        util.event('lay-event', {
-            getContent: function () {
-                console.log(edit.getContent())
-                layer.msg("展开控制台查看")
-            }
-        });
-
-
+    function initNumber(count) {
         count.up("value1", {
             time: 4000,
             num: 10,
@@ -159,7 +198,97 @@
             num: 20,
             regulator: 50
         })
+    }
+
+    function initTinymce(tinymce, $, util, layer, common, notice) {
+        var edit = tinymce.render({
+            elem: "#edit",
+            height: 400
+        });
+        // $('html').click(function () {
+        //     console.log(document.activeElement);
+        // })
+        $(document).click(function (e) {
+            e = window.event || e;
+            var obj = e.srcElement || e.target;
+            if (($(obj).is("#showActiveContent") || $(obj).is("#activeContent") || $(obj).is("#commit")) && !$(obj).is('body')) {
+                $("#activeContent").show();
+            } else {
+                $("#activeContent").hide();
+            }
+        });
+        util.event('lay-event', {
+            getContent: function () {
+                layer.msg(edit.getContent())
+                // var option = {
+                //     url: 'home/signIn',
+                //     type: 'post',
+                //     data: {
+                //         content: edit.getContent()
+                //     }
+                // }
+                // common.submit(option, function (res) {
+                //     if (res.code == 0) {
+                //         notice.success(res.msg)
+                //     } else {
+                //         notice.error(res.msg)
+                //     }
+                //
+                // })
+            }
+        });
+    }
+
+    function signIn(button, notice, common) {
+        $("#signIn").on('click', function () {
+            button.load({
+                elem: '[load]',
+                time: 600,
+                done: function () {
+                    notice.info("发表点什么呗")
+                    $("#activeContent").show();
+                }
+            })
+        })
+    }
+
+    layui.use(['tinymce', 'notice', 'common', 'util', 'code', 'popup', 'layer', 'echarts', 'element', 'button', 'count', 'topBar', 'laydate'], function () {
+        var $ = layui.jquery,
+            layer = layui.layer,
+            popup = layui.popup,
+            element = layui.element,
+            count = layui.count,
+            notice = layui.notice,
+            common = layui.common,
+            button = layui.button,
+            echarts = layui.echarts,
+            tinymce = layui.tinymce,
+            laydate = layui.laydate,
+            util = layui.util;
+
+        notice.options = {
+            closeButton: false,//显示关闭按钮
+            positionClass: "toast-top-center",//弹出的位置,
+            showDuration: "300",//显示的时间
+            hideDuration: "1000",//消失的时间
+            timeOut: "2000",//停留的时间
+            extendedTimeOut: "1000",//控制时间
+            showEasing: "swing",//显示时的动画缓冲方式
+            hideEasing: "linear",//消失时的动画缓冲方式
+            iconClass: 'toast-info', // 自定义图标，有内置，如不需要则传空 支持layui内置图标/自定义iconfont类名
+            onclick: null, // 点击关闭回调
+        };
+        layui.code();
+        // 富文本编辑器
+        initTinymce(tinymce, $, util, layer, common, notice);
+        // 数字滚动
+        initNumber(count);
+        // 日期控件
+        initDate(laydate);
+        // 签到按钮
+        signIn(button, notice, common);
     });
+
 </script>
 </body>
 </html>
