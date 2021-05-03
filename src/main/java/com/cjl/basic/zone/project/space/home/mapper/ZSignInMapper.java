@@ -4,8 +4,8 @@ import com.cjl.basic.zone.project.space.home.domain.ZDynamic;
 import com.cjl.basic.zone.project.space.home.domain.ZSignIn;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface ZSignInMapper {
     /**
@@ -47,6 +47,14 @@ public interface ZSignInMapper {
      * @return
      */
     List<ZSignIn> selectSignInfoList(Integer accountId);
+
+    /**
+     * 查询签到信息
+     *
+     * @param accountId
+     * @return
+     */
+    List<ZDynamic> selectSignInfoMap(Integer accountId);
 
     /**
      * 查询动态信息

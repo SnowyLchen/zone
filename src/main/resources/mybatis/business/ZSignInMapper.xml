@@ -38,6 +38,15 @@
         from z_sign_in
         where account_id = #{accountId}
     </select>
+    <select id="selectSignInfoMap" parameterType="java.lang.Integer" resultMap="dynamicMap">
+        select DATE(create_time) date, title
+        from z_dynamic
+        where si_id in (
+            select si_id
+            from z_sign_in
+            where account_id = #{accountId}
+        )
+    </select>
     <select id="selectDynamicList" resultMap="dynamicMap">
         select zd.id,
         zd.account_id,
@@ -54,11 +63,12 @@
         left join z_users zu on zd.account_id = zu.account_id
         where zd.del_flag = 0
         and zd.create_time &lt; #{currentTime}
-        AND zd.account_id in (zd.account_id,
+        AND zd.account_id in (
                 (select f_user_id
                 from layim_friend
                 where user_id = #{accountId}
                 group by f_user_id
+                union select #{accountId}
                 )
         )
         order by zd.create_time desc

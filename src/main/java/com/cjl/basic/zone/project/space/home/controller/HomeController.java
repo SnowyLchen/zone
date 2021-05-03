@@ -25,6 +25,7 @@ public class HomeController {
     public String index(ModelMap mmap) {
         User user = ShiroAuthenticateUtils.getUserByToken();
         mmap.put("user", user);
+        mmap.put("signTimes",izSignInService.selectSignInfoList(ShiroAuthenticateUtils.getAccountId()).size());
         return "space/home";
     }
 
@@ -39,6 +40,18 @@ public class HomeController {
         Integer accountId = ShiroAuthenticateUtils.getAccountId();
         return AjaxResult.success(izSignInService.selectSignInfoList(accountId));
     }
+
+    /**
+     * 查询签到信息[2021-5-01]
+     *
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getSignMark")
+    public AjaxResult getSignMark() {
+        Integer accountId = ShiroAuthenticateUtils.getAccountId();
+        return AjaxResult.success(izSignInService.selectSignInfoMap(accountId));
+    }
     /**
      * 今天是否签到
      *
@@ -47,11 +60,6 @@ public class HomeController {
     @ResponseBody
     @RequestMapping("/checkSignIn")
     public AjaxResult checkSignIn() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         Integer accountId = ShiroAuthenticateUtils.getAccountId();
         return AjaxResult.success(izSignInService.checkSignIn(accountId));
     }

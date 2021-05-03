@@ -4,6 +4,7 @@ import com.cjl.basic.zone.project.space.home.domain.ZDynamic;
 import com.cjl.basic.zone.project.space.home.domain.ZSignIn;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IZSignInService {
     /**
@@ -37,6 +38,14 @@ public interface IZSignInService {
      * @return
      */
     List<ZSignIn> selectSignInfoList(Integer accountId);
+
+    /**
+     * 查询签到信息
+     *
+     * @param accountId
+     * @return
+     */
+    List<Map<String,String>> selectSignInfoMap(Integer accountId);
 
     /**
      * 查询动态

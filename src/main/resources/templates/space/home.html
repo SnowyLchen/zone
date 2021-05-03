@@ -7,13 +7,13 @@
     <link th:href="@{/admin/css/other/console1.css}" rel="stylesheet"/>
 </head>
 <style>
-    .laydate-theme-xxx {
+    .laydate-theme-white {
         border: none;
         background-color: #ffffff;
     }
 
     .layui-laydate .layui-this {
-        background-color: black !important;
+        background-color: #2d8cf0 !important;
         color: #fff !important;
     }
 
@@ -55,27 +55,22 @@
         </div>
         <div class="layui-card top-panel">
             <div class="layui-card-header">个人资料</div>
-            <div class="layui-card-body" style="height: 120px">
+            <div class="layui-card-body" style="height: 120px;text-align: left">
                 <div class="layui-row">
-                    <div class="layui-col-xs8 layui-col-md4 top-panel-number" style="color: #28333E;" id="value1">
-                        0
+
+                    <div class="layui-col-xs8 layui-col-md4">
+                        &nbsp;
                     </div>
-                    <div class="layui-col-xs8 layui-col-md4 top-panel-number" style="color: #28333E;" id="value3">
-                        0
-                    </div>
-                    <div class="layui-col-xs4 layui-col-md4 top-panel-number" style="color: red;" id="value4">
-                        0
+                    <div class="layui-col-xs8 layui-col-md8">
+                        E-mail : [[${user.email}]]
                     </div>
                 </div>
                 <div class="layui-row">
-                    <div class="layui-col-xs8 layui-col-md4 top-panel-number" style="color: #28333E;" id="value1">
-                        0
+                    <div class="layui-col-xs8 layui-col-md4">
+                        &nbsp;
                     </div>
-                    <div class="layui-col-xs8 layui-col-md4 top-panel-number" style="color: #28333E;" id="value3">
-                        0
-                    </div>
-                    <div class="layui-col-xs4 layui-col-md4 top-panel-number" style="color: red;" id="value4">
-                        0
+                    <div class="layui-col-xs8 layui-col-md8">
+                        联系电话 : [[${user.phonenumber}]]
                     </div>
                 </div>
             </div>
@@ -120,7 +115,7 @@
                     <div class="layui-col-xs4 layui-col-md4 top-panel-tips">
                         <button class="pear-btn pear-btn-primary" plain="" id="signIn" load> 签到</button>
                     </div>
-                    <div class="layui-col-xs8 layui-col-md8 top-panel-number" style="color: #28333E;" id="value2">
+                    <div class="layui-col-xs8 layui-col-md8 top-panel-number" style="color: #28333E;" id="signTimes">
                         0
                     </div>
                 </div>
@@ -130,7 +125,7 @@
             <div class="layui-card-header">签到日历</div>
             <div class="layui-card-body" style="height: 400px">
                 <div class="layui-row layui-col-space5">
-                    <div id="test2"></div>
+                    <div id="signDate"></div>
                 </div>
             </div>
         </div>
@@ -139,28 +134,52 @@
 <div th:include="include::footer"></div>
 <script th:src="@{component/layui/lay/modules/laydate.js}"></script>
 <script>
-    function initDate(laydate) {
-        var ins1 = laydate.render({
-            elem: '#test2'
-            , position: 'static'
-            , showBottom: false
-            , theme: 'xxx'
-            , calendar: true
-            , mark: {
-                '2021-5-15': '' //具体日期
-                , '2017-8-20': '预发' //如果为空字符，则默认显示数字+徽章
-                , '2021-5-21': '发布'
-            }, done: function (value, date) {
-                if (date.year === 2021 && date.month === 5 && date.date === 14) { //点击2017年8月15日，弹出提示语
-                    ins1.hint('中国人民抗日战争胜利72周年');
-                }
-            }, ready: function (date) {
-                console.log(date); //得到初始的日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+    var signTimes = [[${signTimes}]];
+    debugger
+
+    function initDate(laydate, common) {
+        var data = [];
+        common.ajax({
+            url: 'home/getSignMark',
+            type: 'get'
+        }, function (res) {
+            if (res.code == 0) {
+                data = res.data
+                var ins1 = laydate.render({
+                    elem: '#signDate'
+                    , position: 'static'
+                    , showBottom: false
+                    , theme: 'white'
+                    , value: [
+                        '2021-05-01',
+                        '2021-05-02',
+                        '2021-05-03',
+                    ]
+                    // , calendar: true
+                    , mark: data[0] ? data[0] : {}
+                    , done: function (value, date) {
+                        var _real = data[1] ? data[1] : {};
+                        for (let key in _real) {
+                            if (value == key) {
+                                ins1.hint(_real[key] + '...');
+                            }
+                        }
+                    }, ready: function (date) {
+                        console.log(date); //得到初始的日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+                    }
+                });
             }
         });
+
     }
 
     function initNumber(count) {
+        count.up("signTimes", {
+            time: signTimes ? parseInt(signTimes) * 150 : 0,
+            num: signTimes,
+            bit: 0,
+            regulator: 50
+        })
         count.up("value1", {
             time: 4000,
             num: 10,
@@ -234,6 +253,7 @@
                             $("#activeContent").hide();
                             edit.setContent('')
                             getDynamic(common, $, notice)
+                            changeBtn();
                         }, 1000)
                     } else {
                         notice.error(res.msg)
@@ -241,6 +261,13 @@
                 })
             }
         });
+    }
+
+    function changeBtn() {
+        $("#signIn").removeClass()
+        $("#signIn").addClass('pear-btn pear-btn-success')
+        $("#signIn").attr('disabled', true);
+        $("#signIn").text('今日已签到');
     }
 
     function signIn(button, notice, common) {
@@ -252,10 +279,7 @@
                 var data = res.data;
                 if (data > 0) {
                     // 已经签到
-                    $("#signIn").removeClass()
-                    $("#signIn").addClass('pear-btn pear-btn-success')
-                    $("#signIn").attr('disabled', true);
-                    $("#signIn").text('今日已签到');
+                    changeBtn();
                 }
             } else {
                 $("#signIn").attr('disabled', true);
@@ -339,7 +363,7 @@
         // 数字滚动
         initNumber(count);
         // 日期控件
-        initDate(laydate);
+        initDate(laydate, common);
         // 获取动态消息
         getDynamic(common, $, notice);
         //注册刷新按钮

@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 签到业务层
@@ -32,7 +35,7 @@ public class ZSignInServiceImpl implements IZSignInService {
         zDynamic.setDate(DateUtils.getTime());
         InsertOrUpdateUtils.addInsertAttr(zDynamic);
         int i = checkSignIn(ShiroAuthenticateUtils.getAccountId());
-        if (i==0){
+        if (i == 0) {
             // 插入签到信息
             zSignInMapper.insertSignInfo(zDynamic);
         }
@@ -54,6 +57,21 @@ public class ZSignInServiceImpl implements IZSignInService {
     @Override
     public List<ZSignIn> selectSignInfoList(Integer accountId) {
         return zSignInMapper.selectSignInfoList(accountId);
+    }
+
+    @Override
+    public List<Map<String, String>> selectSignInfoMap(Integer accountId) {
+        List<Map<String, String>> slist = new ArrayList<>();
+        List<ZDynamic> zDynamics = zSignInMapper.selectSignInfoMap(accountId);
+        Map<String, String> date = new HashMap<>();
+        Map<String, String> title = new HashMap<>();
+        for (ZDynamic zDynamic : zDynamics) {
+            date.put(zDynamic.getDate(), "");
+            title.put(zDynamic.getDate(), zDynamic.getTitle());
+        }
+        slist.add(date);
+        slist.add(title);
+        return slist;
     }
 
     @Override

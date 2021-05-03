@@ -101,9 +101,9 @@ public class FtpServiceImpl implements FtpService {
             }
             ftpClient.changeWorkingDirectory(pathName);
             System.out.println("文件名称：" + fileName + "****文件大小：" + inputStream.available());
-            ftpClient.storeFile(fileName, inputStream);
+            boolean b = ftpClient.storeFile(fileName, inputStream);
             System.out.println(ftpClient.getReplyCode());
-            return false;
+            return b;
         } catch (Exception e) {
             e.printStackTrace();
 //            logger.error("ftp文件上传失败，e={}" , e.getMessage());
