@@ -95,28 +95,18 @@
             </div>
         </div>
         <div class="layui-card">
-            <div class="layui-card-header">全部动态</div>
+            <div class="layui-card-header">
+                <ul>
+                    <li style="display: inline">全部动态</li>
+                    <li class="refresh layui-nav-item" style="display: inline">
+                        <a href="#" id="refresh" class="layui-icon layui-icon-refresh-1" loading=600></a>
+                    </li>
+                </ul>
+            </div>
             <div class="layui-card-body">
-                <dl class="layuiadmin-card-status">
+                <dl class="layuiadmin-card-status" id="dynamic">
                     <dd>
-                        <div class="layui-status-img"><a href="javascript:;"><img
-                                style="width: 32px;height: 32px;border-radius: 50px;"
-                                src="../../admin/images/avatar.jpg"></a></div>
-                        <div>
-                            <p>动态
-                            </p>
-                            <span>几秒前</span>
-                        </div>
-                    </dd>
-                    <dd>
-                        <div class="layui-status-img"><a href="javascript:;"><img
-                                style="width: 32px;height: 32px;border-radius: 50px;"
-                                src="../../admin/images/avatar.jpg"></a></div>
-                        <div>
-                            <p>简 在 <a lay-href="https://gitee.com/Jmysy/Pear-Admin-Layui">Pear Admin 专区</a> 进行了 <a
-                                    lay-href="http://fly.layui.com/vipclub/list/layuiadmin/column/quiz/">提问</a></p>
-                            <span>2天前</span>
-                        </div>
+                        暂无动态
                     </dd>
                 </dl>
             </div>
@@ -204,6 +194,12 @@
         var edit = tinymce.render({
             elem: "#edit",
             height: 400
+            // , init_instance_callback: function (ed) {
+            //     ed.on('Blur', function (e) {
+            //         // 监听编辑器内部的点击事件
+            //         debugger
+            //     });
+            // }
         });
         // $('html').click(function () {
         //     console.log(document.activeElement);
@@ -221,6 +217,7 @@
             getContent: function () {
                 if (edit.getContent() == '' || edit.getContent() == undefined) {
                     notice.info('你得说点儿什么~')
+                    return
                 }
                 var option = {
                     url: 'home/signIn',
@@ -228,10 +225,16 @@
                     data: {
                         content: edit.getContent()
                     }
-                }
+                };
                 common.ajax(option, function (res) {
                     if (res.code == 0) {
                         notice.success(res.msg)
+                        setTimeout(function () {
+                            // 重载动态消息
+                            $("#activeContent").hide();
+                            edit.setContent('')
+                            getDynamic(common, $, notice)
+                        }, 1000)
                     } else {
                         notice.error(res.msg)
                     }
@@ -241,6 +244,24 @@
     }
 
     function signIn(button, notice, common) {
+        common.ajax({
+            url: 'home/checkSignIn',
+            type: 'get'
+        }, function (res) {
+            if (res.code == 0) {
+                var data = res.data;
+                if (data > 0) {
+                    // 已经签到
+                    $("#signIn").removeClass()
+                    $("#signIn").addClass('pear-btn pear-btn-success')
+                    $("#signIn").attr('disabled', true);
+                    $("#signIn").text('今日已签到');
+                }
+            } else {
+                $("#signIn").attr('disabled', true);
+                notice.error('初始化签到按钮失败！' + res.msg)
+            }
+        });
         $("#signIn").on('click', function () {
             $("#signIn").attr('disabled', true);
             button.load({
@@ -255,7 +276,36 @@
         })
     }
 
-    layui.use(['tinymce', 'notice', 'common', 'util', 'code', 'popup', 'layer', 'echarts', 'element', 'button', 'count', 'topBar', 'laydate'], function () {
+    function getDynamic(common, $, notice) {
+        var dd = '<dd>',
+            div = '<div>',
+            divImg = ' <div class="layui-status-img"><a href="javascript:;"><img style="width: 32px;height: 32px;border-radius: 50px;" src="../../admin/images/avatar.jpg"></a></div><div>',
+            p = '<p>',
+            span = '<span>';
+        var option = {
+            url: 'home/getDynamic',
+            type: 'get'
+        };
+        common.ajax(option, function (res) {
+            if (res.code == 0) {
+                if (res.data.length > 0) {
+                    $("#dynamic").empty();
+                    $.each(res.data, function (index, item) {
+                        var ct = '';
+                        var content = item.content;
+                        var date = item.createTime;
+                        var userName = item.userName;
+                        ct = dd + divImg + div + p + content + '</p>' + span + userName + '&nbsp;发表于：&nbsp;' + date + '</span>' + '</div>' + '</dd>';
+                        $('#dynamic').append(ct);
+                    })
+                }
+            } else {
+                notice.error(res.msg)
+            }
+        });
+    }
+
+    window.onload = layui.use(['tinymce', 'notice', 'common', 'util', 'code', 'popup', 'layer', 'echarts', 'element', 'button', 'count', 'topBar', 'laydate'], function () {
         var $ = layui.jquery,
             layer = layui.layer,
             popup = layui.popup,
@@ -268,7 +318,7 @@
             tinymce = layui.tinymce,
             laydate = layui.laydate,
             util = layui.util;
-
+        // 注册notice提示框
         notice.options = {
             closeButton: false,//显示关闭按钮
             positionClass: "toast-top-center",//弹出的位置,
@@ -282,14 +332,20 @@
             onclick: null, // 点击关闭回调
         };
         layui.code();
+        // 签到按钮
+        signIn(button, notice, common);
         // 富文本编辑器
         initTinymce(tinymce, $, util, layer, common, notice);
         // 数字滚动
         initNumber(count);
         // 日期控件
         initDate(laydate);
-        // 签到按钮
-        signIn(button, notice, common);
+        // 获取动态消息
+        getDynamic(common, $, notice);
+        //注册刷新按钮
+        $('#refresh').on('click', function () {
+            getDynamic(common, $, notice)
+        })
     });
 
 </script>

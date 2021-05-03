@@ -1,7 +1,10 @@
 package com.cjl.basic.zone.project.space.home.mapper;
 
+import com.cjl.basic.zone.project.space.home.domain.ZDynamic;
 import com.cjl.basic.zone.project.space.home.domain.ZSignIn;
+import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ZSignInMapper {
@@ -12,6 +15,14 @@ public interface ZSignInMapper {
      * @return
      */
     int insertSignInfo(ZSignIn zSignIn);
+
+    /**
+     * 插入动态
+     *
+     * @param zDynamic
+     * @return
+     */
+    int insertDynamic(ZDynamic zDynamic);
 
     /**
      * 更新签到信息
@@ -36,4 +47,22 @@ public interface ZSignInMapper {
      * @return
      */
     List<ZSignIn> selectSignInfoList(Integer accountId);
+
+    /**
+     * 查询动态信息
+     *
+     * @param accountId
+     * @param currentTime
+     * @return
+     */
+    List<ZDynamic> selectDynamicList(@Param("accountId") Integer accountId, @Param("currentTime") String currentTime);
+
+    /**
+     * 查询今天是否签到
+     *
+     * @param accountId
+     * @param currentDate
+     * @return
+     */
+    int checkSignIn(@Param("accountId") Integer accountId, @Param("currentDate") String currentDate);
 }

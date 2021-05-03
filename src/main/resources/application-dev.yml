@@ -5,14 +5,14 @@ uustop:
   # 版本
   version: 1.0.0
   # 版权年份
-  copyrightYear: 2019
+  copyrightYear: 2021
   # 文件上传路径
   profile: D:/imgUpload/
   # 文件读取路径
   profileUrl: /imgUpload/
   # 获取ip地址开关
   addressEnabled: true
-  reloadImgUrl: http://39.102.117.87:100
+  reloadImgUrl: http://39.105.42.13:100
 
 # 开发环境配置
 server:
@@ -65,15 +65,16 @@ spring:
       # 主库数据源
       master:
         url: jdbc:mysql://39.102.117.87/tale?useUnicode=true&characterEncoding=utf8
+#        url: jdbc:mysql://localhost/tale?useUnicode=true&characterEncoding=utf8
         username: root
         password: Cjl19980112!
       # 从库数据源
       slave:
         # 从数据源开关/默认关闭
-        enabled: true
-        url: jdbc:mysql://39.102.117.87/xxl_job?useUnicode=true&characterEncoding=utf8
-        username: root
-        password: YZgP3oX2
+        enabled: false
+        url:
+        username:
+        password:
       # 初始连接数
       initial-size: 10
       # 最大连接池数量
@@ -198,15 +199,16 @@ zx-ftp:
 
   #FTP连接属性配置
   #ip
+#  host: 39.105.42.13
   host: 39.102.117.87
   #端口
-  port: 21
+  port: 60021
   #登录名
   username: cjl
   #密码
-  password: 19980112
+  password: cjl19980112
   #连接是否为主动模式
-  passiveMode: true
+  passiveMode: false
   #编码
   encoding: UTF-8
   #超时时间

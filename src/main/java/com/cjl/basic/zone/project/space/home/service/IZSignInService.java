@@ -1,5 +1,6 @@
 package com.cjl.basic.zone.project.space.home.service;
 
+import com.cjl.basic.zone.project.space.home.domain.ZDynamic;
 import com.cjl.basic.zone.project.space.home.domain.ZSignIn;
 
 import java.util.List;
@@ -8,10 +9,10 @@ public interface IZSignInService {
     /**
      * 签到
      *
-     * @param record
+     * @param zDynamic
      * @return
      */
-    int insertSignInfo(ZSignIn record);
+    int insertSignInfo(ZDynamic zDynamic);
 
     /**
      * 更新签到信息
@@ -36,4 +37,20 @@ public interface IZSignInService {
      * @return
      */
     List<ZSignIn> selectSignInfoList(Integer accountId);
+
+    /**
+     * 查询动态
+     *
+     * @param accountId
+     * @return
+     */
+    List<ZDynamic> getDynamic(Integer accountId);
+
+    /**
+     * 查询今天是否签到
+     *
+     * @param accountId
+     * @return
+     */
+    int checkSignIn(Integer accountId);
 }

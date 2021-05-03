@@ -1,5 +1,6 @@
 package com.cjl.basic.zone.project.space.home.domain;
 
+import com.cjl.basic.zone.framework.web.domain.BaseEntity;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -10,7 +11,7 @@ import java.io.Serializable;
  * @author chen
  */
 @Data
-public class ZSignIn implements Serializable {
+public class ZSignIn extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
      * 主键id
@@ -31,9 +32,5 @@ public class ZSignIn implements Serializable {
      * 签到人员
      */
     private Integer accountId;
-    /**
-     * 动态内容
-     */
-    private String content;
 
 }
