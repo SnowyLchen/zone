@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <div th:include="include::header"></div>
+    <style>
+        h1 {
+            margin-top: 200px;
+            color: #5FB878;
+        }
+
+        .layui-card-body {
+            text-align: center;
+        }
+
+        /*    隐藏表格工具栏元素、表头元素*/
+        .layui-table-tool, .layui-table-header {
+            display: none;
+        }
+
+    </style>
+</head>
+<body class="pear-container">
+<!--内容-->
+<div class="layui-card">
+    <div class="layui-card-body">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">我的日志</li>
+                <li>私密日志</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-row layui-col-space10">
+                        <!--我的日志左边部分-->
+                        <div class="layui-col-sm10">
+                            <!--左边部分第一行-->
+                            <div class="layui-row">
+                                <div class="layui-col-sm12">
+                                    <button type="button" class="layui-btn" lay-event="add">写日志</button>
+                                    <button type="button" class="layui-btn" onclick="tabTable(this)">切换到摘要</button>
+                                </div>
+                            </div>
+                            <!--左边部分第二行-->
+                            <div class="layui-row">
+                                <div class="layui-col-sm12">
+                                    <table id="user-table" lay-filter="user-table"></table>
+                                </div>
+                            </div>
+                        </div>
+                        <!--我的日志右边部分-->
+                        <div class="layui-col-sm2">
+                            <div class="layui-bg-gray" style="padding: 10px;">
+                                <!--右边部分第一行-->
+                                <div class="layui-row layui-col-space15">
+                                    <div class="layui-col-md12">
+                                        <div class="layui-card">
+                                            <div class="layui-card-header">日志分类</div>
+                                            <div class="layui-card-body">
+                                                <ul id="layui-custom-ul"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--右边部分第二行-->
+                                <div class="layui-row layui-col-space15">
+                                    <div class="layui-col-md12">
+                                        <div class="layui-card">
+                                            <div class="layui-card-header">搜索日志</div>
+                                            <div class="layui-card-body">
+                                                <input type="text" name="title" autocomplete="off" placeholder="请输入关键字"
+                                                       class="layui-input">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--右边部分第三行-->
+                                <div class="layui-row layui-col-space15">
+                                    <div class="layui-col-md12">
+                                        <div class="layui-card">
+                                            <div class="layui-card-header">评论审核</div>
+                                            <div class="layui-card-body">
+                                                56456
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-tab-item">
+                    内容02
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<!--表格操作界面-->
+<script type="text/html" id="oper">
+    <div class="layui-btn-group">
+        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">
+            <i class="layui-icon">&#xe642;</i>编辑
+        </button>
+        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">
+            <i class="layui-icon">&#xe640;</i>删除
+        </button>
+    </div>
+</script>
+<script>
+
+
+    tableInit();
+
+    /**
+     * 切换表格类型
+     * */
+    function tabTable(ele) {
+        $('#user-table').html('');
+        debugger
+        if ($(ele).attr('tableType') == 'card') {
+            $(ele).attr('tableType', 'table')
+            tableInit();
+            $(ele).text('切换到摘要');
+        } else {
+            $(ele).attr('tableType', 'card');
+            $('#user-table').parent().find('div[lay-id=user-table]').remove();
+            tableInit1();
+            $(ele).text('切换到列表');
+        }
+    }
+
+    /**
+     * 初始化表格
+     */
+    function tableInit() {
+        layui.use(['table', 'form', 'jquery'], function () {
+            let table = layui.table;
+            let form = layui.form;
+            let $ = layui.jquery;
+
+            let MODULE_PATH = "/system/user/";
+
+            let cols = [
+                [
+                    {
+                        type: 'checkbox',
+                        templet: function () {
+                            debugger
+                            return 's';
+                        }
+                    },
+                    {
+                        field: 'titleName',
+                        align: 'left',
+                        // width: 900
+                    },
+                    {
+                        field: 'createTime',
+                        align: 'right',
+                        templet: '#user-createTime'
+                    },
+                    {
+                        align: 'right',
+                        templet: '#oper'
+                    }
+                ]
+            ];
+            table.render({
+                elem: '#user-table',
+                url: '../../journal/data/table.json',
+                page: true,
+                cols: cols,
+                skin: 'line',
+                defaultToolbar: [],
+                even: true,
+            });
+
+            table.on('tool(user-table)', function (obj) {
+                if (obj.event === 'remove') {
+                    window.remove(obj);
+                } else if (obj.event === 'edit') {
+                    window.edit(obj);
+                }
+            });
+
+            table.on('toolbar(user-table)', function (obj) {
+                if (obj.event === 'add') {
+                    window.add();
+                } else if (obj.event === 'refresh') {
+                    window.refresh();
+                } else if (obj.event === 'batchRemove') {
+                    window.batchRemove(obj);
+                }
+            });
+
+            form.on('submit(user-query)', function (data) {
+                table.reload('user-table', {
+                    where: data.field
+                })
+                return false;
+            });
+
+            form.on('switch(user-enable)', function (obj) {
+                layer.tips(this.value + ' ' + this.name + '：' + obj.elem.checked, obj.othis);
+            });
+
+            window.add = function () {
+                layer.msg("新增");
+            }
+
+            window.edit = function (obj) {
+                layer.msg("修改");
+            }
+
+            window.remove = function (obj) {
+                layer.confirm('确定要删除该用户', {
+                    icon: 3,
+                    title: '提示'
+                }, function (index) {
+                    layer.close(index);
+                    let loading = layer.load();
+                    $.ajax({
+                        url: MODULE_PATH + "remove/" + obj.data['userId'],
+                        dataType: 'json',
+                        type: 'delete',
+                        success: function (result) {
+                            layer.close(loading);
+                            if (result.success) {
+                                layer.msg(result.msg, {
+                                    icon: 1,
+                                    time: 1000
+                                }, function () {
+                                    obj.del();
+                                });
+                            } else {
+                                layer.msg(result.msg, {
+                                    icon: 2,
+                                    time: 1000
+                                });
+                            }
+                        }
+                    })
+                });
+            }
+
+            window.batchRemove = function (obj) {
+                let data = table.checkStatus(obj.config.id).data;
+                if (data.length === 0) {
+                    layer.msg("未选中数据", {
+                        icon: 3,
+                        time: 1000
+                    });
+                    return false;
+                }
+                let ids = "";
+                for (let i = 0; i < data.length; i++) {
+                    ids += data[i].userId + ",";
+                }
+                ids = ids.substr(0, ids.length - 1);
+                layer.confirm('确定要删除这些用户', {
+                    icon: 3,
+                    title: '提示'
+                }, function (index) {
+                    layer.close(index);
+                    let loading = layer.load();
+                    $.ajax({
+                        url: MODULE_PATH + "batchRemove/" + ids,
+                        dataType: 'json',
+                        type: 'delete',
+                        success: function (result) {
+                            layer.close(loading);
+                            if (result.success) {
+                                layer.msg(result.msg, {
+                                    icon: 1,
+                                    time: 1000
+                                }, function () {
+                                    table.reload('user-table');
+                                });
+                            } else {
+                                layer.msg(result.msg, {
+                                    icon: 2,
+                                    time: 1000
+                                });
+                            }
+                        }
+                    })
+                });
+            }
+
+            window.refresh = function (param) {
+                table.reload('user-table');
+            }
+        })
+    }
+
+    /**
+     * 初始化表格（卡片）
+     * */
+    function tableInit1() {
+        layui.use(['table', 'form', 'jquery', 'card'], function () {
+            let table = layui.table;
+            let form = layui.form;
+            let $ = layui.jquery;
+            let card = layui.card;
+
+            let MODULE_PATH = "/system/user/";
+
+            card.render({
+                elem: '#user-table',
+                url: '../../journal/data/card.json',
+                lineSize: 2,
+                done: function () {
+                    alert(1);
+                },
+                templet: function (item) {
+                    var ele = '<div class="project-list-item-body">';
+                    //标题
+                    ele += '<h2>' + item.titleName + '</h2>';
+                    //第二行
+                    ele += '<div class="layui-row project-list-item-desc">';
+                    //第二行左边部分
+                    ele += '<div class="layui-col-sm4"><span class="time">' + item.createTime + '</span></div>';
+                    //第二行右边部分
+                    ele += '<div class="layui-col-sm3 layui-col-sm-offset5">' +
+                        '<div class="layui-btn-group">\n' +
+                        '        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">\n' +
+                        '            <i class="layui-icon">&#xe642;</i>编辑\n' +
+                        '        </button>\n' +
+                        '        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">\n' +
+                        '            <i class="layui-icon">&#xe640;</i>删除\n' +
+                        '        </button>\n' +
+                        '</div>' +
+                        '</div>';
+                    ele += '</div></div>';
+
+                    return ele;
+                }
+            })
+
+        })
+    }
+
+    /**
+     * 初始化无序列表
+     * */
+    ulInit();
+
+    /**
+     * 初始化列表
+     */
+    function ulInit(options) {
+        var opt = {
+            //元素
+            ele: 'layui-custom-ul',
+            //数据
+            data: [{
+                'logName': '日志1'
+            }, {
+                'logName': '日志2'
+            }, {
+                'logName': '日志3'
+            }, {
+                'logName': '日志4'
+            }, {
+                'logName': '日志5'
+            }],
+            templet: function (v) {
+                return '<div class="layui-li">' + v.logName + '</div>';
+            },
+            //隔行换色
+            even: true,
+        };
+
+        /**
+         * 初始化
+         */
+        function init() {
+            var $ul = $('#' + opt.ele);
+            $ul.css('text-align', 'left');
+            opt.data.forEach(function (value, index, array) {
+                $ul.append('<li style="padding: 5px">' + opt.templet(value) + '</li>');
+            });
+            if (opt.even) {
+                $ul.find('li:odd').css('background', '#f2f2f2');
+            }
+        }
+
+        init();
+    }
+
+    sortButton();
+
+    /**
+     * 排序按钮
+     */
+    function sortButton() {
+    }
+</script>
+</body>
+</html>
