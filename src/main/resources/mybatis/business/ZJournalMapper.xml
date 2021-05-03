@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cjl.basic.zone.project.space.journal.mapper.ZJournalMapper">
+    <resultMap id="BaseResultMap" type="com.cjl.basic.zone.project.space.journal.domain.ZJournal">
+        <id column="j_id" jdbcType="INTEGER" property="jId"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="time" jdbcType="VARCHAR" property="time"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="secret" jdbcType="CHAR" property="secret"/>
+        <result column="cate_id" jdbcType="INTEGER" property="cateId"/>
+        <result column="account_id" jdbcType="INTEGER" property="accountId"/>
+        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="del_flag" jdbcType="VARCHAR" property="delFlag"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    j_id, title, `time`, content, secret, cate_id, account_id, create_by, create_time, 
+    update_by, update_time, del_flag
+  </sql>
+    <select id="selectJournalById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from z_journal
+        where j_id = #{jId,jdbcType=INTEGER}
+    </select>
+    <select id="selectJournalListByAccountId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from z_journal
+        where j_id = #{jId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteJournalById" parameterType="java.lang.Integer">
+    update  z_journal set del_flag=1
+    where j_id = #{jId,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteJournalByAccountId" parameterType="java.lang.Integer">
+   update z_journal set del_flag=1
+    where account_id = #{accountId,jdbcType=INTEGER}
+  </delete>
+    <insert id="addJournal" keyColumn="j_id" keyProperty="jId"
+            parameterType="com.cjl.basic.zone.project.space.journal.domain.ZJournal" useGeneratedKeys="true">
+        insert into z_journal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                title,
+            </if>
+            <if test="time != null">
+                `time`,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="secret != null">
+                secret,
+            </if>
+            <if test="cateId != null">
+                cate_id,
+            </if>
+            <if test="accountId != null">
+                account_id,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateBy != null">
+                update_by,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="delFlag != null">
+                del_flag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="time != null">
+                #{time,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="secret != null">
+                #{secret,jdbcType=CHAR},
+            </if>
+            <if test="cateId != null">
+                #{cateId,jdbcType=INTEGER},
+            </if>
+            <if test="accountId != null">
+                #{accountId,jdbcType=INTEGER},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateJournalById" parameterType="com.cjl.basic.zone.project.space.journal.domain.ZJournal">
+        update z_journal
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="time != null">
+                `time` = #{time,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="secret != null">
+                secret = #{secret,jdbcType=CHAR},
+            </if>
+            <if test="cateId != null">
+                cate_id = #{cateId,jdbcType=INTEGER},
+            </if>
+            <if test="accountId != null">
+                account_id = #{accountId,jdbcType=INTEGER},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where j_id = #{jId,jdbcType=INTEGER}
+    </update>
+
+</mapper>
