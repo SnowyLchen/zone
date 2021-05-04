@@ -36,7 +36,7 @@ public class AlbumPhotoController extends BaseController {
     }
 
     /**
-     * 空间相册模块-新增相册
+     * 空间相册模块-新增相册/上传照片
      */
     @GetMapping("/operator/{type}")
     public String addAlbum(ModelMap mmap, @PathVariable String type) {

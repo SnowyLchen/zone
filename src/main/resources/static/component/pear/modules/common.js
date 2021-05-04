@@ -87,7 +87,9 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
             }, 500);
         }
         this.ajaxMsg = function (res, index) {
-            top.layer.close(index);
+            if (index) {
+                top.layer.close(index);
+            }
             if (res.code === 0) {
                 layer.msg(res.msg, {icon: 1, time: 1000}, function () {
                     parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
@@ -266,7 +268,7 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
          * @return [返回值]
          * @date 2021/5/4 17:35
          */
-        openIframe: function (title, url, width, height, yes, collBack) {
+        openIframe: function (title, url, width, height, btnlist, yes, collBack) {
             layui.use('layer', function () { //独立版的layer无需执行这一句
                 var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
                 var opt = {
@@ -282,7 +284,7 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
                     ,
                     content: url
                     ,
-                    btn: ['确认', '关闭'] //只是为了演示
+                    btn: btnlist?btnlist:btnlist==null?[]:['确认', '关闭'] //只是为了演示
                     ,
                     yes: yes ? yes : function () {
                         if (typeof yes == 'function') {

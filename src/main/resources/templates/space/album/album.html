@@ -101,35 +101,30 @@
         })
     }
 
+    function btnClick($, MODULE_PATH) {
+        $("#uploadPic").on("click", function () {
+            var $layuiTabContext = $('.layui-tab-content');
+            $.modal.openIframe("上传照片", MODULE_PATH + 'addAlbumPic', $layuiTabContext.width(), $layuiTabContext.height(), function () {
+                alert(2)
+            }, function () {
+                alert(1)
+            });
+        });
+        $("#createAlbum").on("click", function () {
+            $.modal.openIframe("新增相册", MODULE_PATH + 'createAlbum', 700, 370, )
+        })
+    }
+
     layui.use(['table', 'form', 'jquery', 'card', 'cardTable'], function () {
         let table = layui.table;
         let form = layui.form;
         let $ = layui.jquery;
         let cardTable = layui.cardTable;
-        var $layuiTabContext = $('.layui-tab-content');
         let MODULE_PATH = "/album/operator/";
         // 初始化卡片
         initCard(cardTable);
-
-        $("#uploadPic").on("click", function () {
-            layer.open({
-                type: 2,
-                title: '上传照片',
-                shade: 0.1,
-                area: [$layuiTabContext.width() + 'px', $layuiTabContext.height() + 'px'],
-                content: MODULE_PATH + 'createAlbum'
-            });
-        })
-        $("#createAlbum").on("click", function () {
-            layer.open({
-                type: 2,
-                title: '新增相册',
-                shade: 0.1,
-                area: [$layuiTabContext.width() + 'px', $layuiTabContext.height() + 'px'],
-                content: MODULE_PATH + 'addAlbum'
-            });
-        })
-
+        // 注册点击事件
+        btnClick($, MODULE_PATH);
     })
 
 </script>
