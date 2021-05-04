@@ -131,9 +131,11 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
          * @date 2021/5/4 16:56
          */
         tableInit: function (options) {
+            var tableObj;
             layui.use(['table'], function () {
                 let table = layui.table;
                 var opt = {
+                    id: '#layui-table',
                     //默认元素
                     elem: '#layui-table',
                     //列字段
@@ -164,8 +166,14 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
                     even: true,
                 };
                 Object.assign(opt, options);
-                table.render(opt);
-            })
+                tableObj = table.render(opt);
+            });
+            return {
+                //重载
+                reload: function () {
+                    tableObj.reload();
+                }
+            }
         },
         /**
          * 初始化表格（卡片）
@@ -238,8 +246,14 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
                     return '<div class="layui-li">' + v.logName + '</div>';
                 },
                 //隔行换色
-                even: false,
+                even: true,
             };
+
+            layui.use(['laypage'], function () {
+                var laypage = layui.laypage
+                    , layer = layui.layer;
+            });
+
 
             Object.assign(opt, options);
 
@@ -264,11 +278,15 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
         /**
          * @Description [弹出层]
          * @author xj
-         * @param null []
+         * @param title [标题]
+         * @param url [路由]
+         * @param width [宽]
+         * @param height [高]
+         * @param callbackFn [回调函数]
          * @return [返回值]
          * @date 2021/5/4 17:35
          */
-        openIframe: function (title, url, width, height, btnlist, yes, collBack) {
+        openIframe: function (title, url, width, height, callbackFn) {
             layui.use('layer', function () { //独立版的layer无需执行这一句
                 var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
                 var opt = {
@@ -284,12 +302,22 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
                     ,
                     content: url
                     ,
-                    btn: btnlist?btnlist:btnlist==null?[]:['确认', '关闭'] //只是为了演示
+                    btn: ['确认', '关闭'] //只是为了演示
                     ,
-                    yes: yes ? yes : function () {
-                        if (typeof yes == 'function') {
-                            yes()
+                    yes: function () {
+                        //回调iframe里面的submitHandler
+                        var iframeWin = $('iframe')[0].contentWindow;
+                        if (iframeWin.submitHandler) {
+                            var data = iframeWin.submitHandler();
+                            //当return false时，不会关闭弹窗
+                            if (data == false) {
+                                return;
+                            }
+                            if (callbackFn) {
+                                callbackFn(data);
+                            }
                         }
+                        layer.closeAll();
                     }
                     ,
                     btn2: function () {
@@ -297,12 +325,6 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
                     }
                     ,
                     zIndex: layer.zIndex //重点1
-                    ,
-                    success: function (layero) {
-                        if (typeof collBack == 'function') {
-                            collBack(layero)
-                        }
-                    }
                 };
                 layer.open(opt);
             });

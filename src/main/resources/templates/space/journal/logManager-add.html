@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <div th:include="include::header"></div>
+</head>
+<body>
+<form id="form-add" class="layui-form layui-form-pane">
+    <div class="layui-row">
+        <div class="layui-col-sm6">
+            <div class="layui-form-item">
+                <label class="layui-form-label">长输入框</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div th:include="include::footer"></div>
+<script>
+    function submitHandler() {
+        return 1;
+    }
+</script>
+</body>
+</html>

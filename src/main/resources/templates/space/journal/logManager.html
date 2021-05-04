@@ -1,72 +1,21 @@
-<!DOCTYPE html >
-<html lang="en">
-<style>
-    #logManager {
-        position: absolute;
-        right: 5%;
-        font-size: 12px;
-    }
-</style>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <div th:include="include::header"></div>
+</head>
 <body>
-
-<!--我的日志-->
-<div class="layui-row layui-col-space10">
-    <!--我的日志左边部分-->
-    <div class="layui-col-sm10">
-        <!--左边部分第一行-->
-        <div class="layui-row">
-            <div class="layui-col-sm12">
-                <button type="button" class="layui-btn" id="addLog">写日志</button>
-                <button type="button" class="layui-btn" id="tabTableType">切换到摘要</button>
-            </div>
-        </div>
-        <!--左边部分第二行-->
-        <div class="layui-row">
-            <div class="layui-col-sm12">
-                <table id="layui-table" lay-filter="layui-table"></table>
-            </div>
-        </div>
+<!--第一行-->
+<div class="layui-row">
+    <div class="layui-col-sm12">
+        <button type="button" class="layui-btn" id="addLogType">新增</button>
     </div>
-    <!--我的日志右边部分-->
-    <div class="layui-col-sm2">
-        <div class="layui-bg-gray" style="padding: 10px;">
-            <!--右边部分第一行-->
-            <div class="layui-row layui-col-space15">
-                <div class="layui-col-md12">
-                    <div class="layui-card">
-                        <div class="layui-card-header">日志分类
-                            <span id="logManager">管理</span>
-                        </div>
-                        <div class="layui-card-body">
-                            <ul id="layui-ul"></ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--右边部分第二行-->
-            <div class="layui-row layui-col-space15">
-                <div class="layui-col-md12">
-                    <div class="layui-card">
-                        <div class="layui-card-header">搜索日志</div>
-                        <div class="layui-card-body">
-                            <input type="text" name="title" autocomplete="off" placeholder="请输入关键字"
-                                   class="layui-input">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--右边部分第三行-->
-            <div class="layui-row layui-col-space15">
-                <div class="layui-col-md12">
-                    <div class="layui-card">
-                        <div class="layui-card-header">评论审核</div>
-                        <div class="layui-card-body">
-                            56456
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+</div>
+<!--第二行-->
+<div class="layui-row">
+    <div class="layui-col-sm12">
+        <table id="layui-table" lay-filter="layui-table"></table>
     </div>
 </div>
 <!--表格操作界面-->
@@ -80,47 +29,51 @@
         </button>
     </div>
 </script>
+<div th:include="include::footer"></div>
 <script>
-    var prefix = '/journal';
-    $(function () {
-        //初始化表格
-        $.table.tableInit();
-        //绑定页面事件
-        bindEvent();
-        //初始化无序列表
-        $.ul.ulInit();
-    });
 
-    /**
-     * @Description [事件绑定]
-     * @author xj
-     * @return [返回值]
-     * @date 2021/5/3 18:28
-     */
-    function bindEvent() {
-        //写日志
-        $('#addLog').click(function () {
-            $.modal.openIframe('写日志', prefix + '/add');
+    $(function () {
+        bindEvent();
+
+        /**
+         * @Description [事件绑定]
+         * @author xj
+         * @return [返回值]
+         * @date 2021/5/4 19:04
+         */
+        function bindEvent() {
+            $('#addLogType').click(function () {
+                $.modal.openIframe('新增日志类型', '/journal/template?url=/logManager-add', null, 400, function (data) {
+                    console.log(data);
+                    nn.reload();
+                });
+
+            });
+        }
+
+
+        var nn = $.table.tableInit({
+            url: '/zCategories/list',
+            cols: [
+                [
+                    {
+                        title: '日志分类名称',
+                        field: 'titleName',
+                        align: 'left',
+                    },
+                    {
+                        title: '创建时间',
+                        field: 'createTime',
+                        align: 'right',
+                    },
+                    {
+                        align: 'right',
+                        templet: '#oper'
+                    }
+                ]
+            ]
         });
-        //日志管理
-        $('#logManager').click(function () {
-            $.modal.openIframe('');
-        })
-        //切换到摘要/列表
-        $('#tabTableType').click(function () {
-            if ($(this).attr('tableType') == 'card') {
-                $(this).attr('tableType', 'table')
-                $.table.tableInit();
-                $('#layui-table').html('');
-                $(this).text('切换到摘要');
-            } else {
-                $(this).attr('tableType', 'card');
-                $('#layui-table').parent().find('div[lay-id=layui-table]').remove();
-                $.table.cardInit();
-                $(this).text('切换到列表');
-            }
-        })
-    }
+    })
 </script>
 </body>
 </html>
