@@ -272,7 +272,7 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
                 var opt = {
                     type: 2 //此处以iframe举例
                     , title: title || '写日志'
-                    , area: [$(document).width() * 0.8 + 'px', $(document).height() * 0.8 + 'px']
+                    , area: [width||($(document).width() * 0.8) + 'px', height||($(document).height() * 0.8) + 'px']
                     , shade: 0
                     , maxmin: true
                     , content: url
