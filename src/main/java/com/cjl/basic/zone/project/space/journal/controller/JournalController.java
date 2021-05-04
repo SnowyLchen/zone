@@ -3,6 +3,7 @@ package com.cjl.basic.zone.project.space.journal.controller;
 import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.framework.web.controller.BaseController;
 import com.cjl.basic.zone.framework.web.domain.AjaxResult;
+import com.cjl.basic.zone.framework.web.domain.AjaxResult;
 import com.cjl.basic.zone.project.manage.user.domain.User;
 import com.cjl.basic.zone.project.space.journal.domain.ZJournal;
 import com.cjl.basic.zone.project.space.journal.service.IZJournalService;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping("/journal")
 public class JournalController extends BaseController {
+    private static final String PREFIX = "/space";
+    private static final String PREFIX_JOURNAL = "/space/journal";
     @Autowired
     private IZJournalService journalService;
 
@@ -29,8 +34,32 @@ public class JournalController extends BaseController {
     public String index(ModelMap mmap, HttpServletResponse response) {
         User user = ShiroAuthenticateUtils.getUserByToken();
         mmap.put("user", user);
-        return "space/journal";
+        return PREFIX + "/journal";
     }
+
+    /**
+     * @param url [地址]
+     * @return [返回值]
+     * @Description [链接跳转]
+     * @author xj
+     * @date 2021/5/3 19:40
+     */
+    @RequestMapping("template")
+    public String template(String url) {
+        return PREFIX_JOURNAL + url;
+    }
+
+    /**
+     * @return [返回值]
+     * @Description [新增跳转页]
+     * @author xj
+     * @date 2021/5/3 19:45
+     */
+    @GetMapping("/add")
+    public String add() {
+        return PREFIX_JOURNAL + "/add";
+    }
+
 
     /**
      * 写日志

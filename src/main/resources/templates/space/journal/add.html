@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <div th:include="include::header"></div>
+</head>
+<body>
+<div class="layui-row">
+    <div class="layui-col-sm1">
+        <label for="titleName" class="layui-form-label">日志标题：</label>
+    </div>
+    <div class="layui-col-sm11">
+        <input type="text" name="titleName" id="titleName" placeholder="请输入日志标题" autocomplete="off" class="layui-input">
+    </div>
+</div>
+<div class="layui-row">
+    <div class="layui-col-sm12">
+        <textarea id="logContext" name="logContext" cols="30" rows="10"></textarea>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<script>
+    $(function () {
+        textAreaInit();
+    });
+
+    function textAreaInit() {
+        layui.use(['tinymce'], function () {
+            var tinymce = layui.tinymce
+            var edit = tinymce.render({
+                elem: "#logContext",
+                height: 400
+            });
+        });
+
+    }
+</script>
+</body>
+</html>

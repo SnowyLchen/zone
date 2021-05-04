@@ -1,0 +1,135 @@
+<!DOCTYPE html >
+<html lang="en">
+<body>
+<!--我的日志-->
+<div class="layui-row layui-col-space10">
+    <!--我的日志左边部分-->
+    <div class="layui-col-sm10">
+        <!--左边部分第一行-->
+        <div class="layui-row">
+            <div class="layui-col-sm12">
+                <button type="button" class="layui-btn" id="addLog">写日志</button>
+                <button type="button" class="layui-btn" id="tabTableType">切换到摘要</button>
+            </div>
+        </div>
+        <!--左边部分第二行-->
+        <div class="layui-row">
+            <div class="layui-col-sm12">
+                <table id="layui-table" lay-filter="layui-table"></table>
+            </div>
+        </div>
+    </div>
+    <!--我的日志右边部分-->
+    <div class="layui-col-sm2">
+        <div class="layui-bg-gray" style="padding: 10px;">
+            <!--右边部分第一行-->
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">日志分类</div>
+                        <div class="layui-card-body">
+                            <ul id="layui-ul"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--右边部分第二行-->
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">搜索日志</div>
+                        <div class="layui-card-body">
+                            <input type="text" name="title" autocomplete="off" placeholder="请输入关键字"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--右边部分第三行-->
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">评论审核</div>
+                        <div class="layui-card-body">
+                            56456
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--表格操作界面-->
+<script type="text/html" id="oper">
+    <div class="layui-btn-group">
+        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">
+            <i class="layui-icon">&#xe642;</i>编辑
+        </button>
+        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">
+            <i class="layui-icon">&#xe640;</i>删除
+        </button>
+    </div>
+</script>
+<script>
+    var prefix = '/journal';
+    $(function () {
+        //初始化表格
+        $.table.tableInit();
+        //绑定页面事件
+        bindEvent();
+        //初始化无序列表
+        $.ul.ulInit();
+    });
+
+    /**
+     * @Description [事件绑定]
+     * @author xj
+     * @return [返回值]
+     * @date 2021/5/3 18:28
+     */
+    function bindEvent() {
+        //写日志
+        $('#addLog').click(function () {
+            layui.use('layer', function () { //独立版的layer无需执行这一句
+                var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+                var $layuiTabContext = $('.layui-tab-content');
+                layer.open({
+                    type: 2 //此处以iframe举例
+                    , title: '写日志'
+                    , area: [$layuiTabContext.width() + 'px', $layuiTabContext.height() + 'px']
+                    , shade: 0
+                    , maxmin: true
+                    , content: prefix + '/add'
+                    , btn: ['继续弹出', '全部关闭'] //只是为了演示
+                    , yes: function () {
+                        alert(1);
+                    }
+                    , btn2: function () {
+                        layer.closeAll();
+                    }
+
+                    , zIndex: layer.zIndex //重点1
+                    , success: function (layero) {
+                        layer.setTop(layero); //重点2
+                    }
+                });
+            });
+        });
+        //切换到摘要/列表
+        $('#tabTableType').click(function () {
+            if ($(this).attr('tableType') == 'card') {
+                $(this).attr('tableType', 'table')
+                $.table.tableInit();
+                $('#layui-table').html('');
+                $(this).text('切换到摘要');
+            } else {
+                $(this).attr('tableType', 'card');
+                $('#layui-table').parent().find('div[lay-id=layui-table]').remove();
+                $.table.cardInit();
+                $(this).text('切换到列表');
+            }
+        })
+    }
+</script>
+</body>
+</html>

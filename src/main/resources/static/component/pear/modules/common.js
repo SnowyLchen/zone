@@ -115,3 +115,147 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
     }
     exports(MOD_NAME, common);
 });
+/**
+ * JQuery全局扩展方法
+ */
+(function ($) {
+
+    $.table = {
+        /**
+         * @Description [数据表格初始化函数]
+         * @author xj
+         * @param options [参数]
+         * @return [返回值]
+         * @date 2021/5/4 16:56
+         */
+        tableInit: function (options) {
+            layui.use(['table'], function () {
+                let table = layui.table;
+                var opt = {
+                    //默认元素
+                    elem: '#layui-table',
+                    //列字段
+                    cols: [
+                        [
+                            {
+                                type: 'checkbox',
+                            },
+                            {
+                                field: 'titleName',
+                                align: 'left',
+                                // width: 900
+                            },
+                            {
+                                field: 'createTime',
+                                align: 'right',
+                            },
+                            {
+                                align: 'right',
+                                templet: '#oper'
+                            }
+                        ]
+                    ],
+                    url: '../../journal/data/table.json',
+                    //分页
+                    page: true,
+                    //隔行变色
+                    even: true,
+                };
+                Object.assign(opt, options);
+                table.render(opt);
+            })
+        },
+        /**
+         * 初始化表格（卡片）
+         * */
+        cardInit: function (options) {
+            layui.use(['card'], function () {
+                let card = layui.card;
+                //具体参数进源码可看
+                var opt = {
+                    elem: '#layui-table',
+                    url: '../../journal/data/card.json',
+                    lineSize: 2,
+                    done: function () {
+                        alert(1);
+                    },
+                    templet: function (item) {
+                        var ele = '<div class="project-list-item-body">';
+                        //标题
+                        ele += '<h2>' + item.titleName + '</h2>';
+                        //第二行
+                        ele += '<div class="layui-row project-list-item-desc">';
+                        //第二行左边部分
+                        ele += '<div class="layui-col-sm4"><span class="time">' + item.createTime + '</span></div>';
+                        //第二行右边部分
+                        ele += '<div class="layui-col-sm3 layui-col-sm-offset5">' +
+                            '<div class="layui-btn-group">\n' +
+                            '        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">\n' +
+                            '            <i class="layui-icon">&#xe642;</i>编辑\n' +
+                            '        </button>\n' +
+                            '        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">\n' +
+                            '            <i class="layui-icon">&#xe640;</i>删除\n' +
+                            '        </button>\n' +
+                            '</div>' +
+                            '</div>';
+                        ele += '</div></div>';
+
+                        return ele;
+                    }
+                };
+                Object.assign(opt, options);
+                card.render(opt)
+            });
+        }
+    };
+    $.ul = {
+        /**
+         * @Description [列表]
+         * @author xj
+         * @param options [参数]
+         * @return [返回值]
+         * @date 2021/5/4 17:10
+         */
+        ulInit: function (options) {
+            var opt = {
+                //元素
+                elem: '#layui-ul',
+                //数据
+                data: [{
+                    'logName': '日志1'
+                }, {
+                    'logName': '日志2'
+                }, {
+                    'logName': '日志3'
+                }, {
+                    'logName': '日志4'
+                }, {
+                    'logName': '日志5'
+                }],
+                templet: function (v) {
+                    return '<div class="layui-li">' + v.logName + '</div>';
+                },
+                //隔行换色
+                even: false,
+            };
+
+            Object.assign(opt, options);
+
+            /**
+             * 初始化
+             */
+            function init() {
+                var $ul = $(opt.elem);
+                $ul.css('text-align', 'left');
+                opt.data.forEach(function (value, index, array) {
+                    $ul.append('<li style="padding: 5px">' + opt.templet(value) + '</li>');
+                });
+                if (opt.even) {
+                    $ul.find('li:odd').css('background', '#f2f2f2');
+                }
+            }
+
+            init();
+        }
+    }
+})(jQuery)
