@@ -286,7 +286,7 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
          * @return [返回值]
          * @date 2021/5/4 17:35
          */
-        openIframe: function (title, url, width, height, callbackFn) {
+        openIframe: function (title, url, width, height, callbackFn, btnList) {
             layui.use('layer', function () { //独立版的layer无需执行这一句
                 var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
                 var opt = {
@@ -302,7 +302,7 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
                     ,
                     content: url
                     ,
-                    btn: ['确认', '关闭'] //只是为了演示
+                    btn: btnList ? btnList : btnList === null ? [] : ['确认', '关闭'] //只是为了演示
                     ,
                     yes: function () {
                         //回调iframe里面的submitHandler

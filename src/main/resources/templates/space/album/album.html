@@ -45,7 +45,7 @@
                             </div>
                             <div class="layui-row">
                                 <div class="layui-col-sm12">
-                                    <table id="album-table" lay-filter="album-table"></table>
+                                    <table id="album-table" lay-filter="album-table" style="width: 100%"></table>
                                 </div>
                             </div>
                         </div>
@@ -77,7 +77,7 @@
     function initCard(cardTable) {
         cardTable.render({
             elem: '#album-table',
-            url: '../../admin/data/card.json',
+            url: 'album/getAlbums',
             loading: true,//是否加载
             linenum: 6, //每行数量 2,3,4,6
             page: true, //是否分页
@@ -103,15 +103,10 @@
 
     function btnClick($, MODULE_PATH) {
         $("#uploadPic").on("click", function () {
-            var $layuiTabContext = $('.layui-tab-content');
-            $.modal.openIframe("上传照片", MODULE_PATH + 'addAlbumPic', $layuiTabContext.width(), $layuiTabContext.height(), function () {
-                alert(2)
-            }, function () {
-                alert(1)
-            });
+            $.modal.openIframe("上传照片", MODULE_PATH + 'addAlbumPic', window.screen.width * 0.9, window.screen.height * 0.65);
         });
         $("#createAlbum").on("click", function () {
-            $.modal.openIframe("新增相册", MODULE_PATH + 'createAlbum', 700, 370, )
+            $.modal.openIframe("新增相册", MODULE_PATH + 'createAlbum', 700, 370, null, null)
         })
     }
 

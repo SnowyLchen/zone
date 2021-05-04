@@ -1,0 +1,108 @@
+/**
+ @ Name：layui.dragMove 图片查看器
+ @ Author：FQSong
+ @ License：MIT 
+ */
+
+/* 样式加载完毕的标识 */
+html #layuicss-dragMove {
+    display: none;
+    position: absolute;
+    width: 1989px;
+}
+
+.img_close {
+    height: 50px;
+    width: 50px;
+    position: relative;
+    top: -115px;
+    right: -135px;
+    color: rgba(0, 0, 0, 0.4);
+    line-height: 18px;
+    font-size: 14px;
+    text-align: center;
+}
+
+/*.imgZmList:hover {*/
+/*    background-color: rgba(255, 255, 255, 0.5);*/
+/*    font-size: 50px;*/
+/*    color: #333333;*/
+/*}*/
+
+.img_close:hover {
+    cursor: pointer;
+}
+
+#_photo {
+    width: 100%;
+}
+
+#_photo li {
+    margin: 0 8px 0 0;
+    width: 150px;
+    height: 113px;
+    list-style: none;
+    list-style-type: none;
+    display: inline-block;
+}
+
+/* 组件样式 */
+.dragMove-skin .layui-layer-content {
+    overflow: hidden !important;
+}
+
+.layui-dragMove {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column;
+}
+
+.layui-dragMove .dragMove-img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    -webkit-flex: 1;
+    flex: 1;
+    background-color: #eee;
+}
+
+.layui-dragMove .dragMove-img img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    user-select: none;
+    cursor: grab;
+}
+
+.layui-dragMove .dragMove-btn {
+    width: 100%;
+    padding: 10px 0;
+    text-align: center;
+    -webkit-flex: none;
+    flex: none;
+}
+
+.layui-dragMove .dragMove-btn .layui-btn {
+    height: 28px;
+    line-height: 28px;
+}
+
+.layui-icon-loading {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: block;
+    width: 36px;
+    height: 36px;
+    font-size: 36px;
+    line-height: 36px;
+}
+
+.transitioning {
+    -webkit-transition: -webkit-transform .24s ease-out;
+    transition: transform .24s ease-out;
+}

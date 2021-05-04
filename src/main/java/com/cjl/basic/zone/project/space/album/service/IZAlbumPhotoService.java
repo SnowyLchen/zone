@@ -1,5 +1,6 @@
 package com.cjl.basic.zone.project.space.album.service;
 
+import com.cjl.basic.zone.project.space.album.domain.Card;
 import com.cjl.basic.zone.project.space.album.domain.ZAlbum;
 import com.cjl.basic.zone.project.space.album.domain.ZPhoto;
 
@@ -63,7 +64,7 @@ public interface IZAlbumPhotoService {
      * @param accountId
      * @return
      */
-    List<ZAlbum> selectAlbumByAccountId(Integer accountId);
+    List<Card> selectAlbumByAccountId(Integer accountId);
 
 
     /**

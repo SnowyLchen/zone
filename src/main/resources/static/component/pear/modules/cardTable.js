@@ -88,7 +88,7 @@ layui.define(['table', 'laypage', 'jquery', 'element'], function (exports) {
                 option.count = 0;
             } else {
                 option.data = data.data;
-                option.count = option.data.length;
+                option.count = data.count;
             }
 
         } else {
@@ -113,10 +113,14 @@ layui.define(['table', 'laypage', 'jquery', 'element'], function (exports) {
         }
         $(option.elem).html(html);
         if (option.page) {
+            
             // 初始化分页组件
             laypage.render({
                 elem: 'cardpage'
-                , count: option.count, limit: option.limit, limits: option.limits, curr: option.currentPage
+                , count: option.count
+                , limit: option.limit
+                , limits: option.limits
+                , curr: option.currentPage
                 , layout: option.layout
                 , jump: function (obj, first) {
                     option.limit = obj.limit;
@@ -156,7 +160,7 @@ layui.define(['table', 'laypage', 'jquery', 'element'], function (exports) {
     function createCard(elem, linenum, item, no) {
         var line = 12 / linenum;
         var card =
-            '<div id=' + item.id + ' onclick="cardTableCheckedCard(' + elem + ',this)" class="layui-col-md' + line + ' ew-datagrid-item" data-index="' + no + '" data-number="1"> <div class="project-list-item"> <img class="project-list-item-cover" src="' + item.image + '"> <div class="project-list-item-body"> <h2>' + item.title + '</h2> <div class="project-list-item-text layui-text">' + item.remark + '</div> <div class="project-list-item-desc"> <span class="time">' + item.time + '</span> <div class="ew-head-list"></div> </div> </div > </div > </div > '
+            '<div id=' + item.id + ' onclick="cardTableCheckedCard(' + elem + ',this)" class="layui-col-md' + line + ' ew-datagrid-item" data-index="' + no + '" data-number="1"> <div class="project-list-item"> <img class="project-list-item-cover" src="' + item.image + '"> <div class="project-list-item-body"> <h2>' + (item.title == null ? "" : item.title) + '</h2> <div class="project-list-item-text layui-text">' + item.remark + '</div> <div class="project-list-item-desc"> <span class="time">' + item.time + '</span> <div class="ew-head-list"></div> </div> </div > </div > </div > '
         return card;
     }
 
@@ -166,6 +170,7 @@ layui.define(['table', 'laypage', 'jquery', 'element'], function (exports) {
         data.code = tempData[option.response.statusName];
         data.msg = tempData[option.response.msgName];
         data.count = tempData[option.response.countName];
+        
         var dataList = tempData[option.response.dataName];
         data.data = [];
         for (var i = 0; i < dataList.length; i++) {
@@ -182,9 +187,10 @@ layui.define(['table', 'laypage', 'jquery', 'element'], function (exports) {
 
     /** 同 步 请 求 获 取 数 据 */
     function getData(url) {
-        $.ajaxSettings.async = false;
         var redata = null;
+        $.ajaxSettings.async = false;
         $.getJSON(url, function (data) {
+            
             redata = data;
         }).fail(function () {
             redata = null;
@@ -194,7 +200,7 @@ layui.define(['table', 'laypage', 'jquery', 'element'], function (exports) {
 
     //卡片点击事件
     window.cardTableCheckedCard = function (elem, obj) {
-        debugger
+        
         $(obj).addClass('layui-table-click').siblings().removeClass('layui-table-click');
         var item = {};
         item.id = obj.id;

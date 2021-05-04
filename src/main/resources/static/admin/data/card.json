@@ -2,7 +2,8 @@
 	"code": 0,
 	"msg": "...",
 	"count": 3,
-	"data": [{
+	"data": [
+		{
 		"id": "1",
 		"image": "https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png",
 		"title": "Alipay",

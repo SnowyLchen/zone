@@ -1,5 +1,6 @@
 package com.cjl.basic.zone.project.space.album.mapper;
 
+import com.cjl.basic.zone.project.space.album.domain.Card;
 import com.cjl.basic.zone.project.space.album.domain.ZAlbum;
 import com.cjl.basic.zone.project.space.album.domain.ZPhoto;
 
@@ -60,7 +61,7 @@ public interface ZAlbumPhotoMapper {
      * @param accountId
      * @return
      */
-    List<ZAlbum> selectAlbumByAccountId(Integer accountId);
+    List<Card> selectAlbumByAccountId(Integer accountId);
 
 
     /**
@@ -78,5 +79,4 @@ public interface ZAlbumPhotoMapper {
      * @return
      */
     int deleteAlbumById(Integer aId);
-
 }

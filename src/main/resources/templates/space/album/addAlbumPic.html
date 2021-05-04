@@ -24,111 +24,88 @@
 <!--内容-->
 <div class="layui-card">
     <div class="layui-card-body">
-        <div class="layui-tab layui-tab-brief">
-            <ul class="layui-tab-title">
-                <li class="layui-this">照片</li>
-                <li>相册</li>
-            </ul>
-            <div class="layui-tab-content">
-                <div class="layui-tab-item layui-show">
-                    <div class="layui-row layui-col-space12">
-                        <div class="layui-col-sm12">
-                            <div class="layui-row">
-                                <div class="layui-col-sm12">
-                                    <button type="button" class="pear-btn pear-btn-primary" plain="" lay-event="add">
-                                        上传照片
-                                    </button>
-                                    <button plain="" type="button" class="pear-btn pear-btn-primary ">创建相册</button>
-                                </div>
-                            </div>
-                            <div class="layui-row">
-                                <div class="layui-col-sm12">
-                                    <table id="album-table" lay-filter="album-table"></table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-tab-item">
-                    内容02
-                </div>
+        <div class="layui-upload">
+            <div class="layui-upload-drag" id="uploadPic">
+                <i class="layui-icon"></i>
+                <p>支持多图上传，或将文件拖拽到此处</p>
             </div>
+            <blockquote class="layui-elem-quote layui-quote-nm" id="photo"
+                        style="margin-top: 10px;text-align: left;display: none;">
+                预览图：
+                <div class="layui-upload-list">
+                    <ul id="_photo">
+
+                    </ul>
+                </div>
+            </blockquote>
+            <p id="tipTxt"></p>
         </div>
+
     </div>
 </div>
 <div th:include="include::footer"></div>
-<!--表格操作界面-->
-<script type="text/html" id="oper">
-    <div class="layui-btn-group">
-        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">
-            <i class="layui-icon">&#xe642;</i>
-        </button>
-        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">
-            <i class="layui-icon">&#xe640;</i>
-        </button>
-    </div>
-</script>
+
 <script>
-    /**
-     * 初始化表格（卡片）
-     * */
-    function initCard(cardTable) {
-        cardTable.render({
-            elem: '#album-table',
-            url: '../../admin/data/card.json',
-            loading: true,//是否加载
-            linenum: 6, //每行数量 2,3,4,6
-            page: true, //是否分页
-            layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],//分页控件
-            request: {
-                pageName: 'page' //页码的参数名称，默认：page
-                , limitName: 'limit' //每页数据量的参数名，默认：limit
-                , idName: 'id'       //主键名称，默认：id
-                , titleName: 'title' //标题名称，默认：title
-                , imageName: 'image' //图片地址，默认：image
-                , remarkName: 'remark' //备注名称，默认：remark
-                , timeName: 'time' //时间名称，默认：time
-            },
-            response: {
-                statusName: 'code' //规定数据状态的字段名称，默认：code
-                , statusCode: 0 //规定成功的状态码，默认：0
-                , msgName: 'msg' //规定状态信息的字段名称，默认：msg
-                , countName: 'count' //规定数据总数的字段名称，默认：count
-                , dataName: 'data' //规定数据列表的字段名称，默认：data
-            },
-        })
+    //图片删除
+    function deletePic(Obj) {
+        Obj.parentNode.parentNode.removeChild(Obj.parentNode);
     }
 
-    layui.use(['table', 'form', 'jquery', 'card', 'cardTable'], function () {
-        let table = layui.table;
-        let form = layui.form;
-        let $ = layui.jquery;
-        let cardTable = layui.cardTable;
+    layui.use(['element', 'layer', 'form', 'upload', 'dragMove'], function () {
+        var $ = layui.jquery
+            , layer = layui.layer
+            , element = layui.element
+            , upload = layui.upload
+            , dragMove = layui.dragMove
+            , form = layui.from;
+        //多图片上传
+        upload.render({
+            elem: '#uploadPic'
+            , url: 'xxx.xxx' //改成您自己的上传接口
+            , multiple: true
+            , accept: 'images'
+            , exts: 'jpg|jpeg|png|gjf|webp|bmp|tif'
+            , drag: true
+            , allDone: function (obj) {
+                var txt = "共选择了 【" + obj.total + "】 张图片，其中，上传成功 【" + obj.successful + "】 张，失败 <span style='color:red'>【" + obj.aborted + "】 </span>张";
+                $("#tipTxt").html(txt);
+            }
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $("#photo").show();
+                    // var text = '<li style="display: inline;"><img style="width: 150px;height: 150px" src="' + result + '" alt="' + file.name + '" class="layui-upload-img"></li>';
+                    var lid = 'p' + index;
+                    $('#_photo').append(
+                        '<li id="' + lid + '">' +
+                        '<img name="imgZmList" src="' + result + '" width="150" height="113" alt="' + file.name + '">' +
+                        '<span class="icon pear-icon pear-icon-ashbin img_close"  onclick="deletePic(this)"></span>' +
+                        '</li>');
+                    picMove('p' + index)
+                });
+            }
+            , done: function (res) {
+                $('#demoText').html('');
+                //上传完毕
+                if (res.code == 200) {
+                    layer.msg('上传完毕', {icon: 1});
+                }
+            }
+        });
 
-        let MODULE_PATH = "/album";
-        // 初始化卡片
-        initCard(cardTable);
-        window.add = function () {
-            layer.open({
-                type: 2,
-                title: '新增相册',
-                shade: 0.1,
-                area: ['850px', '420px'],
-                content: MODULE_PATH + 'add'
+
+        function picMove(elem) {
+            //执行示例
+            dragMove.render({
+                elem: "#" + elem, //指向图片的父容器
+                layerArea: ["560px", "520px"], //弹窗的宽高，同layer的area，默认["960px","720px"]
+                layerShade: 0.6, //遮罩的透明度，同layer的shade，默认0.6
+                layerMove: false, //触发拖动的元素，同layer的move，这里默认禁止，可设置为'.layui-layer-title'
+                maxZoom: 1 //图片能放大的最大倍数，默认1倍
             });
         }
 
-        window.edit = function (obj) {
-            layer.open({
-                type: 2,
-                title: '上传照片',
-                shade: 0.1,
-                area: ['850px', '420px'],
-                content: MODULE_PATH + 'edit?menuId=' + obj.data.menuId
-            });
-        }
-    })
-
+    });
 </script>
 </body>
 </html>

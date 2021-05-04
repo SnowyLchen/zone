@@ -11,7 +11,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label">相册名称</label>
             <div class="layui-input-block">
-                <input class="layui-input" type="text" lay-verify="required" placeholder="相册名称" autocomplete="off"
+                <input class="layui-input" type="text" required lay-verify="required" placeholder="相册名称"
+                       autocomplete="off"
                        name="name">
             </div>
         </div>
@@ -41,6 +42,7 @@
 <div th:include="include::footer"></div>
 
 <script>
+
     layui.use(['form', 'jquery', 'common'], function () {
         let form = layui.form;
         let $ = layui.jquery;
@@ -53,7 +55,7 @@
                 type: 'post',
             }, function (res) {
                 common.ajaxMsg(res)
-            })
+            });
             return false;
         });
     })

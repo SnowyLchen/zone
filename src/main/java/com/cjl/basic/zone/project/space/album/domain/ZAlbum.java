@@ -1,14 +1,16 @@
 package com.cjl.basic.zone.project.space.album.domain;
 
-import java.io.Serializable;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
- * z_album
- * @author 
+ * 相册类
+ *
+ * @author
  */
 @Data
-public class ZAlbum implements Serializable {
+public class ZAlbum extends ZPhoto implements Serializable {
     private Integer aId;
 
     /**

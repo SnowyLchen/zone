@@ -1,8 +1,10 @@
 package com.cjl.basic.zone.project.space.album.service;
 
+import com.cjl.basic.zone.project.space.album.domain.Card;
 import com.cjl.basic.zone.project.space.album.domain.ZAlbum;
 import com.cjl.basic.zone.project.space.album.domain.ZPhoto;
 import com.cjl.basic.zone.project.space.album.mapper.ZAlbumPhotoMapper;
+import com.cjl.basic.zone.utils.dateutils.DateUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -44,8 +46,17 @@ public class ZAlbumPhotoServiceImpl implements IZAlbumPhotoService {
     }
 
     @Override
-    public List<ZAlbum> selectAlbumByAccountId(Integer accountId) {
-        return albumPhotoMapper.selectAlbumByAccountId(accountId);
+    public List<Card> selectAlbumByAccountId(Integer accountId) {
+        List<Card> cards = albumPhotoMapper.selectAlbumByAccountId(accountId);
+        for (Card card : cards) {
+            if (card.getImage() == null) {
+                card.setImage("admin/images/nothing.jpg");
+            }
+            if (card.getTime() == null) {
+                card.setTime(DateUtils.getDate());
+            }
+        }
+        return cards;
     }
 
     @Override

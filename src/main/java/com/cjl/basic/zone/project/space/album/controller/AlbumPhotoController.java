@@ -3,6 +3,7 @@ package com.cjl.basic.zone.project.space.album.controller;
 import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.framework.web.controller.BaseController;
 import com.cjl.basic.zone.framework.web.domain.AjaxResult;
+import com.cjl.basic.zone.framework.web.page.TableDataInfo;
 import com.cjl.basic.zone.project.manage.user.domain.User;
 import com.cjl.basic.zone.project.space.album.domain.ZAlbum;
 import com.cjl.basic.zone.project.space.album.domain.ZPhoto;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 /**
  * 相册模块
@@ -66,6 +69,21 @@ public class AlbumPhotoController extends BaseController {
         Integer accountId = ShiroAuthenticateUtils.getAccountId();
         zAlbum.setAccountId(accountId);
         return AjaxResult.success(albumPhotoService.addAlbum(zAlbum));
+    }
+
+    /**
+     * 查询相册
+     *
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getAlbums")
+    public TableDataInfo getAlbums() {
+        startPage();
+        Integer accountId = ShiroAuthenticateUtils.getAccountId();
+        TableDataInfo dataTable = getDataTable(albumPhotoService.selectAlbumByAccountId(accountId));
+        System.out.println(dataTable.getCount() + "--" + dataTable.getData().size());
+        return dataTable;
     }
 
 }
