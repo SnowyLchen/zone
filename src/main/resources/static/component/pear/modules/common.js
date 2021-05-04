@@ -258,4 +258,39 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
             init();
         }
     }
+    $.modal = {
+        /**
+         * @Description [弹出层]
+         * @author xj
+         * @param null []
+         * @return [返回值]
+         * @date 2021/5/4 17:35
+         */
+        openIframe: function (title, url, width, height, btnList) {
+            layui.use('layer', function () { //独立版的layer无需执行这一句
+                var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+                var opt = {
+                    type: 2 //此处以iframe举例
+                    , title: title || '写日志'
+                    , area: [$(document).width() * 0.8 + 'px', $(document).height() * 0.8 + 'px']
+                    , shade: 0
+                    , maxmin: true
+                    , content: url
+                    , btn: btnList || ['继续弹出', '全部关闭'] //只是为了演示
+                    , yes: function () {
+                        alert(1);
+                    }
+                    , btn2: function () {
+                        layer.closeAll();
+                    }
+
+                    , zIndex: layer.zIndex //重点1
+                    , success: function (layero) {
+                        layer.setTop(layero); //重点2
+                    }
+                };
+                layer.open(opt);
+            });
+        }
+    }
 })(jQuery)
