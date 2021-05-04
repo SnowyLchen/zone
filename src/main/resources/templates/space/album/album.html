@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <div th:include="include::header"></div>
+    <style>
+        h1 {
+            margin-top: 200px;
+            color: #5FB878;
+        }
+
+        .layui-card-body {
+            text-align: center;
+        }
+
+        /*    隐藏表格工具栏元素、表头元素*/
+        .layui-table-tool, .layui-table-header {
+            display: none;
+        }
+    </style>
+</head>
+<body class="pear-container">
+<!--内容-->
+<div class="layui-card">
+    <div class="layui-card-body">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">照片</li>
+                <li>相册</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-row layui-col-space12">
+                        <div class="layui-col-sm12">
+                            <div class="layui-row">
+                                <div class="layui-col-sm12">
+                                    <button type="button" class="pear-btn pear-btn-primary" plain="" id="uploadPic">
+                                        上传照片
+                                    </button>
+                                    <button plain="" type="button" class="pear-btn pear-btn-primary" id="createAlbum">
+                                        创建相册
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-col-sm12">
+                                    <table id="album-table" lay-filter="album-table"></table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-tab-item">
+                    内容02
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<!--表格操作界面-->
+<script type="text/html" id="oper">
+    <div class="layui-btn-group">
+        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">
+            <i class="layui-icon">&#xe642;</i>
+        </button>
+        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">
+            <i class="layui-icon">&#xe640;</i>
+        </button>
+    </div>
+</script>
+<script>
+    /**
+     * 初始化表格（卡片）
+     * */
+    function initCard(cardTable) {
+        cardTable.render({
+            elem: '#album-table',
+            url: '../../admin/data/card.json',
+            loading: true,//是否加载
+            linenum: 6, //每行数量 2,3,4,6
+            page: true, //是否分页
+            layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],//分页控件
+            request: {
+                pageName: 'page' //页码的参数名称，默认：page
+                , limitName: 'limit' //每页数据量的参数名，默认：limit
+                , idName: 'id'       //主键名称，默认：id
+                , titleName: 'title' //标题名称，默认：title
+                , imageName: 'image' //图片地址，默认：image
+                , remarkName: 'remark' //备注名称，默认：remark
+                , timeName: 'time' //时间名称，默认：time
+            },
+            response: {
+                statusName: 'code' //规定数据状态的字段名称，默认：code
+                , statusCode: 0 //规定成功的状态码，默认：0
+                , msgName: 'msg' //规定状态信息的字段名称，默认：msg
+                , countName: 'count' //规定数据总数的字段名称，默认：count
+                , dataName: 'data' //规定数据列表的字段名称，默认：data
+            },
+        })
+    }
+
+    layui.use(['table', 'form', 'jquery', 'card', 'cardTable'], function () {
+        let table = layui.table;
+        let form = layui.form;
+        let $ = layui.jquery;
+        let cardTable = layui.cardTable;
+        var $layuiTabContext = $('.layui-tab-content');
+        let MODULE_PATH = "/album/operator/";
+        // 初始化卡片
+        initCard(cardTable);
+
+        $("#uploadPic").on("click", function () {
+            layer.open({
+                type: 2,
+                title: '上传照片',
+                shade: 0.1,
+                area: [$layuiTabContext.width() + 'px', $layuiTabContext.height() + 'px'],
+                content: MODULE_PATH + 'createAlbum'
+            });
+        })
+        $("#createAlbum").on("click", function () {
+            layer.open({
+                type: 2,
+                title: '新增相册',
+                shade: 0.1,
+                area: [$layuiTabContext.width() + 'px', $layuiTabContext.height() + 'px'],
+                content: MODULE_PATH + 'addAlbum'
+            });
+        })
+
+    })
+
+</script>
+</body>
+</html>

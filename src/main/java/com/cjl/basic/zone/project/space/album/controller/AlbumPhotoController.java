@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -31,7 +32,15 @@ public class AlbumPhotoController extends BaseController {
     public String album(ModelMap mmap) {
         User user = ShiroAuthenticateUtils.getUserByToken();
         mmap.put("user", user);
-        return "space/album";
+        return "space/album/album";
+    }
+
+    /**
+     * 空间相册模块-新增相册
+     */
+    @GetMapping("/operator/{type}")
+    public String addAlbum(ModelMap mmap, @PathVariable String type) {
+        return "space/album/" + type;
     }
 
     /**
