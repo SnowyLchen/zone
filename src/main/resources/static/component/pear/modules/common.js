@@ -266,26 +266,30 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
          * @return [返回值]
          * @date 2021/5/4 17:35
          */
-        openIframe: function (title, url, width, height, btnList) {
+        openIframe: function (title, url, width, height, yes, collBack) {
             layui.use('layer', function () { //独立版的layer无需执行这一句
                 var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
                 var opt = {
                     type: 2 //此处以iframe举例
                     , title: title || ''
-                    , area: [width||($(document).width() * 0.8) + 'px', height||($(document).height() * 0.8) + 'px']
+                    , area: [width || ($(document).width() * 0.8) + 'px', height || ($(document).height() * 0.8) + 'px']
                     , shade: 0.3
                     , maxmin: true
                     , content: url
-                    , btn: btnList || ['确认', '关闭'] //只是为了演示
-                    , yes: function () {
-                        alert(1);
+                    , btn: ['确认', '关闭'] //只是为了演示
+                    , yes: yes ? yes : function () {
+                        if (typeof yes == 'function') {
+                            yes()
+                        }
                     }
                     , btn2: function () {
                         layer.closeAll();
                     }
                     , zIndex: layer.zIndex //重点1
                     , success: function (layero) {
-                        layer.setTop(layero); //重点2
+                        if (typeof collBack == 'function') {
+                            collBack(layero)
+                        }
                     }
                 };
                 layer.open(opt);
