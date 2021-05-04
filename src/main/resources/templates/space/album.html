@@ -19,6 +19,101 @@
             display: none;
         }
 
+        .project-list-item {
+            background-color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .project-list-item:hover {
+            box-shadow: 2px 0 4px rgba(0, 21, 41, .35);
+        }
+
+        .project-list-item .project-list-item-cover {
+            width: 100%;
+            height: 180px;
+            display: block;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+        }
+
+        .project-list-item-body {
+            padding: 20px;
+            border: 1px solid #e8e8e8;
+        }
+
+        .project-list-item .project-list-item-body > h2 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .project-list-item .project-list-item-text {
+            height: 40px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .project-list-item .project-list-item-desc {
+            position: relative;
+        }
+
+        .project-list-item .project-list-item-desc .time {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .project-list-item .project-list-item-desc .ew-head-list {
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .ew-head-list .ew-head-list-item:first-child {
+            margin-left: 0;
+        }
+
+        .ew-head-list .ew-head-list-item {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1px solid #fff;
+            margin-left: -10px;
+        }
+
+        .ew-head-list .ew-head-list-item {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1px solid #fff;
+            margin-left: -10px;
+        }
+
+        .cloud-card-component {
+            padding: 20px;
+        }
+
+        .cloud-card-component .layui-laypage .layui-laypage-curr .layui-laypage-em {
+            border-radius: 0px !important;
+        }
+
+        .ew-table-loading {
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .ew-table-loading > i {
+            color: #999;
+            font-size: 30px;
+        }
+
+        .ew-table-loading.ew-loading-float {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
     </style>
 </head>
 <body class="pear-container">
@@ -27,64 +122,24 @@
     <div class="layui-card-body">
         <div class="layui-tab layui-tab-brief">
             <ul class="layui-tab-title">
-                <li class="layui-this">我的日志</li>
-                <li>私密日志</li>
+                <li class="layui-this">照片</li>
+                <li>相册</li>
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
-                    <div class="layui-row layui-col-space10">
-                        <!--我的日志左边部分-->
-                        <div class="layui-col-sm10">
-                            <!--左边部分第一行-->
+                    <div class="layui-row layui-col-space12">
+                        <div class="layui-col-sm12">
                             <div class="layui-row">
                                 <div class="layui-col-sm12">
-                                    <button type="button" class="layui-btn" lay-event="add">写日志</button>
-                                    <button type="button" class="layui-btn" onclick="tabTable(this)">切换到摘要</button>
+                                    <button type="button" class="pear-btn pear-btn-primary" plain="" lay-event="add">
+                                        上传照片
+                                    </button>
+                                    <button plain="" type="button" class="pear-btn pear-btn-primary ">创建相册</button>
                                 </div>
                             </div>
-                            <!--左边部分第二行-->
                             <div class="layui-row">
                                 <div class="layui-col-sm12">
-                                    <table id="user-table" lay-filter="user-table"></table>
-                                </div>
-                            </div>
-                        </div>
-                        <!--我的日志右边部分-->
-                        <div class="layui-col-sm2">
-                            <div class="layui-bg-gray" style="padding: 10px;">
-                                <!--右边部分第一行-->
-                                <div class="layui-row layui-col-space15">
-                                    <div class="layui-col-md12">
-                                        <div class="layui-card">
-                                            <div class="layui-card-header">日志分类</div>
-                                            <div class="layui-card-body">
-                                                <ul id="layui-custom-ul"></ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--右边部分第二行-->
-                                <div class="layui-row layui-col-space15">
-                                    <div class="layui-col-md12">
-                                        <div class="layui-card">
-                                            <div class="layui-card-header">搜索日志</div>
-                                            <div class="layui-card-body">
-                                                <input type="text" name="title" autocomplete="off" placeholder="请输入关键字"
-                                                       class="layui-input">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--右边部分第三行-->
-                                <div class="layui-row layui-col-space15">
-                                    <div class="layui-col-md12">
-                                        <div class="layui-card">
-                                            <div class="layui-card-header">评论审核</div>
-                                            <div class="layui-card-body">
-                                                56456
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <table id="album-table" lay-filter="album-table"></table>
                                 </div>
                             </div>
                         </div>
@@ -102,205 +157,21 @@
 <script type="text/html" id="oper">
     <div class="layui-btn-group">
         <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">
-            <i class="layui-icon">&#xe642;</i>编辑
+            <i class="layui-icon">&#xe642;</i>
         </button>
         <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">
-            <i class="layui-icon">&#xe640;</i>删除
+            <i class="layui-icon">&#xe640;</i>
         </button>
     </div>
 </script>
 <script>
-
-
-    tableInit();
-
-    /**
-     * 切换表格类型
-     * */
-    function tabTable(ele) {
-        $('#user-table').html('');
-        debugger
-        if ($(ele).attr('tableType') == 'card') {
-            $(ele).attr('tableType', 'table')
-            tableInit();
-            $(ele).text('切换到摘要');
-        } else {
-            $(ele).attr('tableType', 'card');
-            $('#user-table').parent().find('div[lay-id=user-table]').remove();
-            tableInit1();
-            $(ele).text('切换到列表');
-        }
-    }
-
-    /**
-     * 初始化表格
-     */
-    function tableInit() {
-        layui.use(['table', 'form', 'jquery'], function () {
-            let table = layui.table;
-            let form = layui.form;
-            let $ = layui.jquery;
-
-            let MODULE_PATH = "/system/user/";
-
-            let cols = [
-                [
-                    {
-                        type: 'checkbox',
-                        templet: function () {
-                            debugger
-                            return 's';
-                        }
-                    },
-                    {
-                        field: 'titleName',
-                        align: 'left',
-                        // width: 900
-                    },
-                    {
-                        field: 'createTime',
-                        align: 'right',
-                        templet: '#user-createTime'
-                    },
-                    {
-                        align: 'right',
-                        templet: '#oper'
-                    }
-                ]
-            ];
-            table.render({
-                elem: '#user-table',
-                url: '../../journal/data/table.json',
-                page: true,
-                cols: cols,
-                skin: 'line',
-                defaultToolbar: [],
-                even: true,
-            });
-
-            table.on('tool(user-table)', function (obj) {
-                if (obj.event === 'remove') {
-                    window.remove(obj);
-                } else if (obj.event === 'edit') {
-                    window.edit(obj);
-                }
-            });
-
-            table.on('toolbar(user-table)', function (obj) {
-                if (obj.event === 'add') {
-                    window.add();
-                } else if (obj.event === 'refresh') {
-                    window.refresh();
-                } else if (obj.event === 'batchRemove') {
-                    window.batchRemove(obj);
-                }
-            });
-
-            form.on('submit(user-query)', function (data) {
-                table.reload('user-table', {
-                    where: data.field
-                })
-                return false;
-            });
-
-            form.on('switch(user-enable)', function (obj) {
-                layer.tips(this.value + ' ' + this.name + '：' + obj.elem.checked, obj.othis);
-            });
-
-            window.add = function () {
-                layer.msg("新增");
-            }
-
-            window.edit = function (obj) {
-                layer.msg("修改");
-            }
-
-            window.remove = function (obj) {
-                layer.confirm('确定要删除该用户', {
-                    icon: 3,
-                    title: '提示'
-                }, function (index) {
-                    layer.close(index);
-                    let loading = layer.load();
-                    $.ajax({
-                        url: MODULE_PATH + "remove/" + obj.data['userId'],
-                        dataType: 'json',
-                        type: 'delete',
-                        success: function (result) {
-                            layer.close(loading);
-                            if (result.success) {
-                                layer.msg(result.msg, {
-                                    icon: 1,
-                                    time: 1000
-                                }, function () {
-                                    obj.del();
-                                });
-                            } else {
-                                layer.msg(result.msg, {
-                                    icon: 2,
-                                    time: 1000
-                                });
-                            }
-                        }
-                    })
-                });
-            }
-
-            window.batchRemove = function (obj) {
-                let data = table.checkStatus(obj.config.id).data;
-                if (data.length === 0) {
-                    layer.msg("未选中数据", {
-                        icon: 3,
-                        time: 1000
-                    });
-                    return false;
-                }
-                let ids = "";
-                for (let i = 0; i < data.length; i++) {
-                    ids += data[i].userId + ",";
-                }
-                ids = ids.substr(0, ids.length - 1);
-                layer.confirm('确定要删除这些用户', {
-                    icon: 3,
-                    title: '提示'
-                }, function (index) {
-                    layer.close(index);
-                    let loading = layer.load();
-                    $.ajax({
-                        url: MODULE_PATH + "batchRemove/" + ids,
-                        dataType: 'json',
-                        type: 'delete',
-                        success: function (result) {
-                            layer.close(loading);
-                            if (result.success) {
-                                layer.msg(result.msg, {
-                                    icon: 1,
-                                    time: 1000
-                                }, function () {
-                                    table.reload('user-table');
-                                });
-                            } else {
-                                layer.msg(result.msg, {
-                                    icon: 2,
-                                    time: 1000
-                                });
-                            }
-                        }
-                    })
-                });
-            }
-
-            window.refresh = function (param) {
-                table.reload('user-table');
-            }
-        })
-    }
+    tableInit1()
 
     /**
      * 初始化表格（卡片）
      * */
     function tableInit1() {
-        layui.use(['table', 'form', 'jquery', 'card'], function () {
+        layui.use(['table', 'form', 'jquery', 'card', 'card'], function () {
             let table = layui.table;
             let form = layui.form;
             let $ = layui.jquery;
@@ -308,95 +179,35 @@
 
             let MODULE_PATH = "/system/user/";
 
-            card.render({
-                elem: '#user-table',
-                url: '../../journal/data/card.json',
-                lineSize: 2,
-                done: function () {
-                    alert(1);
+            var t = card.render({
+                elem: '#album-table',
+                url: '../../admin/data/card.json',
+                loading: true,//是否加载
+                limit: 0, //每页数量默认是每行数量的双倍
+                linenum: 6, //每行数量 2,3,4,6
+                currentPage: 1,//当前页
+                data: [],       //静态数据
+                limits: [],     //页码
+                page: true, //是否分页
+                layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],//分页控件
+                request: {
+                    pageName: 'page' //页码的参数名称，默认：page
+                    , limitName: 'limit' //每页数据量的参数名，默认：limit
+                    , idName: 'id'       //主键名称，默认：id
+                    , titleName: 'title' //标题名称，默认：title
+                    , imageName: 'image' //图片地址，默认：image
+                    , remarkName: 'remark' //备注名称，默认：remark
+                    , timeName: 'time' //时间名称，默认：time
                 },
-                templet: function (item) {
-                    var ele = '<div class="project-list-item-body">';
-                    //标题
-                    ele += '<h2>' + item.titleName + '</h2>';
-                    //第二行
-                    ele += '<div class="layui-row project-list-item-desc">';
-                    //第二行左边部分
-                    ele += '<div class="layui-col-sm4"><span class="time">' + item.createTime + '</span></div>';
-                    //第二行右边部分
-                    ele += '<div class="layui-col-sm3 layui-col-sm-offset5">' +
-                        '<div class="layui-btn-group">\n' +
-                        '        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">\n' +
-                        '            <i class="layui-icon">&#xe642;</i>编辑\n' +
-                        '        </button>\n' +
-                        '        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">\n' +
-                        '            <i class="layui-icon">&#xe640;</i>删除\n' +
-                        '        </button>\n' +
-                        '</div>' +
-                        '</div>';
-                    ele += '</div></div>';
-
-                    return ele;
-                }
+                response: {
+                    statusName: 'code' //规定数据状态的字段名称，默认：code
+                    , statusCode: 0 //规定成功的状态码，默认：0
+                    , msgName: 'msg' //规定状态信息的字段名称，默认：msg
+                    , countName: 'count' //规定数据总数的字段名称，默认：count
+                    , dataName: 'data' //规定数据列表的字段名称，默认：data
+                },
             })
-
         })
-    }
-
-    /**
-     * 初始化无序列表
-     * */
-    ulInit();
-
-    /**
-     * 初始化列表
-     */
-    function ulInit(options) {
-        var opt = {
-            //元素
-            ele: 'layui-custom-ul',
-            //数据
-            data: [{
-                'logName': '日志1'
-            }, {
-                'logName': '日志2'
-            }, {
-                'logName': '日志3'
-            }, {
-                'logName': '日志4'
-            }, {
-                'logName': '日志5'
-            }],
-            templet: function (v) {
-                return '<div class="layui-li">' + v.logName + '</div>';
-            },
-            //隔行换色
-            even: true,
-        };
-
-        /**
-         * 初始化
-         */
-        function init() {
-            var $ul = $('#' + opt.ele);
-            $ul.css('text-align', 'left');
-            opt.data.forEach(function (value, index, array) {
-                $ul.append('<li style="padding: 5px">' + opt.templet(value) + '</li>');
-            });
-            if (opt.even) {
-                $ul.find('li:odd').css('background', '#f2f2f2');
-            }
-        }
-
-        init();
-    }
-
-    sortButton();
-
-    /**
-     * 排序按钮
-     */
-    function sortButton() {
     }
 </script>
 </body>

@@ -26,9 +26,22 @@ layui.define(['table', 'laypage', 'jquery', 'element'], function (exports) {
             done: opt.done ? opt.done : function () {
                 alert("跳转页面");
             },
+            click: opt.click ? opt.click : function (item) {
+                console.log(item)
+            },
             //卡片内部模板
             templet: opt.templet ? opt.templet : function (item) {
-                return '<img class="project-list-item-cover" src="' + item.image + '"> <div class="project-list-item-body"> <h2>' + item.title + '</h2> <div class="project-list-item-text layui-text">' + item.remark + '</div> <div class="project-list-item-desc"> <span class="time">' + item.time + '</span> <div class="ew-head-list"> <img class="ew-head-list-item" lay-tips="曲丽丽" lay-offset="0,-5px" src="https://gw.alipayobjects.com/zos/rmsportal/ZiESqWwCXBRQoaPONSJe.png"> <img class="ew-head-list-item" lay-tips="王昭君" lay-offset="0,-5px" src="https://gw.alipayobjects.com/zos/rmsportal/tBOxZPlITHqwlGjsJWaF.png"> <img class="ew-head-list-item" lay-tips="董娜娜" lay-offset="0,-5px" src="https://gw.alipayobjects.com/zos/rmsportal/sBxjgqiuHMGRkIjqlQCd.png"> </div> </div> </div>'
+                return '<img class="project-list-item-cover" src="' + item.image + '"> ' +
+                    '<div class="project-list-item-body">' +
+                    ' <h2>' + item.title + '</h2> ' +
+                    '<div class="project-list-item-text layui-text">' + item.remark + '</div>' +
+                    ' <div class="project-list-item-desc">' +
+                    ' <span class="time">' + item.time + '</span> ' +
+                    '<div class="ew-head-list">' +
+                    ' <img class="ew-head-list-item" lay-tips="曲丽丽" lay-offset="0,-5px" src="https://gw.alipayobjects.com/zos/rmsportal/ZiESqWwCXBRQoaPONSJe.png"> ' +
+                    '<img class="ew-head-list-item" lay-tips="王昭君" lay-offset="0,-5px" src="https://gw.alipayobjects.com/zos/rmsportal/tBOxZPlITHqwlGjsJWaF.png"> ' +
+                    '<img class="ew-head-list-item" lay-tips="董娜娜" lay-offset="0,-5px" src="https://gw.alipayobjects.com/zos/rmsportal/sBxjgqiuHMGRkIjqlQCd.png"> ' +
+                    '</div> </div> </div>'
             }
         }
         // 根 据 请 求 方 式 获 取 数 据
@@ -48,10 +61,22 @@ layui.define(['table', 'laypage', 'jquery', 'element'], function (exports) {
             , count: option.data.length
             , layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
             , jump: function (obj) {
-                console.log(obj)
+                //模拟渲染
+                // document.getElementById('biuuu_city_list').innerHTML = function () {
+                //     var arr = []
+                //         , thisData = data.concat().splice(obj.curr * obj.limit - obj.limit, obj.limit);
+                //     layui.each(thisData, function (index, item) {
+                //         arr.push('<li>' + item + '</li>');
+                //     });
+                //     return arr.join('');
+                // }();
             }
         });
 
+        // 卡片点击事件回调
+        $('.project-list-item .project-list-item-cover').on("click", function () {
+            option.click(option.data[$(this).parent().parent().attr("data-index")]);
+        });
         return new pearCard(option);
     }
 
@@ -70,9 +95,7 @@ layui.define(['table', 'laypage', 'jquery', 'element'], function (exports) {
 
         var content = "<div class='layui-row layui-col-space30'>";
         $.each(options.data, function (i, item) {
-
-            content += createCard(item, options);
-
+            content += createCard(i, item, options);
         })
         content += "</div>"
         return content;
@@ -80,11 +103,10 @@ layui.define(['table', 'laypage', 'jquery', 'element'], function (exports) {
 
 
     /** 创建一个卡片 */
-    function createCard(item, options) {
-
+    function createCard(i, item, options) {
         // var card =
         // 	'<div class="layui-col-md3 ew-datagrid-item" data-index="0" data-number="1"> <div class="project-list-item"> <img class="project-list-item-cover" src="'+item.image+'"> <div class="project-list-item-body"> <h2>'+item.title+'</h2> <div class="project-list-item-text layui-text">'+item.remark+'</div> <div class="project-list-item-desc"> <span class="time">'+item.time+'</span> <div class="ew-head-list"> <img class="ew-head-list-item" lay-tips="曲丽丽" lay-offset="0,-5px" src="https://gw.alipayobjects.com/zos/rmsportal/ZiESqWwCXBRQoaPONSJe.png"> <img class="ew-head-list-item" lay-tips="王昭君" lay-offset="0,-5px" src="https://gw.alipayobjects.com/zos/rmsportal/tBOxZPlITHqwlGjsJWaF.png"> <img class="ew-head-list-item" lay-tips="董娜娜" lay-offset="0,-5px" src="https://gw.alipayobjects.com/zos/rmsportal/sBxjgqiuHMGRkIjqlQCd.png"> </div> </div> </div> </div> </div>'
-        var card = '<div class="layui-col-md' + Math.floor(12 / options.lineSize) + ' ew-datagrid-item" data-index="0" data-number="1"> <div class="project-list-item">';
+        var card = '<div class="layui-col-md' + Math.floor(12 / options.lineSize) + ' ew-datagrid-item" data-index="' + i + '" data-number="1"> <div class="project-list-item">';
         card += options.templet(item);
         card += '</div> </div>';
         return card;
