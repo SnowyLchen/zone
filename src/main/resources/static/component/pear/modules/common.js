@@ -271,22 +271,32 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
                 var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
                 var opt = {
                     type: 2 //此处以iframe举例
-                    , title: title || ''
-                    , area: [width || ($(document).width() * 0.8) + 'px', height || ($(document).height() * 0.8) + 'px']
-                    , shade: 0.3
-                    , maxmin: true
-                    , content: url
-                    , btn: ['确认', '关闭'] //只是为了演示
-                    , yes: yes ? yes : function () {
+                    ,
+                    title: title || ''
+                    ,
+                    area: [(width || ($(document).width() * 0.8)) + 'px', (height || ($(document).height() * 0.8)) + 'px']
+                    ,
+                    shade: 0.3
+                    ,
+                    maxmin: true
+                    ,
+                    content: url
+                    ,
+                    btn: ['确认', '关闭'] //只是为了演示
+                    ,
+                    yes: yes ? yes : function () {
                         if (typeof yes == 'function') {
                             yes()
                         }
                     }
-                    , btn2: function () {
+                    ,
+                    btn2: function () {
                         layer.closeAll();
                     }
-                    , zIndex: layer.zIndex //重点1
-                    , success: function (layero) {
+                    ,
+                    zIndex: layer.zIndex //重点1
+                    ,
+                    success: function (layero) {
                         if (typeof collBack == 'function') {
                             collBack(layero)
                         }
