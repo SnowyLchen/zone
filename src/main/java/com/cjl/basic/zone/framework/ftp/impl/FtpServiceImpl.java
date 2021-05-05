@@ -85,7 +85,6 @@ public class FtpServiceImpl implements FtpService {
         }
         try {
             ftpClient = ftpClientPool.borrowObject();
-            ftpClient.setFileTransferMode(ftpClient.BINARY_FILE_TYPE);
             StringTokenizer s = new StringTokenizer(remotePath, "/");
             s.countTokens();
             String pathName = "";
@@ -100,7 +99,7 @@ public class FtpServiceImpl implements FtpService {
                 }
             }
             ftpClient.changeWorkingDirectory(pathName);
-            System.out.println("文件名称：" + fileName + "****文件大小：" + inputStream.available());
+            System.out.println("文件名称：" + fileName + "****文件大小：" + inputStream.available() / 1024 + "kb");
             boolean b = ftpClient.storeFile(fileName, inputStream);
             System.out.println(ftpClient.getReplyCode());
             return b;

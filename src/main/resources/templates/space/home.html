@@ -20,6 +20,11 @@
     .toast-top-center {
         margin-top: calc(50% - 750px);
     }
+
+    .layuiadmin-card-status img {
+        width: 300px;
+        height: 150px;
+    }
 </style>
 <body class="pear-container">
 <!--内容-->
@@ -135,7 +140,6 @@
 <script th:src="@{component/layui/lay/modules/laydate.js}"></script>
 <script>
     var signTimes = [[${signTimes}]];
-    debugger
 
     function initDate(laydate, common) {
         var data = [];
@@ -329,7 +333,7 @@
         });
     }
 
-    window.onload = layui.use(['tinymce', 'notice', 'common', 'util', 'code', 'popup', 'layer', 'echarts', 'element', 'button', 'count', 'topBar', 'laydate'], function () {
+    window.onload = layui.use(['tinymce', 'notice', 'common', 'util', 'code', 'popup', 'layer', 'echarts', 'element', 'button', 'count', 'topBar', 'laydate', 'dragMove'], function () {
         var $ = layui.jquery,
             layer = layui.layer,
             popup = layui.popup,
@@ -339,6 +343,7 @@
             common = layui.common,
             button = layui.button,
             echarts = layui.echarts,
+            dragMove = layui.dragMove,
             tinymce = layui.tinymce,
             laydate = layui.laydate,
             util = layui.util;
@@ -370,6 +375,14 @@
         $('#refresh').on('click', function () {
             getDynamic(common, $, notice)
         })
+        //执行示例
+        dragMove.render({
+            elem: "#dynamic", //指向图片的父容器
+            layerArea: ["960px", "720px"],
+            layerShade: 0.6, //遮罩的透明度，同layer的shade，默认0.6
+            layerMove: false, //触发拖动的元素，同layer的move，这里默认禁止，可设置为'.layui-layer-title'
+            maxZoom: 3 //图片能放大的最大倍数，默认1倍
+        });
     });
 
 </script>

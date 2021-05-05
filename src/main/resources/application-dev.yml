@@ -1,5 +1,5 @@
 # 项目相关配置
-uustop:
+zone:
   # 名称
   name: 个人空间
   # 版本
@@ -12,7 +12,7 @@ uustop:
   profileUrl: /imgUpload/
   # 获取ip地址开关
   addressEnabled: true
-  reloadImgUrl: http://39.105.42.13:100
+  reloadImgUrl: http://39.102.117.87:65400
 
 # 开发环境配置
 server:
@@ -65,7 +65,7 @@ spring:
       # 主库数据源
       master:
         url: jdbc:mysql://39.102.117.87/tale?useUnicode=true&characterEncoding=utf8
-#        url: jdbc:mysql://localhost/tale?useUnicode=true&characterEncoding=utf8
+        #        url: jdbc:mysql://localhost/tale?useUnicode=true&characterEncoding=utf8
         username: root
         password: Cjl19980112!
       # 从库数据源
@@ -199,7 +199,7 @@ zx-ftp:
 
   #FTP连接属性配置
   #ip
-#  host: 39.105.42.13
+  #  host: 39.105.42.13
   host: 39.102.117.87
   #端口
   port: 60021
@@ -208,7 +208,7 @@ zx-ftp:
   #密码
   password: cjl19980112
   #连接是否为主动模式
-  passiveMode: false
+  passiveMode: true
   #编码
   encoding: UTF-8
   #超时时间

@@ -34,7 +34,7 @@ public class CommonController extends BaseController {
     @ResponseBody
     @RequestMapping("/upload")
     public AjaxResult upload(HttpServletRequest request, @RequestParam("edit") MultipartFile[] edit) {
-        List<Map<String, String>> files = new ArrayList<>();
+        List<ZImage> files = new ArrayList<>();
         for (MultipartFile multipartFile : edit) {
             files.add(UploadPathUtils.thumbnail(multipartFile,ftpService));
         }
