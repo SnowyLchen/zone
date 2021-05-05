@@ -18,10 +18,10 @@ public interface ZAlbumPhotoMapper {
     /**
      * 插入照片
      *
-     * @param record
+     * @param zAlbum
      * @return
      */
-    int addPhoto(ZPhoto record);
+    int addPhoto(ZAlbum zAlbum);
 
     /**
      * 查询单张照片
@@ -42,10 +42,10 @@ public interface ZAlbumPhotoMapper {
     /**
      * 按相册查询照片
      *
-     * @param accountId
+     * @param id
      * @return
      */
-    ZPhoto selectPhotoByAlbum(Integer accountId);
+    List<ZPhoto> selectPhotoByAlbum(Integer id);
 
     /**
      * 新增相册

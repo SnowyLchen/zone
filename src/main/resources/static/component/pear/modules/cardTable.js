@@ -1,4 +1,4 @@
-layui.define(['table', 'laypage', 'jquery', 'element'], function (exports) {
+layui.define(['table', 'laypage', 'jquery', 'element', 'dropdown', 'form'], function (exports) {
     "use strict";
     var filePath = layui.cache.modules.cardTable
         .substr(0, layui.cache.modules.cardTable.lastIndexOf('/'));
@@ -8,6 +8,7 @@ layui.define(['table', 'laypage', 'jquery', 'element'], function (exports) {
         $ = layui.jquery,
         element = layui.element,
         laypage = layui.laypage;
+    var dropdown = layui.dropdown;
     var _instances = {};  // 记录所有实例
     /* 默认参数 */
     var defaultOption = {
@@ -37,6 +38,9 @@ layui.define(['table', 'laypage', 'jquery', 'element'], function (exports) {
             , countName: 'count' //规定数据总数的字段名称，默认：count
             , dataName: 'data' //规定数据列表的字段名称，默认：data
         },
+        click: function (item) {
+
+        },
         // 完 成 函 数
         done: function () {
 
@@ -60,10 +64,11 @@ layui.define(['table', 'laypage', 'jquery', 'element'], function (exports) {
         var option = this.option;
         var url = option.url;
         var html = "";
-        html += option.loading == true ? '      <div class="ew-table-loading">' : '      <div class="ew-table-loading layui-hide">';
+        html += option.loading == true ? '<div class="ew-table-loading">' : '<div class="ew-table-loading layui-hide">';
         html += '         <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i>';
         html += '      </div>';
         $(option.elem).html(html);
+
         // 根 据 请 求 方 式 获 取 数 据
         html = "";
         if (!!url) {
@@ -113,7 +118,6 @@ layui.define(['table', 'laypage', 'jquery', 'element'], function (exports) {
         }
         $(option.elem).html(html);
         if (option.page) {
-            
             // 初始化分页组件
             laypage.render({
                 elem: 'cardpage'
@@ -131,11 +135,12 @@ layui.define(['table', 'laypage', 'jquery', 'element'], function (exports) {
                 }
             });
         }
-    }
+        option.done();
+    };
     card.prototype.reload = function (opt) {
         this.initOptions(this.option ? $.extend(true, this.option, opt) : opt);
         this.init();  // 初始化表格
-    }
+    };
 
     function createComponent(elem, linenum, data) {
         var html = "<div class='cloud-card-component'>"
@@ -160,8 +165,24 @@ layui.define(['table', 'laypage', 'jquery', 'element'], function (exports) {
     function createCard(elem, linenum, item, no) {
         var line = 12 / linenum;
         var card =
-            '<div id=' + item.id + ' onclick="cardTableCheckedCard(' + elem + ',this)" class="layui-col-md' + line + ' ew-datagrid-item" data-index="' + no + '" data-number="1"> <div class="project-list-item"> <img class="project-list-item-cover" src="' + item.image + '"> <div class="project-list-item-body"> <h2>' + (item.title == null ? "" : item.title) + '</h2> <div class="project-list-item-text layui-text">' + item.remark + '</div> <div class="project-list-item-desc"> <span class="time">' + item.time + '</span> <div class="ew-head-list"></div> </div> </div > </div > </div > '
+            '<div id=' + item.id + ' onclick="cardTableCheckedCard(\'' + elem + '\',this)" class="layui-col-md' + line + ' ew-datagrid-item" data-index="' + no + '" data-number="1">' +
+            // '<a class="layui-icon layui-icon-more-vertical" style="position: relative;top: 23px;left: 260px;width: 10px;height: 20px" href="javascript:void(0)"></a>' +
+            ' <div class="project-list-item">' +
+            ' <img class="project-list-item-cover" src="' + item.image + '"> ' +
+            '<div class="project-list-item-body"> <h2>' + (item.title == null ? "" : item.title) + '</h2> ' +
+            '<div class="project-list-item-text layui-text">' + item.remark + '</div> ' +
+            '<div class="project-list-item-desc"> <span class="time">' + item.time + '</span> ' +
+            '<div class="ew-head-list"></div> </div> </div > </div > </div > '
         return card;
+    }
+
+    window.downMenu = function () {
+        layui.use(['table', 'form', 'jquery', 'card', 'cardTable', 'dropdown'], function () {
+            // 监听菜单点击
+            dropdown.onFilter('down13', function (event) {
+                // ...业务代码
+            })
+        });
     }
 
     /** 格式化返回参数 */
@@ -170,7 +191,7 @@ layui.define(['table', 'laypage', 'jquery', 'element'], function (exports) {
         data.code = tempData[option.response.statusName];
         data.msg = tempData[option.response.msgName];
         data.count = tempData[option.response.countName];
-        
+
         var dataList = tempData[option.response.dataName];
         data.data = [];
         for (var i = 0; i < dataList.length; i++) {
@@ -190,7 +211,7 @@ layui.define(['table', 'laypage', 'jquery', 'element'], function (exports) {
         var redata = null;
         $.ajaxSettings.async = false;
         $.getJSON(url, function (data) {
-            
+
             redata = data;
         }).fail(function () {
             redata = null;
@@ -200,18 +221,20 @@ layui.define(['table', 'laypage', 'jquery', 'element'], function (exports) {
 
     //卡片点击事件
     window.cardTableCheckedCard = function (elem, obj) {
-        
-        $(obj).addClass('layui-table-click').siblings().removeClass('layui-table-click');
         var item = {};
         item.id = obj.id;
         item.image = $(obj).find('.project-list-item-cover')[0].src;
         item.title = $(obj).find('h2')[0].innerHTML;
         item.remark = $(obj).find('.project-list-item-text')[0].innerHTML;
         item.time = $(obj).find('.time')[0].innerHTML;
-        _instances[elem.id].option.checkedItem = item;
+        _instances[elem].option.checkedItem = item;
+        tt.getOption(elem).click(item);
     }
     /** 对外提供的方法 */
     var tt = {
+        getOption: function (elem) {
+            return _instances[elem].option;
+        },
         /* 渲染 */
         render: function (options) {
             return new card(options);

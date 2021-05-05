@@ -3,6 +3,7 @@ package com.cjl.basic.zone.project.space.album.domain;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 相册类
@@ -27,6 +28,10 @@ public class ZAlbum extends ZPhoto implements Serializable {
      * 相册描述
      */
     private String description;
+    /**
+     * 相册的相片
+     */
+    private List<ZAlbum> photos;
 
     private static final long serialVersionUID = 1L;
 }

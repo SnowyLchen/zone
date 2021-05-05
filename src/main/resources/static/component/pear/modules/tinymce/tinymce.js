@@ -102,7 +102,7 @@ layui.define(['jquery'],function (exports) {
 
         var form = option.form || {}
 
-        var file_field = form.name || 'edit' //文件字段名
+        var file_field = form.name || 'file' //文件字段名
 
         var form_data = form.data || {} //其他表单数据 {key:value, ...}
 

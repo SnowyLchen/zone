@@ -5,6 +5,8 @@ import com.cjl.basic.zone.common.utils.UploadPathUtils;
 import com.cjl.basic.zone.framework.ftp.FtpService;
 import com.cjl.basic.zone.framework.web.controller.BaseController;
 import com.cjl.basic.zone.framework.web.domain.AjaxResult;
+import com.cjl.basic.zone.project.manage.picture.domain.ZPicture;
+import com.cjl.basic.zone.project.manage.picture.service.IPictureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +21,7 @@ import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/common")
@@ -27,16 +29,26 @@ public class CommonController extends BaseController {
 
     @Autowired
     private FtpService ftpService;
+    @Autowired
+    private IPictureService pictureService;
 
     /**
      * 上传文件
      */
     @ResponseBody
     @RequestMapping("/upload")
-    public AjaxResult upload(HttpServletRequest request, @RequestParam("edit") MultipartFile[] edit) {
+    public AjaxResult upload(HttpServletRequest request, @RequestParam("file") MultipartFile[] file) {
         List<ZImage> files = new ArrayList<>();
-        for (MultipartFile multipartFile : edit) {
-            files.add(UploadPathUtils.thumbnail(multipartFile,ftpService));
+        for (MultipartFile multipartFile : file) {
+            ZImage image = UploadPathUtils.thumbnail(multipartFile, ftpService);
+            if (image != null) {
+                ZPicture zPicture = new ZPicture();
+                zPicture.setPTitle(image.getTitle());
+                zPicture.setPSrc(image.getSrc());
+                pictureService.insertPicture(zPicture);
+                image.setId(Objects.toString(zPicture.getPId()));
+                files.add(image);
+            }
         }
         return AjaxResult.success(files);
     }

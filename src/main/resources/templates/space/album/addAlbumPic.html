@@ -25,30 +25,38 @@
 <div class="layui-card">
     <div class="layui-card-body">
         <div class="layui-upload">
-            <div class="layui-upload-drag" id="uploadPic">
-                <i class="layui-icon"></i>
-                <p>支持多图上传，或将文件拖拽到此处</p>
-            </div>
-            <blockquote class="layui-elem-quote layui-quote-nm" id="photo"
-                        style="margin-top: 10px;text-align: left;display: none;">
-                预览图：
-                <div class="layui-upload-list">
-                    <ul id="_photo">
-
-                    </ul>
+            <form class="layui-form">
+                <div class="layui-upload-drag" id="uploadPic">
+                    <i class="layui-icon"></i>
+                    <p>支持多图上传，或将文件拖拽到此处</p>
                 </div>
-            </blockquote>
-            <p id="tipTxt"></p>
-        </div>
+                <blockquote class="layui-elem-quote layui-quote-nm" id="photo"
+                            style="margin-top: 10px;text-align: left;display: none;">
+                    预览图：
+                    <div class="layui-upload-list">
+                        <ul id="_photo">
 
+                        </ul>
+                    </div>
+                </blockquote>
+                <p id="tipTxt"></p>
+            </form>
+        </div>
     </div>
 </div>
 <div th:include="include::footer"></div>
 
 <script>
+    var photos = [];
+
     //图片删除
     function deletePic(Obj) {
+        var length = $(Obj).parent().parent().find('li').length;
         Obj.parentNode.parentNode.removeChild(Obj.parentNode);
+        if (length == 1) {
+            $("#photo").hide();
+            $("#tipTxt").html("");
+        }
     }
 
     layui.use(['element', 'layer', 'form', 'upload', 'dragMove'], function () {
@@ -58,10 +66,11 @@
             , upload = layui.upload
             , dragMove = layui.dragMove
             , form = layui.from;
+        var windowIndex;
         //多图片上传
         upload.render({
             elem: '#uploadPic'
-            , url: 'common/upload' //改成您自己的上传接口
+            , url: '/common/upload'
             , multiple: true
             , accept: 'images'
             , exts: 'jpg|jpeg|png|gjf|webp|bmp|tif'
@@ -74,38 +83,73 @@
                 //预读本地文件示例，不支持ie8
                 obj.preview(function (index, file, result) {
                     $("#photo").show();
-                    // var text = '<li style="display: inline;"><img style="width: 150px;height: 150px" src="' + result + '" alt="' + file.name + '" class="layui-upload-img"></li>';
-                    var lid = 'p' + index;
                     $('#_photo').append(
-                        '<li id="' + lid + '">' +
+                        '<li>' +
                         '<img name="imgZmList" src="' + result + '" width="150" height="113" alt="' + file.name + '">' +
                         '<span class="icon pear-icon pear-icon-ashbin img_close"  onclick="deletePic(this)"></span>' +
                         '</li>');
-                    picMove('p' + index)
+                    windowIndex = top.layer.msg('请稍候...', {icon: 16, time: false, shade: 0.8});
                 });
             }
             , done: function (res) {
-                $('#demoText').html('');
                 //上传完毕
-                if (res.code == 200) {
-                    layer.msg('上传完毕', {icon: 1});
+                if (res.code == 0) {
+                    if (res.data) {
+                        var photo = res.data[0];
+                        photos.push(photo);
+                        top.layer.close(windowIndex);
+                    }
+                    layer.msg('上传完成', {icon: 1});
                 }
             }
         });
+        picMove();
 
-
-        function picMove(elem) {
+        function picMove() {
             //执行示例
             dragMove.render({
-                elem: "#" + elem, //指向图片的父容器
+                elem: "#_photo", //指向图片的父容器
                 layerArea: ["560px", "520px"], //弹窗的宽高，同layer的area，默认["960px","720px"]
                 layerShade: 0.6, //遮罩的透明度，同layer的shade，默认0.6
                 layerMove: false, //触发拖动的元素，同layer的move，这里默认禁止，可设置为'.layui-layer-title'
-                maxZoom: 1 //图片能放大的最大倍数，默认1倍
+                maxZoom: 3 //图片能放大的最大倍数，默认1倍
             });
         }
 
     });
+
+
+    function submitHandler() {
+        var length = $("[name=imgZmList]").parent().parent().parent().find('li').length;
+        if (length > 0) {
+            $.modal.openIframe('请选择相册', '/album/operator/albumType', 450, 260, function (aId) {
+                var data = [];
+                $.each(photos, function (index, item) {
+                    var entity = 'photos[' + index + ']';
+                    entity.aId = aId;
+                    entity.id = item.id;
+                    entity.title = item.title;
+                    entity.path = item.src;
+                    entity.suffix = item.suffix;
+                    data.push(entity);
+                });
+                debugger
+                // layui.use('common', function () {
+                //     let common = layui.common;
+                //     common.ajax({
+                //         url: '/album/addPhoto',
+                //         data: data,
+                //         type: 'post'
+                //     }, function (res) {
+                //         common.ajaxMsg(res);
+                //     })
+                // })
+            })
+        } else {
+            layer.msg("最少上传一张照片")
+        }
+        return false
+    }
 </script>
 </body>
 </html>

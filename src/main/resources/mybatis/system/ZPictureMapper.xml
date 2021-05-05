@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cjl.basic.zone.project.manage.picture.mapper.ZPictureMapper">
+  <resultMap id="BaseResultMap" type="com.cjl.basic.zone.project.manage.picture.domain.ZPicture">
+    <id column="p_id" jdbcType="INTEGER" property="pId" />
+    <result column="p_title" jdbcType="VARCHAR" property="pTitle" />
+    <result column="p_src" jdbcType="VARCHAR" property="pSrc" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    p_id, p_title, p_src
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from z_picture
+    where p_id = #{pId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from z_picture
+    where p_id = #{pId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="p_id" keyProperty="pId" parameterType="com.cjl.basic.zone.project.manage.picture.domain.ZPicture" useGeneratedKeys="true">
+    insert into z_picture (p_title, p_src)
+    values (#{pTitle,jdbcType=VARCHAR}, #{pSrc,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="p_id" keyProperty="pId" parameterType="com.cjl.basic.zone.project.manage.picture.domain.ZPicture" useGeneratedKeys="true">
+    insert into z_picture
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pTitle != null">
+        p_title,
+      </if>
+      <if test="pSrc != null">
+        p_src,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pTitle != null">
+        #{pTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pSrc != null">
+        #{pSrc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cjl.basic.zone.project.manage.picture.domain.ZPicture">
+    update z_picture
+    <set>
+      <if test="pTitle != null">
+        p_title = #{pTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pSrc != null">
+        p_src = #{pSrc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where p_id = #{pId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cjl.basic.zone.project.manage.picture.domain.ZPicture">
+    update z_picture
+    set p_title = #{pTitle,jdbcType=VARCHAR},
+      p_src = #{pSrc,jdbcType=VARCHAR}
+    where p_id = #{pId,jdbcType=INTEGER}
+  </update>
+</mapper>

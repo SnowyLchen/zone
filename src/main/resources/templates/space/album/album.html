@@ -52,7 +52,15 @@
                     </div>
                 </div>
                 <div class="layui-tab-item">
-                    内容02
+                    <!--                    <a lay-filter="down" style="position: relative;top: 23px;left: 260px;width: 10px;height: 20px"-->
+                    <!--                       lay-dropdown='{menus: [-->
+                    <!--                      {layIcon:"layui-icon-edit",txt: "编辑相册", event:"editAlbum"},-->
+                    <!--                     {layIcon: "layui-icon-delete",txt: "删除", event:"delete"}-->
+                    <!--                    ]}'>-->
+                    <!--                        <i class="layui-icon layui-icon-more-vertical"></i>-->
+                    <!--                    </a>-->
+
+
                 </div>
             </div>
         </div>
@@ -71,10 +79,12 @@
     </div>
 </script>
 <script>
+
+
     /**
      * 初始化表格（卡片）
      * */
-    function initCard(cardTable) {
+    function initCard(cardTable, MODULE_PATH) {
         cardTable.render({
             elem: '#album-table',
             url: 'album/getAlbums',
@@ -97,7 +107,19 @@
                 , msgName: 'msg' //规定状态信息的字段名称，默认：msg
                 , countName: 'count' //规定数据总数的字段名称，默认：count
                 , dataName: 'data' //规定数据列表的字段名称，默认：data
-            },
+            }, done: function () {
+                // alert(1)
+            }, click: function (item) {
+                // console.log(item)
+                $.modal.openIframe(item.title, MODULE_PATH + '/albumPic?aId=' + item.id, 1850, 800)
+                // common.ajax({
+                //     url: '',
+                //     data: '',
+                //     type: 'post'
+                // }, function (res) {
+                //     common.ajaxMsg(res)
+                // })
+            }
         })
     }
 
@@ -110,14 +132,16 @@
         })
     }
 
-    layui.use(['table', 'form', 'jquery', 'card', 'cardTable'], function () {
+    layui.use(['table', 'form', 'jquery', 'card', 'cardTable', 'dropdown', 'common'], function () {
         let table = layui.table;
         let form = layui.form;
+        let common = layui.common;
+        let dropdown = layui.dropdown;
         let $ = layui.jquery;
         let cardTable = layui.cardTable;
         let MODULE_PATH = "/album/operator/";
         // 初始化卡片
-        initCard(cardTable);
+        initCard(cardTable, MODULE_PATH);
         // 注册点击事件
         btnClick($, MODULE_PATH);
     })

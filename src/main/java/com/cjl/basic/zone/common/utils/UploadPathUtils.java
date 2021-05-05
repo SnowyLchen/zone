@@ -8,11 +8,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -106,8 +106,9 @@ public class UploadPathUtils {
             int i = 1;
             //生成目标图片流
             BufferedImage bufferedImage = Thumbnails.of(file.getInputStream()).scale(1f).asBufferedImage();
+//            BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
             //压缩图片至指定大小500k下
-            bufferedImage = commpressPicCycle(500, getAccuracy(500), bufferedImage, startTime, i);
+            bufferedImage = commpressPicCycle(500, getAccuracy(500), bufferedImage, startTime, i, ext);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             ImageIO.write(bufferedImage, ext, os);
             inputStream = new ByteArrayInputStream(os.toByteArray());
@@ -119,6 +120,9 @@ public class UploadPathUtils {
             ZImage zImage = new ZImage();
             zImage.setSrc(outputPath.split("ftp")[1]);
             zImage.setTitle(saveName);
+            zImage.setOriginalFilename(originalFilename);
+            zImage.setSuffix(ext);
+            zImage.setSize(Objects.toString(file.getSize() / 1024));
             return zImage;
         } catch (IOException e) {
             e.printStackTrace();
@@ -133,12 +137,13 @@ public class UploadPathUtils {
      * @param desFileSize 指定大小
      * @param accuracy    比率
      **/
-    private static BufferedImage commpressPicCycle(long desFileSize, double accuracy, BufferedImage bufferedImage, long startTime, int i) throws IOException {
+    private static BufferedImage commpressPicCycle(long desFileSize, double accuracy, BufferedImage bufferedImage, long startTime, int i, String ext) throws IOException {
         System.out.println("********************图片压缩开始******************");
-//        File srcFileJPG = new File(desPath);
-        byte[] data = ((DataBufferByte) bufferedImage.getData().getDataBuffer()).getData();
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ImageIO.write(bufferedImage, ext, os);
+        InputStream inputStream = new ByteArrayInputStream(os.toByteArray());
         //如果小于指定大小不压缩；如果大于等于指定大小压缩
-        if ((data.length / 1024) <= desFileSize) {
+        if ((inputStream.available() / 1024) <= desFileSize) {
             if (i == 1) {
                 System.out.println("********************图片大小小于500k,不进行压缩******************");
                 System.out.println("********************图片压缩结束******************");
@@ -150,13 +155,13 @@ public class UploadPathUtils {
             }
             return bufferedImage;
         }
-        System.out.println("********************开始第" + i + "次压缩*****文件大小" + data.length + "kb*************");
+        System.out.println("********************开始第" + i + "次压缩*****文件大小" + (inputStream.available() / 1024) + "kb*************");
         // 计算宽高
         int desWidth = new BigDecimal(bufferedImage.getWidth()).multiply(new BigDecimal(accuracy)).intValue();
         int desHeight = new BigDecimal(bufferedImage.getHeight()).multiply(new BigDecimal(accuracy)).intValue();
         bufferedImage = Thumbnails.of(bufferedImage).size(desWidth, desHeight).outputQuality(accuracy).asBufferedImage();
         i++;
-        return commpressPicCycle(desFileSize, accuracy, bufferedImage, startTime, i);
+        return commpressPicCycle(desFileSize, accuracy, bufferedImage, startTime, i, ext);
     }
 
     /**

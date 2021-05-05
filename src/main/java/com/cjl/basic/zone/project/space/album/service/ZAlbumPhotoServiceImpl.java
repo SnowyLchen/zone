@@ -1,5 +1,6 @@
 package com.cjl.basic.zone.project.space.album.service;
 
+import com.cjl.basic.zone.common.controller.ZImage;
 import com.cjl.basic.zone.project.space.album.domain.Card;
 import com.cjl.basic.zone.project.space.album.domain.ZAlbum;
 import com.cjl.basic.zone.project.space.album.domain.ZPhoto;
@@ -21,8 +22,12 @@ public class ZAlbumPhotoServiceImpl implements IZAlbumPhotoService {
     }
 
     @Override
-    public int addPhoto(ZPhoto zPhoto) {
-        return albumPhotoMapper.addPhoto(zPhoto);
+    public int addPhoto(ZAlbum zAlbum) {
+//        List<ZImage> images = zAlbum.getImages();
+//        for (ZImage image : images) {
+//            zAlbum.setAId();
+//        }
+        return albumPhotoMapper.addPhoto(zAlbum);
     }
 
     @Override
@@ -36,8 +41,8 @@ public class ZAlbumPhotoServiceImpl implements IZAlbumPhotoService {
     }
 
     @Override
-    public ZPhoto selectPhotoByAlbum(Integer accountId) {
-        return albumPhotoMapper.selectPhotoByAlbum(accountId);
+    public List<ZPhoto> selectPhotoByAlbum(Integer id) {
+        return albumPhotoMapper.selectPhotoByAlbum(id);
     }
 
     @Override

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <div th:include="include::header"></div>
+</head>
+<body class="pear-container">
+<div class="main-container">
+    <form class="layui-form">
+        <select id="album" lay-verify="" lay-search>
+            <option th:each="items:${albums}" th:value="${items.id}"
+                    th:text="${items.title}"></option>
+        </select>
+    </form>
+</div>
+<div th:include="include::footer"></div>
+<script>
+
+    function submitHandler() {
+        return $("#album option:checked").val()
+    }
+
+    // $(function () {
+    //     layui.use(['common', 'layer'], function () {
+    //         let common = layui.common,
+    //             layer = layui.layer;
+    //         common.ajax({
+    //             url: '/album/getAlbums',
+    //             type: 'get'
+    //         }, function (res) {
+    //             if (res.code == 0) {
+    //                 initSelectAlbum(res, layer, common);
+    //             }
+    //         })
+    //     });
+    //
+    //     function initSelectAlbum(res, layer, common) {
+    //         var rows = res.data;
+    //         var option = '';
+    //         $.each(rows, function (index, item) {
+    //             option += '<option value="' + item.id + '">' + item.title + '</option>';
+    //         });
+    //         $("#album").append(option);
+    //         debugger
+    //     }
+    // })
+</script>
+</body>
+</html>
