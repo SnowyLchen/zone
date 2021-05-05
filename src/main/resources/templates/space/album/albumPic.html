@@ -27,24 +27,34 @@
             margin: 25px 0;
         }
 
-        /*.chrg-grid img {*/
-        /*    width: 18.5741%;*/
-        /*    margin-bottom: 15px;*/
-        /*    position: absolute;*/
-        /*    opacity: 1;*/
-        /*}*/
     </style>
 </head>
 <body class="pear-container">
 <div style="text-align: center" hidden="hidden" id="nothing"><img th:src="@{/admin/images/nothing.jpg}"></div>
 <!--内容-->
-<article class="jq22-container">
-    <div class="content">
-        <div class="chroma-gallery mygallery">
-            <img th:each="items:${photos}" th:src="${items.path}" th:alt="${items.name}">
+<div class="layui-col-sm12">
+    <div class="layui-row">
+        <div class="layui-col-sm12" style="padding: 8px 0 0 10px;">
+            <button type="button" class="pear-btn pear-btn-success" plain="" id="uploadPic">
+                上传照片
+            </button>
         </div>
     </div>
-</article>
+    <hr class="layui-border-orange">
+    <div class="layui-row">
+        <div class="layui-col-sm12">
+            <article class="jq22-container">
+                <div class="content">
+                    <div class="chroma-gallery mygallery">
+                        <img th:each="items:${photos}" th:src="${items.path}" th:alt="${items.name}"
+                             th:data-largesrc="${items.path}">
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+</div>
+
 <div th:include="include::footer"></div>
 <script th:src="@{/assets/js/chromagallery.pkgd.min.js}"></script>
 <script>
@@ -57,13 +67,18 @@
             dof: true,
             screenOpacity: 0.8
         });
-    });
-
-    layui.use(['table', 'form', 'jquery', 'card', 'cardTable', 'dropdown', 'common'], function () {
         var photos = '[[${photos}]]';
         if (photos && photos == '[]') {
             $("#nothing").show()
         }
+    });
+    layui.use(['table', 'form', 'jquery', 'card', 'cardTable', 'dropdown', 'common'], function () {
+        let $ = layui.jquery;
+        let MODULE_PATH = "/album/operator/";
+        // 注册点击事件
+        $("#uploadPic").on("click", function () {
+            $.modal.openIframe("上传照片", MODULE_PATH + 'addAlbumPic', window.screen.width * 0.8, window.screen.height * 0.55);
+        });
     })
 
 </script>
