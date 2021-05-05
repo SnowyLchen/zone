@@ -1,12 +1,12 @@
 package com.cjl.basic.zone.project.space.album.service;
 
-import com.cjl.basic.zone.common.controller.ZImage;
 import com.cjl.basic.zone.project.space.album.domain.Card;
 import com.cjl.basic.zone.project.space.album.domain.ZAlbum;
 import com.cjl.basic.zone.project.space.album.domain.ZPhoto;
 import com.cjl.basic.zone.project.space.album.mapper.ZAlbumPhotoMapper;
 import com.cjl.basic.zone.utils.dateutils.DateUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -22,12 +22,20 @@ public class ZAlbumPhotoServiceImpl implements IZAlbumPhotoService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int addPhoto(ZAlbum zAlbum) {
-//        List<ZImage> images = zAlbum.getImages();
-//        for (ZImage image : images) {
-//            zAlbum.setAId();
-//        }
-        return albumPhotoMapper.addPhoto(zAlbum);
+        ZPhoto zPhoto = new ZPhoto();
+        List<ZAlbum> photos = zAlbum.getPhotos();
+        for (ZAlbum album : photos) {
+            zPhoto.setAId(album.getAId());
+            zPhoto.setName(album.getName());
+            zPhoto.setCreateTime(DateUtils.getNowDate());
+            zPhoto.setDelFlag("0");
+            zPhoto.setPath(album.getPath());
+            zPhoto.setSuffix(album.getSuffix());
+            albumPhotoMapper.addPhoto(zPhoto);
+        }
+        return 1;
     }
 
     @Override

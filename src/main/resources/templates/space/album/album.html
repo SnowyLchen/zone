@@ -110,8 +110,9 @@
             }, done: function () {
                 // alert(1)
             }, click: function (item) {
+                debugger
                 // console.log(item)
-                $.modal.openIframe(item.title, MODULE_PATH + '/albumPic?aId=' + item.id, 1850, 800)
+                $.modal.openIframe(item.title, MODULE_PATH + '/albumPic?id=' + item.id, 1850, 800)
                 // common.ajax({
                 //     url: '',
                 //     data: '',

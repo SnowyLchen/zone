@@ -36,25 +36,15 @@
     </style>
 </head>
 <body class="pear-container">
+<div style="text-align: center" hidden="hidden" id="nothing"><img th:src="@{/admin/images/nothing.jpg}"></div>
 <!--内容-->
-<div class="layui-card">
-    <article class="jq22-container">
-        <div class="content">
-            <div class="chroma-gallery mygallery" th:with="">
-                <img src="images/thumbs/1.jpg" alt="Pic 1" data-largesrc="images/1.jpg">
-                <img src="images/thumbs/2.jpg" alt="Pic 2" data-largesrc="images/2.jpg">
-                <img src="images/thumbs/3.jpg" alt="Pic 3" data-largesrc="images/3.jpg">
-                <img src="images/thumbs/4.jpg" alt="Pic 4" data-largesrc="images/4.jpg">
-                <img src="images/thumbs/5.jpg" alt="Pic 5" data-largesrc="images/5.jpg">
-                <img src="images/thumbs/6.jpg" alt="Pic 6" data-largesrc="images/6.jpg">
-                <img src="images/thumbs/7.jpg" alt="Pic 7" data-largesrc="images/7.jpg">
-                <img src="images/thumbs/8.jpg" alt="Pic 8" data-largesrc="images/8.jpg">
-                <img src="images/thumbs/9.jpg" alt="Pic 9" data-largesrc="images/9.jpg">
-                <img src="images/thumbs/10.jpg" alt="Pic 10" data-largesrc="images/10.jpg">
-            </div>
+<article class="jq22-container">
+    <div class="content">
+        <div class="chroma-gallery mygallery">
+            <img th:each="items:${photos}" th:src="${items.path}" th:alt="${items.name}">
         </div>
-    </article>
-</div>
+    </div>
+</article>
 <div th:include="include::footer"></div>
 <script th:src="@{/assets/js/chromagallery.pkgd.min.js}"></script>
 <script>
@@ -62,7 +52,7 @@
         $(".mygallery").chromaGallery
         ({
             color: '#000',
-            gridMargin: 15,
+            gridMargin: 20,
             maxColumns: 6,
             dof: true,
             screenOpacity: 0.8
@@ -70,13 +60,10 @@
     });
 
     layui.use(['table', 'form', 'jquery', 'card', 'cardTable', 'dropdown', 'common'], function () {
-        let table = layui.table;
-        let form = layui.form;
-        let common = layui.common;
-        let dropdown = layui.dropdown;
-        let $ = layui.jquery;
-        let cardTable = layui.cardTable;
-        let MODULE_PATH = "/album/operator/";
+        var photos = '[[${photos}]]';
+        if (photos && photos == '[]') {
+            $("#nothing").show()
+        }
     })
 
 </script>

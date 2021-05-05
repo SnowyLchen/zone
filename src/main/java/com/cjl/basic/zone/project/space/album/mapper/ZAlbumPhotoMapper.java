@@ -21,7 +21,7 @@ public interface ZAlbumPhotoMapper {
      * @param zAlbum
      * @return
      */
-    int addPhoto(ZAlbum zAlbum);
+    int addPhoto(ZPhoto zAlbum);
 
     /**
      * 查询单张照片

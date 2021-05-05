@@ -123,27 +123,26 @@
         var length = $("[name=imgZmList]").parent().parent().parent().find('li').length;
         if (length > 0) {
             $.modal.openIframe('请选择相册', '/album/operator/albumType', 450, 260, function (aId) {
-                var data = [];
+                var data = {};
                 $.each(photos, function (index, item) {
-                    var entity = 'photos[' + index + ']';
-                    entity.aId = aId;
-                    entity.id = item.id;
-                    entity.title = item.title;
-                    entity.path = item.src;
-                    entity.suffix = item.suffix;
-                    data.push(entity);
+                    data['photos[' + index + '].aId'] = aId;
+                    data['photos[' + index + '].id'] = item.id;
+                    data['photos[' + index + '].title'] = item.title;
+                    data['photos[' + index + '].name'] = item.originalFilename;
+                    data['photos[' + index + '].path'] = item.src;
+                    data['photos[' + index + '].size'] = item.size;
+                    data['photos[' + index + '].suffix'] = item.suffix;
                 });
-                debugger
-                // layui.use('common', function () {
-                //     let common = layui.common;
-                //     common.ajax({
-                //         url: '/album/addPhoto',
-                //         data: data,
-                //         type: 'post'
-                //     }, function (res) {
-                //         common.ajaxMsg(res);
-                //     })
-                // })
+                layui.use('common', function () {
+                    let common = layui.common;
+                    common.ajax({
+                        url: '/album/addPhoto',
+                        data: data,
+                        type: 'post'
+                    }, function (res) {
+                        common.ajaxMsg(res);
+                    })
+                })
             })
         } else {
             layer.msg("最少上传一张照片")

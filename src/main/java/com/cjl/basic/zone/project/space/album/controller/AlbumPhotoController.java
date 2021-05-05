@@ -59,9 +59,8 @@ public class AlbumPhotoController extends BaseController {
     @RequestMapping("/addPhoto")
     public AjaxResult addPhoto(ZAlbum albums) {
         Integer accountId = ShiroAuthenticateUtils.getAccountId();
-//        zAlbum.setAccountId(accountId);
-//        return AjaxResult.success(albumPhotoService.addPhoto(zAlbum));
-        return AjaxResult.success(1);
+        albums.setAccountId(accountId);
+        return AjaxResult.success(albumPhotoService.addPhoto(albums));
     }
 
     /**

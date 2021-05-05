@@ -110,6 +110,7 @@
   from z_album za
            left join z_photo zp on zp.a_id = za.a_id
   where account_id = #{accountId}
+  group by za.a_id
   </select>
     <delete id="deleteAlbumById" parameterType="java.lang.Integer">
     delete from z_album
