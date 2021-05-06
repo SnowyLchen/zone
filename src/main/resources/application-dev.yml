@@ -116,10 +116,10 @@ spring:
       # 热部署开关
       enabled: true
   redis:
-    host: localhost
+    host: 39.102.117.87
     port: 6379
     timeout: 30000
-    password:
+    password: 123456
     jedis:
       pool:
         max-wait: 30000
