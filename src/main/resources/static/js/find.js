@@ -1,5 +1,5 @@
 //接入WebSocket
-var wsUrl = 'ws://192.168.1.194:8000/websocket/' + accountId;
+var wsUrl = 'ws://' + basePath.split('//')[1] + '/websocket/' + accountId;
 // var socket = new WebSocket('ws://192.168.1.194:8000/websocket/' + accountId + "/addAsk");
 //开始创建webSocket连接
 var socket = createWebSocket(wsUrl);

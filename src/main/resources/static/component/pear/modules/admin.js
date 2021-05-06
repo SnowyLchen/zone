@@ -25,7 +25,6 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
             }
 
             this.render = function (initConfig, roleId) {
-
                 if (initConfig !== undefined) {
                     applyConfig(initConfig, roleId);
                 } else {

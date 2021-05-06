@@ -1,10 +1,9 @@
-var isLogin = localStorage.getItem('isLogin') === '1';
-var wsUrl = 'ws://localhost:8000/websocket/' + accountId;
-console.log('登录?' + isLogin);
-//开始创建webSocket连接
-var socket = createWebSocket(wsUrl);
-
-layui.use(['layim', 'jquery'], function (layim) {
+layui.use(['layim', 'jquery', 'yaml'], function (layim) {
+    var isLogin = localStorage.getItem('isLogin') === '1';
+    var wsUrl = 'ws://' + basePath.split('//')[1] + '/websocket/' + accountId;
+    console.log('登录?' + isLogin);
+    //开始创建webSocket连接
+    var socket = createWebSocket(wsUrl);
     let $ = layui.jquery;
     //基础配置
     layim.config({
