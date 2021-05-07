@@ -318,6 +318,36 @@ layui.define(['jquery', 'element'], function (exports) {
                 .location.reload(true);
         }
     }
+    // 刷 新 iframe
+    pearTab.prototype.refreshIframe = function (time) {
+        // 刷 新 指 定 的 选 项 卡
+        if (time != false && time != 0) {
+
+            var load = '<div id="pear-tab-loading' + index + '" class="pear-tab-loading">' +
+                '<div class="ball-loader">' +
+                '<span></span><span></span><span></span><span></span>' +
+                '</div>' +
+                '</div>'
+
+            var elem = this.option.elem;
+            $("#" + this.option.elem).find(".pear-tab").append(load);
+            var pearLoad = $("#" + this.option.elem).find("#pear-tab-loading" + index);
+            pearLoad.css({
+                display: "block"
+            });
+            index++;
+            setTimeout(function () {
+                pearLoad.fadeOut(500, function () {
+                    pearLoad.remove();
+                });
+            }, time);
+            $(".spaceContent").find("iframe").contentWindow
+                .location.reload(true);
+        } else {
+            $(".spaceContent").find("iframe").contentWindow
+                .location.reload(true);
+        }
+    }
 
     function tabDelete(elem, id, callback) {
 

@@ -95,6 +95,7 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                     refreshA.addClass("layui-anim-loop");
                     refreshA.addClass("layui-icon-loading");
                     bodyTab.refresh(400);
+                    debugger
                     setTimeout(function () {
                         refreshA.addClass("layui-icon-refresh-1");
                         refreshA.removeClass("layui-anim");
