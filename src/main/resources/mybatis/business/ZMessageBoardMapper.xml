@@ -4,7 +4,11 @@
     <resultMap id="boardMap" type="com.cjl.basic.zone.project.space.board.domain.ZMessageBoard">
         <id column="mb_id" jdbcType="INTEGER" property="mbId"/>
         <result column="account_id" jdbcType="INTEGER" property="accountId"/>
+        <result column="userName" jdbcType="VARCHAR" property="userName"/>
+        <result column="avatar" jdbcType="VARCHAR" property="avatar"/>
         <result column="come_account_id" jdbcType="INTEGER" property="comeAccountId"/>
+        <result column="comeUserName" jdbcType="VARCHAR" property="comeUserName"/>
+        <result column="comeAvatar" jdbcType="VARCHAR" property="comeAvatar"/>
         <result column="message" jdbcType="VARCHAR" property="message"/>
         <result column="del_flag" jdbcType="CHAR" property="delFlag"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
@@ -19,10 +23,39 @@
         where mb_id = #{mbId,jdbcType=INTEGER}
     </select>
     <select id="selectMessageBoardList" resultMap="boardMap">
+      select mess.mb_id,
+           mess.account_id,
+           mess.user_name userName,
+           mess.avatar,
+           mess.come_account_id,
+           zu.user_name   comeUserName,
+           zu.avatar comeAvatar,
+           mess.message,
+           mess.del_flag,
+           mess.create_time
+    from (
+             select mb.mb_id,
+                    mb.account_id,
+                    mb.come_account_id,
+                    mb.message,
+                    mb.del_flag,
+                    mb.create_time,
+                    z.user_name,
+                    z.avatar
+             from z_message_board mb
+                      left join z_users z on z.account_id = mb.account_id and z.del_flag = 0
+             where mb.account_id = #{accountId}
+               AND mb.del_flag = 0
+               and mb.come_account_id != #{accountId}
+         ) mess
+             left join z_users zu on zu.account_id = mess.come_account_id and zu.del_flag = 0
+    </select>
+    <select id="selectOwnerMessageBoard" resultMap="boardMap">
         select
         <include refid="Base_Column_List"/>
         from z_message_board
-        where mb_id = #{mbId,jdbcType=INTEGER}
+        where account_id = #{accountId,jdbcType=INTEGER}
+        AND come_account_id=#{accountId}
     </select>
     <delete id="deleteMessageById" parameterType="java.lang.Integer">
     delete from z_message_board

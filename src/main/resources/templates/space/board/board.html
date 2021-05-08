@@ -15,57 +15,61 @@
         width: 300px;
         height: 150px;
     }
+
+    .form img {
+        width: 100%;
+        height: 100%;
+        margin-bottom: 30px;
+    }
+
+    .form-box {
+        padding-bottom: 30px;
+        /*height: 600px;*/
+    }
+
+    .reply {
+        position: relative;
+        top: 20px;
+        left: 5px;
+    }
 </style>
 <body class="pear-container">
 <!--内容-->
 <div class="layui-row layui-col-space10">
-    <div id="refresh">aaaa</div>
     <div class="layui-card top-panel">
         <div class="layui-card-body">
             <div class="content whisper-content leacots-content">
                 <div class="cont w1000">
                     <div class="whisper-list">
                         <div class="item-box">
-                            <div class="review-version">
+                            <div class="review-version" id="board">
                                 <div class="form-box">
                                     <div class="volume">
                                         主人寄语
+                                        <button class="pear-btn pear-btn-warming pear-btn-xs" id="edit" load>编辑</button>
                                     </div>
-                                    <div class="form">
-                                        <textarea name="" id="message" cols="30" rows="10"></textarea>
-                                        <div class="layui-form-item" style="margin-top: 10px">
-                                            <div class="layui-input-block" style="text-align: right;">
-                                                <button class="layui-btn definite" lay-event="getContent" id="commit">
-                                                    发表
-                                                </button>
-                                            </div>
-                                        </div>
+                                    <div class="form" th:if="${#lists.size(owner) ==0 or owner[0].message==''}"
+                                         id="firstMessage">
+                                        <div>这个人很懒，什么都没有留下。。。</div>
+                                    </div>
+                                    <div class="form" th:if="${#lists.size(owner) !=0}" id="editMessage">
                                     </div>
                                 </div>
                                 <div class="volume">
-                                    全部留言 <span>8</span>
+                                    全部留言 <span>[[${#lists.size(message)}]]</span>
                                 </div>
                                 <div class="list-cont">
-                                    <div class="cont">
+                                    <div class="cont" th:each="item:${message}">
                                         <div class="img">
-                                            <img src="./Document_files/header.png" alt="">
+                                            <img th:src="${item?.avatar}" alt="">
                                         </div>
                                         <div class="text">
-                                            <p class="tit"><span class="name">吳亦凡</span><span
-                                                    class="data">2018/06/06</span></p>
-                                            <p class="ct">敢问大师，师从何方？上古高人呐逐一地看完你的作品后，我的心久久
-                                                不能平静！这世间怎么可能还有如此精辟的作品？我不敢相信自己的眼睛。自从改革开放以后，我就以为再也不会有任何作品能打动我，没想到今天看到这个如此精妙绝伦的作品好厉害！</p>
-                                        </div>
-                                    </div>
-                                    <div class="cont">
-                                        <div class="img">
-                                            <img src="./Document_files/header.png" alt="">
-                                        </div>
-                                        <div class="text">
-                                            <p class="tit"><span class="name">吳亦凡</span><span
-                                                    class="data">2018/06/06</span></p>
-                                            <p class="ct">敢问大师，师从何方？上古高人呐逐一地看完你的作品后，我的心久久
-                                                不能平静！这世间怎么可能还有如此精辟的作品？我不敢相信自己的眼睛。自从改革开放以后，我就以为再也不会有任何作品能打动我，没想到今天看到这个如此精妙绝伦的作品好厉害！</p>
+                                            <p class="tit"><span class="name" th:text="${item?.comeUserName}"></span>
+                                                <span class="data" th:text="${item?.createTime}"></span>
+                                            </p>
+                                            <p class="ct" th:text="${item?.message}"></p>
+                                            <p class="reply"><a href="javascript:void(0)" th:id="${item?.mbId}"
+                                                                onclick="reply(this)">回复</a></p>
                                         </div>
                                     </div>
                                 </div>
@@ -77,20 +81,54 @@
         </div>
     </div>
 </div>
+<script type="text/html" id="message-toolbar">
+    <textarea name="" id="message" cols="30" rows="10"></textarea>
+    <div class="layui-form-item" style="margin-top: 10px">
+        <div class="layui-input-block" style="text-align: right;">
+            <button class="layui-btn definite" lay-event="getContent" id="commit">
+                发表
+            </button>
+            <button class="layui-btn definite" lay-event="cancelContent" id="cancel">
+                取消
+            </button>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="messageValue">
+    <div th:utext="${#lists.size(owner)>0?owner[0].message:''}"></div>
+</script>
+<script type="text/html" id="replyContent">
+    <div class="layui-form-item layui-form-text">
+        <div class="layui-col-sm11">
+            <div class="layui-input-block" style="margin-left:5px;margin-top: 10px;">
+                <textarea name="desc" placeholder="" class="layui-textarea"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-col-sm11">
+            <div class="layui-input-block" style="text-align: right;margin-left:5px;margin-bottom: -25px;">
+                <button class="pear-btn pear-btn-primary pear-btn-xs">回复</button>
+            </div>
+        </div>
+    </div>
+</script>
 <div th:include="include::footer"></div>
-<script type="text/javascript">
-    function initTinymce(tinymce, $, util, layer, common, notice) {
+<script th:inline="javascript">
+    function initTinymce(tinymce, $, util, layer, common, oldContent) {
         var edit = tinymce.render({
             elem: "#message",
             height: 400,
             menubar: false, //隐藏菜单栏
         });
+        setTimeout(function () {
+            if (oldContent) {
+                edit.setContent(oldContent)
+            }
+        }, 500);
         util.event('lay-event', {
             getContent: function () {
-                if (edit.getContent() == '' || edit.getContent() == undefined) {
-                    notice.info('你得说点儿什么~')
-                    return
-                }
                 var option = {
                     url: '/board/addOwner',
                     type: 'post',
@@ -100,62 +138,54 @@
                 };
                 common.ajax(option, function (res) {
                     if (res.code == 0) {
-                        notice.success("发表成功")
-
-                        setTimeout(function () {
-                            edit.setContent('')
-                            // getDynamic(common, $, notice)
-                        }, 1000)
+                        $.notice.successNotice("发表成功")
+                        edit.setContent('')
+                        $.modal.refreshIframe(400)
                     } else {
-                        notice.error(res.msg)
+                        $.notice.errorNotice(res.msg)
                     }
                 })
+            },
+            cancelContent: function () {
+                $("#edit").show()
+                var oldContent = $("#messageValue").html();
+                $("#editMessage").empty();
+                // 将主人寄语加载到div中
+                $("#editMessage").append(oldContent);
             }
         });
     }
 
-    window.onload = layui.use(['tinymce', 'notice', 'common', 'util', 'layer', 'button', 'tab', 'dragMove'], function () {
+    layui.use(['tinymce', 'common', 'util', 'layer', 'button', 'dragMove'], function () {
         var $ = layui.jquery,
             layer = layui.layer,
-            notice = layui.notice,
             common = layui.common,
-            tab = layui.tab,
-            dragMove = layui.dragMove,
             tinymce = layui.tinymce,
             util = layui.util;
-        // 注册notice提示框
-        notice.options = {
-            closeButton: false,//显示关闭按钮
-            positionClass: "toast-top-center",//弹出的位置,
-            showDuration: "300",//显示的时间
-            hideDuration: "1000",//消失的时间
-            timeOut: "2000",//停留的时间
-            extendedTimeOut: "1000",//控制时间
-            showEasing: "swing",//显示时的动画缓冲方式
-            hideEasing: "linear",//消失时的动画缓冲方式
-            iconClass: 'toast-info', // 自定义图标，有内置，如不需要则传空 支持layui内置图标/自定义iconfont类名
-            onclick: null, // 点击关闭回调
-        };
-        // 富文本编辑器
-        initTinymce(tinymce, $, util, layer, common, notice);
-        //注册刷新按钮
-        $('#refresh').on('click', function () {
-            // getDynamic(common, $, notice)
-            tab.option = {
-                elem: 'spaceContent'
-            }
-            tab.refreshIframe(400)
+        var content = $('#message-toolbar').text();
+        var messageValue = $("#messageValue").html();
+        // 将第一次主人寄语加载到div中
+        $("#editMessage").append(messageValue);
+        // 注册图片放大
+        $.dragMove.init('board')
+
+        $("#edit").click(function () {
+            $("#edit").hide();
+            $("#firstMessage").hide();
+            var elem = [[${owner}]].length > 0 ? '#editMessage' : '#firstMessage'
+            var oldContent = $('#editMessage div:first-child').html();
+            $(elem).empty();
+            // 将主人寄语加载到div中
+            $(elem).append(content);
+            // 富文本编辑器
+            initTinymce(tinymce, $, util, layer, common, oldContent);
         })
-        //执行示例
-        dragMove.render({
-            elem: "#dynamic", //指向图片的父容器
-            layerArea: ["960px", "720px"],
-            layerShade: 0.6, //遮罩的透明度，同layer的shade，默认0.6
-            layerMove: false, //触发拖动的元素，同layer的move，这里默认禁止，可设置为'.layui-layer-title'
-            maxZoom: 3 //图片能放大的最大倍数，默认1倍
-        });
     });
 
+    function reply($this) {
+        var content = $("#replyContent").html();
+        $($this).append(content)
+    }
 </script>
 </body>
 </html>

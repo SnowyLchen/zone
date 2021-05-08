@@ -1,5 +1,6 @@
 package com.cjl.basic.zone.common.utils;
 
+import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.framework.web.domain.BaseEntity;
 
 import java.util.Date;
@@ -18,12 +19,13 @@ public class InsertOrUpdateUtils {
      * @param <T> {@link T<T extends  BaseEntity >}
      */
     public static <T extends BaseEntity> void addInsertAttr(final T t) {
-//        final String loginName = ShiroAuthenticateUtils.getLoginName();
+        final String loginName = ShiroAuthenticateUtils.getLoginName();
         final Date now = DateUtils.getNowDate();
-//        t.setUpdateBy(loginName);
+        t.setUpdateBy(loginName);
         t.setUpdateTime(now);
-//        t.setCreateBy(loginName);
+        t.setCreateBy(loginName);
         t.setCreateTime(now);
+        t.setDelFlag("0");
     }
 
     /**
@@ -33,9 +35,9 @@ public class InsertOrUpdateUtils {
      * @param <T> {@link T<T extends BaseEntity>}
      */
     public static <T extends BaseEntity> void addUpdateAttr(final T t) {
-//        final String loginName = ShiroAuthenticateUtils.getLoginName();
+        final String loginName = ShiroAuthenticateUtils.getLoginName();
         final Date now = DateUtils.getNowDate();
-//        t.setUpdateBy(loginName);
+        t.setUpdateBy(loginName);
         t.setUpdateTime(now);
     }
 

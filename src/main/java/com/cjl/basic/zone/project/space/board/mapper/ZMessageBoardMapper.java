@@ -37,4 +37,12 @@ public interface ZMessageBoardMapper {
      * @return
      */
     List<ZMessageBoard> selectMessageBoardList(Integer accountId);
+
+    /**
+     * 查询主人寄语
+     *
+     * @param accountId
+     * @return
+     */
+    List<ZMessageBoard> selectOwnerMessageBoard(Integer accountId);
 }

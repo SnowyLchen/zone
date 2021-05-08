@@ -328,6 +328,72 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
                 };
                 layer.open(opt);
             });
+        },
+        refreshIframe: function (loading) {
+            layui.use('tab', function () {
+                var tab = layui.tab;
+                tab.option = {
+                    elem: 'spaceContent'
+                }
+                tab.refreshIframe(400, loading ? loading : 1000)
+            })
+        }
+    }
+    $.notice = {
+        option: function (notice) {
+            // 注册notice提示框
+            notice.options = {
+                closeButton: false,//显示关闭按钮
+                positionClass: "toast-top-center",//弹出的位置,
+                showDuration: "300",//显示的时间
+                hideDuration: "1000",//消失的时间
+                timeOut: "2000",//停留的时间
+                extendedTimeOut: "1000",//控制时间
+                showEasing: "swing",//显示时的动画缓冲方式
+                hideEasing: "linear",//消失时的动画缓冲方式
+                iconClass: 'toast-info', // 自定义图标，有内置，如不需要则传空 支持layui内置图标/自定义iconfont类名
+                onclick: null, // 点击关闭回调
+            };
+            return notice;
+        },
+        successNotice: function (msg) {
+            layui.use('notice', function () {
+                var notice = layui.notice;
+                $.notice.option(notice).success(msg);
+            })
+        },
+        errorNotice: function (msg) {
+            layui.use('notice', function () {
+                var notice = layui.notice;
+                $.notice.option(notice).error(msg);
+            })
+        },
+        warningNotice: function (msg) {
+            layui.use('notice', function () {
+                var notice = layui.notice;
+                $.notice.option(notice).warning(msg);
+            })
+        },
+        normalNotice: function (msg) {
+            layui.use('notice', function () {
+                var notice = layui.notice;
+                $.notice.option(notice).info(msg);
+            })
+        }
+    }
+    $.dragMove = {
+        init: function (elem, area, shade, move, zoom) {
+            layui.use('dragMove', function () {
+                var dragMove = layui.dragMove;
+                //执行示例
+                dragMove.render({
+                    elem: "#" + elem, //指向图片的父容器
+                    layerArea: area ? area : ["960px", "720px"],
+                    layerShade: shade ? shade : 0.6, //遮罩的透明度，同layer的shade，默认0.6
+                    layerMove: move ? move : false, //触发拖动的元素，同layer的move，这里默认禁止，可设置为'.layui-layer-title'
+                    maxZoom: zoom ? zoom : 3 //图片能放大的最大倍数，默认1倍
+                });
+            })
         }
     }
 })(jQuery)

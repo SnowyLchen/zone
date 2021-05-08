@@ -1,10 +1,10 @@
-layui.define(['jquery', 'element'], function (exports) {
+layui.define(['jquery', 'element', 'loading'], function (exports) {
     "use strict";
 
     var MOD_NAME = 'tab',
         $ = layui.jquery,
         element = layui.element;
-
+    var loading = layui.loading;
     var pearTab = function (opt) {
         this.option = opt;
     };
@@ -319,7 +319,7 @@ layui.define(['jquery', 'element'], function (exports) {
         }
     }
     // 刷 新 iframe
-    pearTab.prototype.refreshIframe = function (time) {
+    pearTab.prototype.refreshIframe = function (time, load_time) {
         // 刷 新 指 定 的 选 项 卡
         if (time != false && time != 0) {
 
@@ -341,10 +341,15 @@ layui.define(['jquery', 'element'], function (exports) {
                     pearLoad.remove();
                 });
             }, time);
-            $(".spaceContent").find("iframe").contentWindow
+
+            loading.Load(5, "");
+            loading.loadRemove(load_time);
+            $(".pear-frame-content").prevObject[0]
                 .location.reload(true);
         } else {
-            $(".spaceContent").find("iframe").contentWindow
+            loading.Load(5, "");
+            loading.loadRemove(load_time);
+            $(".pear-frame-content").prevObject[0]
                 .location.reload(true);
         }
     }

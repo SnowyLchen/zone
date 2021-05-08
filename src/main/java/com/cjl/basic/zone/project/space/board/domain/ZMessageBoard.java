@@ -1,5 +1,6 @@
 package com.cjl.basic.zone.project.space.board.domain;
 
+import com.cjl.basic.zone.framework.web.domain.BaseEntity;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -11,19 +12,22 @@ import java.util.Date;
  * @author
  */
 @Data
-public class ZMessageBoard implements Serializable {
+public class ZMessageBoard extends BaseEntity implements Serializable {
     private Integer mbId;
 
     /**
      * 当前用户id
      */
     private Integer accountId;
+    private String userName;
+    private String avatar;
 
     /**
-     * 被留言人的id
+     * 留言人的id
      */
     private Integer comeAccountId;
-
+    private String comeUserName;
+    private String comeAvatar;
     /**
      * 留言的内容
      */

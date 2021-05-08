@@ -1,7 +1,7 @@
 //  http://tinymce.ax-z.cn/   中文文档
 
-layui.define(['jquery'],function (exports) {
-    var $ = layui.$
+layui.define(['jquery'], function (exports) {
+    var $ = layui.$, index;
 
     var modFile = layui.cache.modules['tinymce'];
 
@@ -28,6 +28,7 @@ layui.define(['jquery'],function (exports) {
             }
         }
         , success: function (res, succFun, failFun) {//图片上传完成回调 根据自己需要修改
+            top.layer.close(index);
             if (res[this.response.statusName] == this.response.statusCode.ok) {
                 succFun(res[this.response.dataName][0]['src']);
             } else {
@@ -41,13 +42,13 @@ layui.define(['jquery'],function (exports) {
     var t = {};
 
     //初始化
-    t.render = function (options,callback) {
+    t.render = function (options, callback) {
 
         initTinymce();
 
-        var option = initOptions(options,callback)
+        var option = initOptions(options, callback)
 
-            ,edit = t.get(option.elem);
+            , edit = t.get(option.elem);
 
         if (edit) {
             edit.destroy();
@@ -79,10 +80,10 @@ layui.define(['jquery'],function (exports) {
 
         var options = {}
 
-        if(typeof elem == 'string'){
+        if (typeof elem == 'string') {
             option.elem = elem
             options = $.extend({}, option)
-        } else if (typeof elem == 'object' && typeof elem.elem == 'string'){
+        } else if (typeof elem == 'object' && typeof elem.elem == 'string') {
             options = $.extend({}, elem)
             callback = option
         }
@@ -91,12 +92,12 @@ layui.define(['jquery'],function (exports) {
 
         delete optionCache.init_instance_callback
 
-        $.extend(optionCache,options)
+        $.extend(optionCache, options)
 
-        return t.render(optionCache,callback)
+        return t.render(optionCache, callback)
     }
 
-    function initOptions(option,callback) {
+    function initOptions(option, callback) {
 
         var admin = layui.admin || {}
 
@@ -106,7 +107,7 @@ layui.define(['jquery'],function (exports) {
 
         var form_data = form.data || {} //其他表单数据 {key:value, ...}
 
-        option.suffix= isset(option.suffix) ? option.suffix : (plugin_filename.indexOf('.min')>-1 ? '.min' : '')
+        option.suffix = isset(option.suffix) ? option.suffix : (plugin_filename.indexOf('.min') > -1 ? '.min' : '')
 
         option.base_url = isset(option.base_url) ? option.base_url : settings.base_url
 
@@ -140,24 +141,25 @@ layui.define(['jquery'],function (exports) {
             table: {title: '表格', items: 'inserttable tableprops deletetable | cell row column'},
         };
 
-        option.init_instance_callback =isset(option.init_instance_callback) ? option.init_instance_callback : function(inst) {
-            if(typeof callback == 'function') callback(option,inst)
+        option.init_instance_callback = isset(option.init_instance_callback) ? option.init_instance_callback : function (inst) {
+            if (typeof callback == 'function') callback(option, inst)
         };
 
         option.images_upload_url = isset(option.images_upload_url) ? option.images_upload_url : settings.images_upload_url;
 
-        option.images_upload_handler = isset(option.images_upload_handler) ? option.images_upload_handler : function(blobInfo, succFun, failFun) {
-            if(isEmpty(option.images_upload_url)){
+        option.images_upload_handler = isset(option.images_upload_handler) ? option.images_upload_handler : function (blobInfo, succFun, failFun) {
+            if (isEmpty(option.images_upload_url)) {
                 failFun("上传接口未配置");
                 return console.error('images_upload_url未配置');
             }
             var formData = new FormData();
             formData.append(file_field, blobInfo.blob());
-            if(typeof form_data == 'object'){
-                for(var key in form_data){
+            if (typeof form_data == 'object') {
+                for (var key in form_data) {
                     formData.append(key, form_data[key]);
                 }
             }
+            index = top.layer.msg('图片上传中 请稍候...', {icon: 16, time: false, shade: 0.8});
             var ajaxOpt = {
                 url: option.images_upload_url,
                 dataType: 'json',
@@ -179,9 +181,9 @@ layui.define(['jquery'],function (exports) {
             }
         }
 
-        layui.sessionData('layui-tinymce',{
-            key:option.selector,
-            value:option
+        layui.sessionData('layui-tinymce', {
+            key: option.selector,
+            value: option
         })
         return option
     }
@@ -202,11 +204,11 @@ layui.define(['jquery'],function (exports) {
     }
 
     function isEmpty(value) {
-        if(typeof value === 'undefined' || value === null|| value === ''){
+        if (typeof value === 'undefined' || value === null || value === '') {
             return true
-        } else if (value instanceof Array && value.length === 0){
+        } else if (value instanceof Array && value.length === 0) {
             return true
-        } else if (typeof value === 'object' && Object.keys(value).length === 0){
+        } else if (typeof value === 'object' && Object.keys(value).length === 0) {
             return true
         }
         return false

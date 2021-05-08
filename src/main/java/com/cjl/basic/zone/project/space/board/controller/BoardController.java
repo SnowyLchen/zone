@@ -30,6 +30,8 @@ public class BoardController {
     public String board(ModelMap mmap) {
         User user = ShiroAuthenticateUtils.getUserByToken();
         mmap.put("user", user);
+        mmap.put("owner", boardService.selectOwnerMessageBoard(user.getAccountId()));
+        mmap.put("message", boardService.selectMessageBoardList(user.getAccountId()));
         return "space/board/board";
     }
 
@@ -66,7 +68,7 @@ public class BoardController {
         Integer accountId = ShiroAuthenticateUtils.getAccountId();
         zMessageBoard.setAccountId(accountId);
         zMessageBoard.setComeAccountId(accountId);
-        return AjaxResult.success(1);
+        return AjaxResult.success(boardService.insertMessage(zMessageBoard));
     }
 
 }
