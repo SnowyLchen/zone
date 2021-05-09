@@ -1,6 +1,7 @@
 package com.cjl.basic.zone.project.space.board.service;
 
 import com.cjl.basic.zone.project.space.board.domain.ZMessageBoard;
+import com.cjl.basic.zone.project.space.board.domain.ZReply;
 
 import java.util.List;
 
@@ -23,6 +24,15 @@ public interface IBoardService {
      * @return
      */
     int insertMessage(ZMessageBoard record);
+
+
+    /**
+     * 新增留言
+     *
+     * @param record
+     * @return
+     */
+    int insertReplyMessage(ZReply record);
 
     /**
      * 查询留言

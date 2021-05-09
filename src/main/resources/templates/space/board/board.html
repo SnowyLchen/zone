@@ -31,6 +31,17 @@
         position: relative;
         top: 20px;
         left: 5px;
+        text-align: right;
+    }
+
+    .replyMessage {
+        position: relative;
+        top: 20px;
+        left: 50px;
+    }
+
+    .message_title {
+        color: #9675ce;
     }
 </style>
 <body class="pear-container">
@@ -68,8 +79,19 @@
                                                 <span class="data" th:text="${item?.createTime}"></span>
                                             </p>
                                             <p class="ct" th:text="${item?.message}"></p>
-                                            <p class="reply"><a href="javascript:void(0)" th:id="${item?.mbId}"
-                                                                onclick="reply(this)">回复</a></p>
+                                            <p class="replyMessage" th:if="${#lists.size(item?.replies)>0}">
+                                                <span th:each="rp:${item?.replies}">
+                                                    <span class="message_title">
+                                                        [[${rp.createTime}]] [[${rp.userName}]] 对 [[${rp.repliedUserName}]] 说：
+                                                    </span>
+                                                    <span th:text="${rp?.message}"></span> <br>
+                                                </span>
+                                            </p>
+                                            <p class="reply">
+                                                <a href="javascript:void(0)" th:id="${item?.mbId}"
+                                                   th:data-accountId="${item?.comeAccountId}"
+                                                   onclick="reply(this)">回复</a>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -99,17 +121,22 @@
     <div th:utext="${#lists.size(owner)>0?owner[0].message:''}"></div>
 </script>
 <script type="text/html" id="replyContent">
-    <div class="layui-form-item layui-form-text">
-        <div class="layui-col-sm11">
-            <div class="layui-input-block" style="margin-left:5px;margin-top: 10px;">
-                <textarea name="desc" placeholder="" class="layui-textarea"></textarea>
+    <div id="mesBoard">
+        <input type="hidden" name="mbId" id="mbId">
+        <input type="hidden" name="accountId" id="accountId">
+        <div class="layui-form-item layui-form-text">
+            <div class="layui-col-sm11">
+                <div class="layui-input-block" style="margin-left:5px;margin-top: 10px;">
+                    <textarea name="desc" placeholder="" class="layui-textarea"></textarea>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="layui-form-item">
-        <div class="layui-col-sm11">
-            <div class="layui-input-block" style="text-align: right;margin-left:5px;margin-bottom: -25px;">
-                <button class="pear-btn pear-btn-primary pear-btn-xs">回复</button>
+        <div class="layui-form-item">
+            <div class="layui-col-sm11">
+                <div class="layui-input-block" style="text-align: right;margin-left:5px;margin-bottom: -25px;">
+                    <button class="pear-btn pear-btn-primary pear-btn-xs" lay-event="comeback">回复</button>
+                    <button class="pear-btn pear-btn-primary pear-btn-xs" lay-event="cancelReply">取消</button>
+                </div>
             </div>
         </div>
     </div>
@@ -156,6 +183,20 @@
         });
     }
 
+    function editButton($, content, tinymce, util, layer, common) {
+        $("#edit").click(function () {
+            $("#edit").hide();
+            $("#firstMessage").hide();
+            var elem = [[${owner}]].length > 0 ? '#editMessage' : '#firstMessage'
+            var oldContent = $('#editMessage div:first-child').html();
+            $(elem).empty();
+            // 将主人寄语加载到div中
+            $(elem).append(content);
+            // 富文本编辑器
+            initTinymce(tinymce, $, util, layer, common, oldContent);
+        })
+    }
+
     layui.use(['tinymce', 'common', 'util', 'layer', 'button', 'dragMove'], function () {
         var $ = layui.jquery,
             layer = layui.layer,
@@ -168,24 +209,54 @@
         $("#editMessage").append(messageValue);
         // 注册图片放大
         $.dragMove.init('board')
-
-        $("#edit").click(function () {
-            $("#edit").hide();
-            $("#firstMessage").hide();
-            var elem = [[${owner}]].length > 0 ? '#editMessage' : '#firstMessage'
-            var oldContent = $('#editMessage div:first-child').html();
-            $(elem).empty();
-            // 将主人寄语加载到div中
-            $(elem).append(content);
-            // 富文本编辑器
-            initTinymce(tinymce, $, util, layer, common, oldContent);
+        // 注册编辑按钮
+        editButton($, content, tinymce, util, layer, common);
+        // 回复按钮
+        util.event('lay-event', {
+            comeback: function () {
+                var desc = $("[name=desc]").val();
+                var mbId = $("#mbId").val();
+                var accountId = $("#accountId").val();
+                if (desc == '') {
+                    $.notice.warningNotice('回复内容不能为空哦');
+                    return
+                }
+                common.ajax({
+                    url: '/board/replyMessage',
+                    type: 'post',
+                    data: {
+                        message: desc,
+                        mbId: mbId,
+                        repliedAccountId: accountId
+                    }
+                }, function (res) {
+                    if (res.code != 0) {
+                        $.notice.errorNotice(res.msg);
+                    }
+                })
+            },
+            cancelReply: function () {
+                var mbId = $("#mbId").val();
+                $('#' + mbId).show()
+                var jQuery = $("#" + mbId).parent();
+                var a = $("#" + mbId).prop("outerHTML");
+                jQuery.empty();
+                jQuery.append(a)
+            }
         })
     });
 
     function reply($this) {
+        var jQuery = $("#mesBoard").parent();
+        jQuery.find('a').show();
+        $("#mesBoard").remove();
         var content = $("#replyContent").html();
-        $($this).append(content)
+        $($this).parent().append(content);
+        $("[name=mbId]").val($this.id);
+        $("[name=accountId]").val($this.dataset["accountid"]);
+        $('#' + $this.id).hide();
     }
+
 </script>
 </body>
 </html>

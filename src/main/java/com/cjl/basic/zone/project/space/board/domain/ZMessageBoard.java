@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * z_message_board
@@ -42,6 +43,10 @@ public class ZMessageBoard extends BaseEntity implements Serializable {
      * 留言时间
      */
     private Date createTime;
+    /**
+     * 留言回复
+     */
+    private List<ZReply> replies;
 
     private static final long serialVersionUID = 1L;
 }

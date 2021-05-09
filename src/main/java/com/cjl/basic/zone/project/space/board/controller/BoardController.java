@@ -4,6 +4,7 @@ import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.framework.web.domain.AjaxResult;
 import com.cjl.basic.zone.project.manage.user.domain.User;
 import com.cjl.basic.zone.project.space.board.domain.ZMessageBoard;
+import com.cjl.basic.zone.project.space.board.domain.ZReply;
 import com.cjl.basic.zone.project.space.board.service.IBoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -55,6 +56,19 @@ public class BoardController {
         Integer accountId = ShiroAuthenticateUtils.getAccountId();
         zMessageBoard.setAccountId(accountId);
         return AjaxResult.success(boardService.insertMessage(zMessageBoard));
+    }
+
+    /**
+     * 回复留言
+     *
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/replyMessage")
+    public AjaxResult replyMessage(ZReply reply) {
+        Integer accountId = ShiroAuthenticateUtils.getAccountId();
+        reply.setAccountId(accountId);
+        return AjaxResult.success(boardService.insertReplyMessage(reply));
     }
 
     /**

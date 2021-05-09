@@ -2,7 +2,9 @@ package com.cjl.basic.zone.project.space.board.service;
 
 import com.cjl.basic.zone.common.utils.InsertOrUpdateUtils;
 import com.cjl.basic.zone.project.space.board.domain.ZMessageBoard;
+import com.cjl.basic.zone.project.space.board.domain.ZReply;
 import com.cjl.basic.zone.project.space.board.mapper.ZMessageBoardMapper;
+import com.cjl.basic.zone.project.space.board.mapper.ZReplyMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +15,8 @@ import java.util.List;
 public class BoardServiceImpl implements IBoardService {
     @Resource
     private ZMessageBoardMapper messageBoardMapper;
+    @Resource
+    private ZReplyMapper replyMapper;
 
     @Override
     public int deleteMessageById(Integer mbId) {
@@ -32,13 +36,24 @@ public class BoardServiceImpl implements IBoardService {
     }
 
     @Override
+    public int insertReplyMessage(ZReply record) {
+        InsertOrUpdateUtils.addInsertAttr(record);
+        return replyMapper.insertSelective(record);
+    }
+
+    @Override
     public ZMessageBoard selectMessageBoardById(Integer mbId) {
         return messageBoardMapper.selectMessageBoardById(mbId);
     }
 
     @Override
     public List<ZMessageBoard> selectMessageBoardList(Integer accountId) {
-        return messageBoardMapper.selectMessageBoardList(accountId);
+        List<ZMessageBoard> zMessageBoards = messageBoardMapper.selectMessageBoardList(accountId);
+        for (ZMessageBoard zMessageBoard : zMessageBoards) {
+            Integer mbId = zMessageBoard.getMbId();
+            zMessageBoard.setReplies(replyMapper.selectReplyList(mbId));
+        }
+        return zMessageBoards;
     }
 
     @Override

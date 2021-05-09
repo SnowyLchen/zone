@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cjl.basic.zone.project.space.board.mapper.ZReplyMapper">
+  <resultMap id="BaseResultMap" type="com.cjl.basic.zone.project.space.board.domain.ZReply">
+    <id column="r_id" jdbcType="INTEGER" property="rId" />
+    <result column="account_id" jdbcType="INTEGER" property="accountId" />
+    <result column="user_name" jdbcType="INTEGER" property="userName" />
+    <result column="replied_account_id" jdbcType="INTEGER" property="repliedAccountId" />
+    <result column="replied_user_name" jdbcType="INTEGER" property="repliedUserName" />
+    <result column="message" jdbcType="VARCHAR" property="message" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="mb_id" jdbcType="INTEGER" property="mbId" />
+    <result column="del_flag" jdbcType="CHAR" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    r_id, account_id, replied_account_id, message, create_time, del_flag,mb_id
+  </sql>
+  <select id="selectReplyList" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+   select zr.r_id,
+           zr.account_id,
+           zu.user_name,
+           zr.replied_account_id,
+           (select user_name
+            from z_users
+            where account_id = zr.replied_account_id) replied_user_name,
+           zr.message,
+           zr.create_time,
+           zr.del_flag,
+           zr.mb_id
+    from z_reply zr
+             left join z_users zu on zr.account_id = zu.account_id
+    where mb_id = #{mbId}
+    order by create_time
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from z_reply
+    where r_id = #{rId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insertSelective" keyColumn="r_id" keyProperty="rId" parameterType="com.cjl.basic.zone.project.space.board.domain.ZReply" useGeneratedKeys="true">
+    insert into z_reply
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="accountId != null">
+        account_id,
+      </if>
+      <if test="repliedAccountId != null">
+        replied_account_id,
+      </if>
+      <if test="message != null">
+        message,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="delFlag != null">
+        del_flag,
+      </if>
+      <if test="mbId != null">
+        mb_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="accountId != null">
+        #{accountId,jdbcType=INTEGER},
+      </if>
+      <if test="repliedAccountId != null">
+        #{repliedAccountId,jdbcType=INTEGER},
+      </if>
+      <if test="message != null">
+        #{message,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=CHAR},
+      </if>
+      <if test="mbId != null">
+        #{mbId},
+      </if>
+    </trim>
+  </insert>
+</mapper>
