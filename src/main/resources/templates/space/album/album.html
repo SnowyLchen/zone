@@ -18,6 +18,14 @@
         .layui-table-tool, .layui-table-header {
             display: none;
         }
+
+        .down {
+            position: relative;
+            top: -335px;
+            left: 256px;
+            width: 10px;
+            height: 20px
+        }
     </style>
 </head>
 <body class="pear-container">
@@ -51,15 +59,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="layui-tab-item">
-                    <!--                    <a lay-filter="down" style="position: relative;top: 23px;left: 260px;width: 10px;height: 20px"-->
-                    <!--                       lay-dropdown='{menus: [-->
-                    <!--                      {layIcon:"layui-icon-edit",txt: "编辑相册", event:"editAlbum"},-->
-                    <!--                     {layIcon: "layui-icon-delete",txt: "删除", event:"delete"}-->
-                    <!--                    ]}'>-->
-                    <!--                        <i class="layui-icon layui-icon-more-vertical"></i>-->
-                    <!--                    </a>-->
-
+                <div class="layui-tab-item" id="aa">
 
                 </div>
             </div>
@@ -69,14 +69,9 @@
 <div th:include="include::footer"></div>
 <!--表格操作界面-->
 <script type="text/html" id="oper">
-    <div class="layui-btn-group">
-        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">
-            <i class="layui-icon">&#xe642;</i>
-        </button>
-        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">
-            <i class="layui-icon">&#xe640;</i>
-        </button>
-    </div>
+    <a lay-filter="down" name="mybtn" class="down">
+        <i class="layui-icon layui-icon-triangle-d" style="font-size: 20px;color: rgba(0,0,0,.5);"></i>
+    </a>
 </script>
 <script>
 

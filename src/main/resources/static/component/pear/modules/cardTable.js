@@ -44,7 +44,7 @@ layui.define(['table', 'laypage', 'jquery', 'element', 'dropdown', 'form'], func
         // 完 成 函 数
         done: function () {
 
-        }
+        }, template: "<div class='layui-icon-edit'>编辑</div>"
     };
     var card = function (opt) {
         _instances[opt.elem.substring(1)] = this;
@@ -117,6 +117,7 @@ layui.define(['table', 'laypage', 'jquery', 'element', 'dropdown', 'form'], func
             html = "<p>没有数据</p>";
         }
         $(option.elem).html(html);
+        downMenu()
         if (option.page) {
             // 初始化分页组件
             laypage.render({
@@ -164,25 +165,37 @@ layui.define(['table', 'laypage', 'jquery', 'element', 'dropdown', 'form'], func
     /** 创建一个卡片 */
     function createCard(elem, linenum, item, no) {
         var line = 12 / linenum;
+        var oper = $("#oper").html();
         var card =
-            '<div id=' + item.id + ' onclick="cardTableCheckedCard(\'' + elem + '\',this)" class="layui-col-md' + line + ' ew-datagrid-item" data-index="' + no + '" data-number="1">' +
+            '<div  class="layui-col-md' + line + ' ew-datagrid-item" data-index="' + no + '" data-number="1">' +
             // '<a class="layui-icon layui-icon-more-vertical" style="position: relative;top: 23px;left: 260px;width: 10px;height: 20px" href="javascript:void(0)"></a>' +
-            ' <div class="project-list-item">' +
+            ' <div class="project-list-item" onclick="cardTableCheckedCard(\'' + elem + '\',this)" id=' + item.id + '>' +
             ' <img class="project-list-item-cover" src="' + item.image + '"> ' +
             '<div class="project-list-item-body"> <h2>' + (item.title == null ? "" : item.title) + '</h2> ' +
             '<div class="project-list-item-text layui-text">' + item.remark + '</div> ' +
             '<div class="project-list-item-desc"> <span class="time">' + item.time + '</span> ' +
-            '<div class="ew-head-list"></div> </div> </div > </div > </div > '
+            '<div class="ew-head-list"></div> </div> </div > </div >' +
+            oper +
+            ' </div > '
         return card;
     }
 
     window.downMenu = function () {
-        layui.use(['table', 'form', 'jquery', 'card', 'cardTable', 'dropdown'], function () {
-            // 监听菜单点击
-            dropdown.onFilter('down13', function (event) {
-                // ...业务代码
-            })
+        // 通过代码(也就是后期异步初始化)进行初始化下拉
+        // 这样可以把 mybtn 实现下拉菜单
+        dropdown.suite("[name=mybtn]", {
+            menus: [{layIcon: "layui-icon-edit", txt: "编辑相册", event: "editAlbum"},
+                {layIcon: "layui-icon-delete", txt: "删除", event: "delete"}]
         });
+        // 监听菜单点击
+        dropdown.onFilter('down', function (event,menu) {
+            // ...业务代码
+            if (event == 'editAlbum') {
+                debugger
+            } else if (event == 'delete') {
+                debugger
+            }
+        })
     }
 
     /** 格式化返回参数 */

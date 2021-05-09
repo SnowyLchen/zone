@@ -64,7 +64,6 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                         }
                     });
                 } else {
-                    debugger
                     sideMenu = pearMenu.render({
                         elem: 'content',
                         role: param.role,
@@ -128,7 +127,6 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                         }
 
                     } else {
-                        debugger
                         config = {
                             elem: 'spaceContent',
                             roll: false,
