@@ -64,6 +64,7 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                         }
                     });
                 } else {
+                    debugger
                     sideMenu = pearMenu.render({
                         elem: 'content',
                         role: param.role,
@@ -80,7 +81,7 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                             compatible();
                         },
                         done: function () {
-                            sideMenu.selectItem(param.menu.select);
+                            sideMenu.selectItem(param.menu.spaceSelect);
                         }
                     });
                 }
@@ -95,7 +96,6 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                     refreshA.addClass("layui-anim-loop");
                     refreshA.addClass("layui-icon-loading");
                     bodyTab.refresh(400);
-                    debugger
                     setTimeout(function () {
                         refreshA.addClass("layui-icon-refresh-1");
                         refreshA.removeClass("layui-anim");
@@ -128,6 +128,7 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                         }
 
                     } else {
+                        debugger
                         config = {
                             elem: 'spaceContent',
                             roll: false,
@@ -140,14 +141,13 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                             closeEvent: function (id) {
                                 sideMenu.selectItem(id);
                             }, data: [{
-                                id: param.tab.index.id,
-                                url: param.tab.index.href,
-                                title: param.tab.index.title,
+                                id: param.tab.space.id,
+                                url: param.tab.space.href,
+                                title: param.tab.space.title,
                                 close: false
                             }]
                         }
                     }
-
                     bodyTab = pearTab.render(config);
                     bodyTab.click(function (id) {
                         if (!param.tab.keepState) {
