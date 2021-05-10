@@ -86,7 +86,7 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
                 }
             }, 500);
         }
-        this.ajaxMsg = function (res, index) {
+        this.ajaxMsg = function (res, index,refresh) {
             if (index) {
                 top.layer.close(index);
             }
@@ -94,6 +94,9 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
                 layer.msg(res.msg, {icon: 1, time: 1000}, function () {
                     parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
                 });
+                if (refresh){
+                    $.modal.refreshIframe(400)
+                }
             } else {
                 layer.msg(res.msg, {icon: 2, time: 1000});
             }

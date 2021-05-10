@@ -77,6 +77,30 @@ public class AlbumPhotoController extends BaseController {
     }
 
     /**
+     * 修改相册
+     *
+     * @return
+     */
+    @RequestMapping("/editAlbum/{aId}")
+    public String editAlbum(@PathVariable Integer aId, ModelMap modelMap) {
+        modelMap.put("album", albumPhotoService.selectAlbumByaId(aId));
+        return "space/album/editAlbum";
+    }
+
+    /**
+     * 修改保存相册
+     *
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/editAlbumSave")
+    public AjaxResult editAlbumSave(ZAlbum zAlbum) {
+        Integer accountId = ShiroAuthenticateUtils.getAccountId();
+        zAlbum.setAccountId(accountId);
+        return AjaxResult.success(albumPhotoService.editAlbum(zAlbum));
+    }
+
+    /**
      * 查询相册
      *
      * @return

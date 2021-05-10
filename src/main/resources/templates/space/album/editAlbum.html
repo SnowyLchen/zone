@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <div th:include="include::header"></div>
+</head>
+<body class="pear-container">
+<div class="main-container">
+    <form class="layui-form" id="createAlbum">
+        <input type="hidden" name="aId" th:value="${album?.aId}">
+        <div class="layui-form-item">
+            <label class="layui-form-label">相册名称</label>
+            <div class="layui-input-block">
+                <input class="layui-input" type="text" required lay-verify="required" placeholder="相册名称"
+                       autocomplete="off"
+                       name="name" th:value="${album?.name}">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">相册描述</label>
+                <div class="layui-input-block">
+                    <textarea name="description" placeholder="相册描述" class="layui-textarea" th:text="${album?.description}"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="button-container">
+                <button type="submit" class="layui-btn layui-btn-normal layui-btn-sm" lay-submit=""
+                        lay-filter="album-save">
+                    <i class="layui-icon layui-icon-ok"></i>
+                    提交
+                </button>
+                <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">
+                    <i class="layui-icon layui-icon-refresh"></i>
+                    重置
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<div th:include="include::footer"></div>
+
+<script>
+
+    layui.use(['form', 'jquery', 'common'], function () {
+        let form = layui.form;
+        let $ = layui.jquery;
+        let common = layui.common;
+
+        form.on('submit(album-save)', function (data) {
+            common.ajax({
+                url: '/album/editAlbumSave',
+                data: $("#createAlbum").serialize(),
+                type: 'post',
+            }, function (res) {
+                common.ajaxMsg(res)
+            });
+            return false;
+        });
+    })
+</script>
+</body>
+</html>

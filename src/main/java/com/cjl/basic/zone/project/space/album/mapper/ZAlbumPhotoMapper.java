@@ -67,10 +67,10 @@ public interface ZAlbumPhotoMapper {
     /**
      * 更新相册信息
      *
-     * @param aId
+     * @param album
      * @return
      */
-    int updateAlbumById(Integer aId);
+    int updateAlbum(ZAlbum album);
 
     /**
      * 删除相册信息
@@ -79,4 +79,11 @@ public interface ZAlbumPhotoMapper {
      * @return
      */
     int deleteAlbumById(Integer aId);
+
+    /**
+     *
+     * @param aId
+     * @return
+     */
+    ZAlbum selectAlbumByaId(Integer aId);
 }

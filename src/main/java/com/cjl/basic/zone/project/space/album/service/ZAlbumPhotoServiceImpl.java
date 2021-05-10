@@ -72,13 +72,19 @@ public class ZAlbumPhotoServiceImpl implements IZAlbumPhotoService {
         return cards;
     }
 
-    @Override
-    public int updateAlbumById(Integer aId) {
-        return albumPhotoMapper.updateAlbumById(aId);
-    }
 
     @Override
     public int deleteAlbumById(Integer aId) {
         return albumPhotoMapper.deleteAlbumById(aId);
+    }
+
+    @Override
+    public int editAlbum(ZAlbum zAlbum) {
+        return albumPhotoMapper.updateAlbum(zAlbum);
+    }
+
+    @Override
+    public ZAlbum selectAlbumByaId(Integer aId) {
+        return albumPhotoMapper.selectAlbumByaId(aId);
     }
 }

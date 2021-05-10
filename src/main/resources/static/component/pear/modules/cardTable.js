@@ -1,4 +1,4 @@
-layui.define(['table', 'laypage', 'jquery', 'element', 'dropdown', 'form'], function (exports) {
+layui.define(['table', 'laypage', 'jquery', 'element', 'dropdown', 'form','common'], function (exports) {
     "use strict";
     var filePath = layui.cache.modules.cardTable
         .substr(0, layui.cache.modules.cardTable.lastIndexOf('/'));
@@ -7,6 +7,7 @@ layui.define(['table', 'laypage', 'jquery', 'element', 'dropdown', 'form'], func
     var MOD_NAME = 'cardTable',
         $ = layui.jquery,
         element = layui.element,
+        common = layui.common,
         laypage = layui.laypage;
     var dropdown = layui.dropdown;
     var _instances = {};  // 记录所有实例
@@ -117,7 +118,9 @@ layui.define(['table', 'laypage', 'jquery', 'element', 'dropdown', 'form'], func
             html = "<p>没有数据</p>";
         }
         $(option.elem).html(html);
-        downMenu()
+        $.each(option.data, function (idx, item) {
+            downMenu(item.id)
+        })
         if (option.page) {
             // 初始化分页组件
             laypage.render({
@@ -175,28 +178,35 @@ layui.define(['table', 'laypage', 'jquery', 'element', 'dropdown', 'form'], func
             '<div class="project-list-item-text layui-text">' + item.remark + '</div> ' +
             '<div class="project-list-item-desc"> <span class="time">' + item.time + '</span> ' +
             '<div class="ew-head-list"></div> </div> </div > </div >' +
-            oper +
+            // oper +
+            '  <a lay-filter="down' + item.id + '"  name="mybtn" id="down' + item.id + '" class="down">\n' +
+            '        <i class="layui-icon layui-icon-triangle-d" style="font-size: 20px;color: rgba(0,0,0,.5);"></i>\n' +
+            '    </a>' +
             ' </div > '
         return card;
     }
 
-    window.downMenu = function () {
-        // 通过代码(也就是后期异步初始化)进行初始化下拉
-        // 这样可以把 mybtn 实现下拉菜单
-        dropdown.suite("[name=mybtn]", {
+    window.downMenu = function (id) {
+        dropdown.suite("#down" + id, {
             menus: [{layIcon: "layui-icon-edit", txt: "编辑相册", event: "editAlbum"},
-                {layIcon: "layui-icon-delete", txt: "删除", event: "delete"}]
+                {layIcon: "layui-icon-delete", txt: "删除", event: "delete"}],
+            onShow: function ($maker, $down) {
+                $maker.find(".layui-icon").css('transition-duration', '300ms');
+                $maker.find(".layui-icon").css('transform', 'rotate(180deg)');
+            },
+            onHide: function ($maker, $down) {
+                $maker.find(".layui-icon").css('transform', 'rotate(0)');
+            },
+            onItemClick: function (event, menu) {
+                if (event == 'editAlbum') {
+                    $.modal.openIframe("修改相册", '/album/editAlbum/' + id, 700, 370, null, null)
+                } else if (event == 'delete') {
+                   alert('删除相册'+id)
+                }
+            },
+            maxHeight: 200
         });
-        // 监听菜单点击
-        dropdown.onFilter('down', function (event,menu) {
-            // ...业务代码
-            if (event == 'editAlbum') {
-                debugger
-            } else if (event == 'delete') {
-                debugger
-            }
-        })
-    }
+    };
 
     /** 格式化返回参数 */
     function initData(tempData, option) {

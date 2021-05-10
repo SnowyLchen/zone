@@ -112,6 +112,11 @@
   where account_id = #{accountId}
   group by za.a_id
   </select>
+    <select id="selectAlbumByaId" resultMap="albumMap">
+    select *
+  from z_album
+  where a_id = #{aId}
+  </select>
     <delete id="deleteAlbumById" parameterType="java.lang.Integer">
     delete from z_album
     where a_id = #{aId,jdbcType=INTEGER}
@@ -142,7 +147,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateAlbumById" parameterType="com.cjl.basic.zone.project.space.album.domain.ZAlbum">
+    <update id="updateAlbum" parameterType="com.cjl.basic.zone.project.space.album.domain.ZAlbum">
         update z_album
         <set>
             <if test="name != null">

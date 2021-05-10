@@ -68,18 +68,24 @@ public interface IZAlbumPhotoService {
 
 
     /**
-     * 更新相册信息
-     *
-     * @param aId
-     * @return
-     */
-    int updateAlbumById(Integer aId);
-
-    /**
      * 删除相册信息
      *
      * @param aId
      * @return
      */
     int deleteAlbumById(Integer aId);
+
+    /**
+     * 修改相册
+     * @param zAlbum
+     * @return
+     */
+    int editAlbum(ZAlbum zAlbum);
+
+    /**
+     * 按照id查询相册
+     * @param aId
+     * @return
+     */
+    ZAlbum selectAlbumByaId(Integer aId);
 }
