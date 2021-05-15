@@ -65,7 +65,7 @@
         and zd.create_time &lt; #{currentTime}
         AND zd.account_id in (
                 (select f_user_id
-                from layim_friend
+                from z_friend
                 where user_id = #{accountId}
                 group by f_user_id
                 union select #{accountId}

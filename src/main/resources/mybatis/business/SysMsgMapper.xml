@@ -12,13 +12,13 @@
 
 
   <insert id="addSysMsg">
-    insert into layim_sys_msg
+    insert into z_sys_msg
     (id,uid,content,create_time,status)
     values (#{id},#{uid},#{content},#{createTime},#{status})
   </insert>
 
   <select id="getSysMsgByUid" resultMap="sysMsgMap">
-    select * from layim_sys_msg
+    select * from z_sys_msg
     where uid=#{uid} order by create_time desc
   </select>
 </mapper>

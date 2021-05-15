@@ -20,14 +20,14 @@
     </sql>
 
     <insert id="insertChatmsg" >
-    insert into layim_chat_msg
+    insert into z_chat_msg
     (<include refid="chatMsg" />)
     values (#{id},#{sendUserId}, #{reciveUserId},#{content},#{createTime},#{msgType})
   </insert>
 
     <select id="getChatMsgLog" resultMap="userMap">
         SELECT lm.account_id,lm.user_name,lm.avatar,lcm.content,lcm.create_time  FROM z_users lm
-        INNER JOIN layim_chat_msg lcm on lcm.send_user_id=lm.account_id
+        INNER JOIN z_chat_msg lcm on lcm.send_user_id=lm.account_id
         where (lcm.send_user_id=#{sendUserId} and lcm.recive_user_id=#{reciveUserId}) or
 				(lcm.recive_user_id=#{sendUserId} and lcm.send_user_id=#{reciveUserId})
         ORDER BY lcm.create_time asc

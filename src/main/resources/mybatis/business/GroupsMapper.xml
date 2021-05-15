@@ -17,20 +17,20 @@
     </resultMap>
 
     <insert id="addGroupUser">
-        insert into layim_group_mine
+        insert into z_group_mine
         (id,gid,uid,create_time,status)
         values (#{id},#{gid},#{uid},#{createTime},#{status})
     </insert>
 
     <select id="getUserGroups" resultMap="groupMap">
-        select lg.* from layim_group lg
-        inner join layim_group_mine lgm on lgm.gid=lg.id
+        select lg.* from z_group lg
+        inner join z_group_mine lgm on lgm.gid=lg.id
         where lgm.uid=#{userId}
     </select>
 
     <select id="getGroupUserById" resultMap="userMap">
         select lm.* from  z_users lm
-        inner join layim_group_mine lgm on lgm.uid=lm.account_id
+        inner join z_group_mine lgm on lgm.uid=lm.account_id
         where lgm.gid=#{id}
     </select>
 
@@ -39,20 +39,20 @@
     </sql>
 
     <insert id="InsertGroupMsg">
-        insert into layim_group_msg
+        insert into z_group_msg
         (<include refid="groupMsg" />)
         values (#{id},#{groupId},#{sendUserId},#{content},#{createTime},#{status})
     </insert>
 
     <select id="getGroupChatLogMsg" resultMap="userMap">
         SELECT * FROM z_users lm
-        INNER JOIN layim_group_msg lgmsg on lgmsg.send_user_id=lm.account_id
+        INNER JOIN z_group_msg lgmsg on lgmsg.send_user_id=lm.account_id
         WHERE lgmsg.group_id=#{groupId}
         ORDER BY lgmsg.create_time asc
     </select>
 
     <select id="getById" resultMap="groupMap">
-        select * from layim_group
+        select * from z_group
         where  id=#{id}
     </select>
 </mapper>

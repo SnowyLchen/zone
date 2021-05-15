@@ -19,7 +19,7 @@
     </resultMap>
 
     <insert id="addFriend">
-        insert into  layim_friend
+        insert into  z_friend
         (id,user_id,f_user_id,create_time,f_group_id)
         values (#{id},#{uid},#{fid},#{createTime},#{gId})
     </insert>
@@ -28,22 +28,22 @@
     <select id="getUserFriend" resultMap="userMap">
        select lm.*, lf.f_group_id, lfg.group_name gName,lm.account_id id
         FROM z_users lm
-                 INNER JOIN layim_friend lf
+                 INNER JOIN z_friend lf
                             ON lf.f_user_id = lm.account_id
-                 left join layim_friend_groupname lfg on lf.f_group_id = lfg.id
+                 left join z_friend_groupname lfg on lf.f_group_id = lfg.id
         WHERE lf.user_id = #{userId}
         group by lm.account_id
     </select>
     <select id="getFriendGroupList" resultMap="friendMap">
         select lfg.*
-        from layim_friend_groupname lfg
-                 left join layim_friend lf on lf.f_group_id = lfg.id
+        from z_friend_groupname lfg
+                 left join z_friend lf on lf.f_group_id = lfg.id
         where lfg.account_id = #{accountId}
         group by lfg.id
         order by lfg.id
     </select>
     <insert id="createGroup">
-        insert into layim_friend_groupname
+        insert into z_friend_groupname
         (account_id,group_name)
         values (#{accountId},#{groupname})
     </insert>
