@@ -41,7 +41,7 @@ public class ChatWebSocket {
     private static SecurityManager securityManager;
 
     @Autowired
-    public void setChatService(ChatMsgService chatService, GroupsService groupsService, IUserService userService, SpringRedisUtil redisTemplate, @Value("${application.cache.prefix}") String cachePrefix,SecurityManager securityManager) {
+    public void setChatService(ChatMsgService chatService, GroupsService groupsService, IUserService userService, SpringRedisUtil redisTemplate, @Value("${application.cache.prefix}") String cachePrefix, SecurityManager securityManager) {
         ChatWebSocket.chatMsgService = chatService;
         ChatWebSocket.groupsService = groupsService;
         ChatWebSocket.userService = userService;
@@ -210,6 +210,7 @@ public class ChatWebSocket {
     @OnClose
     public void onClose() {
         if (accountId != null) {
+            ThreadContext.bind(securityManager);
             //从set中删除
             webSocketSet.remove(accountId);
             //在线数减1

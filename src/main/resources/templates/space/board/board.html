@@ -84,7 +84,10 @@
                                                     <span class="message_title">
                                                         [[${rp.createTime}]] [[${rp.userName}]] 对 [[${rp.repliedUserName}]] 说：
                                                     </span>
-                                                    <span th:text="${rp?.message}"></span> <br>
+                                                    <span th:text="${rp?.message}"></span>
+                                                     <a href="javascript:void(0)" th:id="${item?.mbId}" style="margin-left: 15px;" th:if="${rp?.accountId == user?.accountId}"
+                                                        onclick="delete(this)">  <i class="layui-icon">&#xe640;</i></a>
+                                                    <br>
                                                 </span>
                                             </p>
                                             <p class="reply">

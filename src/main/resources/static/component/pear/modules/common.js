@@ -199,15 +199,15 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
                         //第二行
                         ele += '<div class="layui-row project-list-item-desc">';
                         //第二行左边部分
-                        ele += '<div class="layui-col-sm4"><span class="time">' + item.createTime + '</span></div>';
+                        ele += '<div class="layui-col-sm11"><span class="time">' + item.createTime + '</span></div>';
                         //第二行右边部分
-                        ele += '<div class="layui-col-sm3 layui-col-sm-offset5">' +
+                        ele += '<div class="layui-col-sm1">' +
                             '<div class="layui-btn-group">\n' +
                             '        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">\n' +
-                            '            <i class="layui-icon">&#xe642;</i>编辑\n' +
+                            '            <i class="layui-icon">&#xe642;</i>\n' +
                             '        </button>\n' +
                             '        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">\n' +
-                            '            <i class="layui-icon">&#xe640;</i>删除\n' +
+                            '            <i class="layui-icon">&#xe640;</i>\n' +
                             '        </button>\n' +
                             '</div>' +
                             '</div>';

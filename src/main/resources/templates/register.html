@@ -17,13 +17,17 @@
         text-align: right;
         margin-top: -20px;
     }
+    .toast-top-center {
+        margin-top: calc(50% - 700px);
+    }
+
 </style>
 <!-- 代 码 结 构 -->
 <body background="admin/images/background2.svg" style="background-size: cover;">
 <form class="layui-form" id="form-register">
     <div class="layui-form-item">
         <img class="logo" src="admin/images/logo.png"/>
-        <div class="title">你的空间</div>
+        <div class="title">个人空间</div>
         <div class="desc">注册一个用户
         </div>
     </div>
@@ -44,7 +48,7 @@
                class="layui-input"/>
     </div>
     <div class="layui-form-item">
-        <input id="remember-me" type="checkbox" title="我已阅读并同意" lay-skin="primary">
+        <input id="remember-me" type="checkbox"  title="我已阅读并同意" lay-skin="primary">
         <div class="row"><a href="javascript:;">《用户注册协议》</a></div>
     </div>
     <div class="layui-form-item">
@@ -56,8 +60,7 @@
 </form>
 </form>
 <!-- 资 源 引 入 -->
-<script src="component/layui/layui.js"></script>
-<script src="component/pear/pear.js"></script>
+<div th:include="include::footer"></div>
 <script>
     layui.use(['form', 'element', 'jquery', 'button', 'popup'], function () {
         var form = layui.form;
@@ -66,6 +69,10 @@
         var $ = layui.jquery;
         // 注 册 提 交
         form.on('submit(register)', function (data) {
+            if (!$("#remember-me").prop("checked")){
+                $.notice.warningNotice("请勾选我同意《用户注册协议》")
+                return
+            }
             button.load({
                 elem: 'register',
                 time: 500,
