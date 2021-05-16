@@ -96,7 +96,7 @@ public class ShiroConfig {
 
         filterChainDefinitionMap.put("/logout", "statelessLogout");
         // 所有请求需要认证
-        filterChainDefinitionMap.put("/**/*", "stateless");
+        filterChainDefinitionMap.put("/**", "stateless");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
