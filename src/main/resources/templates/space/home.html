@@ -87,7 +87,7 @@
                 <input class="layui-input" type="text" placeholder="说点什么吧" autocomplete="off" readonly
                        id="showActiveContent">
             </div>
-            <div class="layui-card-body" id="activeContent" hidden>
+            <div class="layui-card-body" id="activeContent" hidden="">
                 <textarea name="" id="edit" cols="30" rows="10"></textarea>
                 <div class="layui-btn-group" style="margin-top: 10px;position: relative;left: 830px">
                     <button class="pear-btn pear-btn-success" lay-event="getContent" id="commit">发表</button>
@@ -224,18 +224,33 @@
             //     });
             // }
         });
-        // $('html').click(function () {
-        //     console.log(document.activeElement);
-        // })
-        $(document).click(function (e) {
-            e = window.event || e;
-            var obj = e.srcElement || e.target;
-            if (($(obj).is("#showActiveContent") || $(obj).is("#activeContent") || $(obj).is("#commit")) && !$(obj).is('body')) {
-                $("#activeContent").show();
-            } else {
-                $("#activeContent").hide();
+        $(document).mouseup(function (e) {
+            var content = $('#activeContent');
+            var content1 = $('.tox-pop__dialog')
+            var content2 = $('.tox-dialog__body')
+            var content3 = $('.tox-collection__group')
+            if (!content.is(e.target) && content.has(e.target).length === 0
+                && !content1.is(e.target) && content1.has(e.target).length === 0
+                && !content2.is(e.target) && content2.has(e.target).length === 0
+                && !content3.is(e.target) && content3.has(e.target).length === 0
+            ) {
+                content.hide()
             }
         });
+        $('#showActiveContent').click(function () {
+            $('#activeContent').show();
+        });
+        // $(document).click(function (e) {
+        //     console.log(document.activeElement)
+        //     // e = window.event || e;
+        //     // var obj = e.srcElement || e.target;
+        //     // if (($(obj).is("#showActiveContent") || $(obj).is("#activeContent") || $(obj).is("#commit")) && !$(obj).is('body')) {
+        //     //     $("#activeContent").show();
+        //     // }
+        //     // else {
+        //     //     $("#activeContent").hide();
+        //     // }
+        // });
         util.event('lay-event', {
             getContent: function () {
                 if (edit.getContent() == '' || edit.getContent() == undefined) {

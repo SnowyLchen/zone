@@ -10,6 +10,8 @@ import com.cjl.basic.zone.project.manage.user.domain.User;
 import com.cjl.basic.zone.project.manage.user.service.IUserService;
 import com.cjl.basic.zone.utils.IdGenerat;
 import com.cjl.basic.zone.utils.LayimUtil;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.util.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -36,14 +38,16 @@ public class ChatWebSocket {
     private static IUserService userService;
     private static SpringRedisUtil redisTemplate;
     private static String cachePrefix;
+    private static SecurityManager securityManager;
 
     @Autowired
-    public void setChatService(ChatMsgService chatService, GroupsService groupsService, IUserService userService, SpringRedisUtil redisTemplate, @Value("${application.cache.prefix}") String cachePrefix) {
+    public void setChatService(ChatMsgService chatService, GroupsService groupsService, IUserService userService, SpringRedisUtil redisTemplate, @Value("${application.cache.prefix}") String cachePrefix,SecurityManager securityManager) {
         ChatWebSocket.chatMsgService = chatService;
         ChatWebSocket.groupsService = groupsService;
         ChatWebSocket.userService = userService;
         ChatWebSocket.redisTemplate = redisTemplate;
         ChatWebSocket.cachePrefix = cachePrefix;
+        ChatWebSocket.securityManager = securityManager;
     }
 
     /**
@@ -76,6 +80,7 @@ public class ChatWebSocket {
      */
     @OnOpen
     public void onOpen(@PathParam(value = "accountId") Integer uId, Session webSocketSession, EndpointConfig config) {
+        ThreadContext.bind(securityManager);
         //接收到发送消息的用户id
         accountId = uId;
         this.webSocketSession = webSocketSession;
