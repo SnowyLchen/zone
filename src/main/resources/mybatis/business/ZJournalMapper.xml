@@ -29,7 +29,7 @@
         select
         <include refid="Base_Column_List"/>
         from z_journal
-        where j_id = #{jId,jdbcType=INTEGER}
+        where account_id = #{accountId}
     </select>
     <delete id="deleteJournalById" parameterType="java.lang.Integer">
     update  z_journal set del_flag=1

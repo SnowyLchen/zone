@@ -34,7 +34,7 @@ public class ZJournal extends BaseEntity implements Serializable {
     private String content;
 
     /**
-     * 普通日志还是私密日志
+     * 普通日志还是私密日志（1私密0公开）
      */
     private String secret;
 

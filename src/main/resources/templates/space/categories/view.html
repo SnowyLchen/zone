@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <div th:include="include::header"></div>
+</head>
+<body>
+<!--第一行-->
+<div class="layui-row">
+    <div class="layui-col-sm12">
+        <button type="button" class="layui-btn" id="addLogType">新增</button>
+    </div>
+</div>
+<!--第二行-->
+<div class="layui-row">
+    <div class="layui-col-sm12">
+        <table id="layui-table" lay-filter="layui-table"></table>
+    </div>
+</div>
+<!--表格操作界面-->
+<script type="text/html" id="oper">
+    <div class="layui-btn-group">
+        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs" onclick="edit({{d.cid}})">
+            <i class="layui-icon">&#xe642;</i>编辑
+        </button>
+        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs" onclick="remove({{d.cid}})">
+            <i class="layui-icon">&#xe640;</i>删除
+        </button>
+    </div>
+</script>
+<div th:include="include::footer"></div>
+<script>
+    var nn = $.table.tableInit({
+        url: '/zCategories/list',
+        cols: [
+            [
+                {
+                    title: '日志分类名称',
+                    field: 'cateName',
+                    align: 'left',
+                },
+                {
+                    align: 'right',
+                    templet: '#oper'
+                }
+            ]
+        ],
+        limit: 7,
+        page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+            layout: ['count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+        },
+        height: 402,
+    });
+
+    function edit(id) {
+        $.modal.openIframe('修改日志分类', '/zCategories/edit/' + id, 461, 189, function (data) {
+            nn.reload();
+        });
+    }
+
+    /**
+     * [删除]
+     * @author xj
+     * @param null []
+     * @return [返回值]
+     * @date 2021/5/4 23:35
+     */
+    function remove(id) {
+        layer.confirm('真的删除行么', function (index) {
+            $.post('/zCategories/remove/' + id, {}, function (result) {
+                if (result.data) {
+                    layer.close(index);
+                    nn.reload();
+                }
+            });
+        });
+    }
+
+    $(function () {
+
+
+        bindEvent();
+
+        /**
+         * @Description [事件绑定]
+         * @author xj
+         * @return [返回值]
+         * @date 2021/5/4 19:04
+         */
+        function bindEvent() {
+            $('#addLogType').click(function () {
+                $.modal.openIframe('新增日志分类', '/zCategories/add', 461, 189, function (data) {
+                    nn.reload();
+                });
+            });
+        }
+
+
+    })
+</script>
+</body>
+</html>

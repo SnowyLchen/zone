@@ -6,34 +6,68 @@
     <div th:include="include::header"></div>
 </head>
 <body>
-<div class="layui-row">
-    <div class="layui-col-sm1">
-        <label for="titleName" class="layui-form-label">日志标题：</label>
+<form id="journal-add" class="layui-form">
+    <div class="layui-row">
+        <div class="layui-col-sm1">
+            <label for="title" class="layui-form-label">日志标题：</label>
+        </div>
+        <div class="layui-col-sm3">
+            <input type="text" name="title" id="title" placeholder="请输入日志标题" required autocomplete="off"
+                   class="layui-input">
+        </div>
+        <div class="layui-col-sm1">
+            <label class="layui-form-label">日志分类：</label>
+        </div>
+        <div class="layui-col-sm3">
+            <select name="cateId" th:with="dataList=${@zCategoriesService.selectZCategoriesList(null)}" required>
+                <option value="" selected="">请选择日志分类</option>
+                <option th:each="dict : ${dataList}" th:text="${dict.cateName}" th:value="${dict.cId}"></option>
+            </select>
+        </div>
+        <div class="layui-col-sm1">
+            <label class="layui-form-label">设为私密:</label>
+        </div>
+        <div class="layui-col-sm3">
+            <input type="radio" name="secret" value="1" title="是" checked="">
+            <input type="radio" name="secret" value="0" title="否">
+        </div>
     </div>
-    <div class="layui-col-sm11">
-        <input type="text" name="titleName" id="titleName" placeholder="请输入日志标题" autocomplete="off" class="layui-input">
+
+    <div class="layui-row">
+        <div class="layui-col-sm12">
+            <textarea id="content" name="content" cols="30" rows="10"></textarea>
+        </div>
     </div>
-</div>
-<div class="layui-row">
-    <div class="layui-col-sm12">
-        <textarea id="logContext" name="logContext" cols="30" rows="10"></textarea>
-    </div>
-</div>
+</form>
 <div th:include="include::footer"></div>
 <script>
+    var prefix = '/journal';
+    var textAreaOpt;
     $(function () {
-        textAreaInit();
+        textAreaOpt = textAreaInit();
     });
 
     function textAreaInit() {
+        var opt = {};
         layui.use(['tinymce'], function () {
             var tinymce = layui.tinymce
             var edit = tinymce.render({
-                elem: "#logContext",
+                elem: "#content",
                 height: 400
             });
+            //获得 tinymce 富文本的内容,获得数据是 HTML 的字符串
+            opt.getContent = function () {
+                return tinymce.get('#content').getContent();
+            }
         });
+        return opt;
+    }
 
+    function submitHandler() {
+        $.post(prefix + '/addJournal', $('#journal-add').serialize() + '&content=' + textAreaOpt.getContent(), function (result) {
+
+        });
+        return false;
     }
 </script>
 </body>

@@ -1,14 +1,13 @@
 package com.cjl.basic.zone.project.space.categories.controller;
 
+import com.cjl.basic.zone.framework.web.controller.BaseController;
 import com.cjl.basic.zone.framework.web.domain.AjaxResult;
+import com.cjl.basic.zone.framework.web.page.TableDataInfo;
 import com.cjl.basic.zone.project.space.categories.domain.ZCategories;
 import com.cjl.basic.zone.project.space.categories.service.IZCategoriesService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -20,8 +19,8 @@ import javax.annotation.Resource;
  */
 @Controller
 @RequestMapping("zCategories")
-public class ZCategoriesController {
-    private static final String PREFIX = "zCategories";
+public class ZCategoriesController extends BaseController {
+    private static final String PREFIX = "/space/categories";
     /**
      * 服务对象
      */
@@ -49,8 +48,9 @@ public class ZCategoriesController {
      */
     @GetMapping("list")
     @ResponseBody
-    public AjaxResult list(ZCategories zCategories) {
-        return AjaxResult.success(zCategoriesService.selectZCategoriesList(zCategories));
+    public TableDataInfo list(ZCategories zCategories) throws IllegalAccessException, InstantiationException {
+        startPage();
+        return getDataTable(zCategoriesService.selectZCategoriesList(zCategories));
     }
 
     /**
@@ -67,6 +67,19 @@ public class ZCategoriesController {
     }
 
     /**
+     * @param zCategories [实例]
+     * @return [返回值]
+     * @Description [新增保存]
+     * @author xj
+     * @date 2021/5/4 21:09
+     */
+    @PostMapping("/add")
+    @ResponseBody
+    public AjaxResult add(ZCategories zCategories) {
+        return AjaxResult.success(zCategoriesService.insertZCategories(zCategories));
+    }
+
+    /**
      * [修改跳转页]
      *
      * @param cId [主键ID]
@@ -76,8 +89,36 @@ public class ZCategoriesController {
      */
     @GetMapping("/edit/{cId}")
     public String edit(@PathVariable("cId") Integer cId, ModelMap map) {
-        map.put("zCategories", this.zCategoriesService.selectZCategoriesById(cId));
+        map.put("bean", this.zCategoriesService.selectZCategoriesById(cId));
         return PREFIX + "/edit";
+    }
+
+    /**
+     * @param zCategories [实例]
+     * @return [返回值]
+     * @Description [新增保存]
+     * @author xj
+     * @date 2021/5/4 21:09
+     */
+    @PostMapping("/edit")
+    @ResponseBody
+    public AjaxResult edit(ZCategories zCategories) {
+        return AjaxResult.success(zCategoriesService.updateZCategories(zCategories));
+    }
+
+
+    /**
+     * [修改跳转页]
+     *
+     * @param cId [主键ID]
+     * @return [返回值]
+     * @author xiaojie
+     * @date 2021/3/31 14:51
+     */
+    @PostMapping("/remove/{cId}")
+    @ResponseBody
+    public AjaxResult remove(@PathVariable("cId") Integer cId) {
+        return AjaxResult.success(zCategoriesService.deleteZCategoriesById(cId));
     }
 
 

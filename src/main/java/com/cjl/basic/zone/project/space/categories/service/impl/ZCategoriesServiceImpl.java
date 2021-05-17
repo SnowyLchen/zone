@@ -1,5 +1,6 @@
 package com.cjl.basic.zone.project.space.categories.service.impl;
 
+import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.project.space.categories.domain.ZCategories;
 import com.cjl.basic.zone.project.space.categories.mapper.ZCategoriesMapper;
 import com.cjl.basic.zone.project.space.categories.service.IZCategoriesService;
@@ -55,6 +56,7 @@ public class ZCategoriesServiceImpl implements IZCategoriesService {
      */
     @Override
     public int insertZCategories(ZCategories zCategories) {
+        zCategories.setAccountId(ShiroAuthenticateUtils.getAccountId());
         return this.zCategoriesMapper.insertZCategories(zCategories);
     }
 
