@@ -64,8 +64,8 @@ spring:
     druid:
       # 主库数据源
       master:
-        url: jdbc:mysql://39.102.117.87/tale?useUnicode=true&characterEncoding=utf8
-        #        url: jdbc:mysql://localhost/tale?useUnicode=true&characterEncoding=utf8
+#        url: jdbc:mysql://39.102.117.87/tale?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://localhost/tale?useUnicode=true&characterEncoding=utf8
         username: root
         password: Cjl19980112!
       # 从库数据源
