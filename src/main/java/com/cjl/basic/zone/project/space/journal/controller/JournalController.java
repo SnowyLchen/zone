@@ -1,9 +1,10 @@
 package com.cjl.basic.zone.project.space.journal.controller;
 
+import com.cjl.basic.zone.common.utils.DateUtils;
 import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.framework.web.controller.BaseController;
 import com.cjl.basic.zone.framework.web.domain.AjaxResult;
-import com.cjl.basic.zone.framework.web.domain.AjaxResult;
+import com.cjl.basic.zone.framework.web.page.TableDataInfo;
 import com.cjl.basic.zone.project.manage.user.domain.User;
 import com.cjl.basic.zone.project.space.journal.domain.ZJournal;
 import com.cjl.basic.zone.project.space.journal.service.IZJournalService;
@@ -12,9 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
@@ -72,6 +71,7 @@ public class JournalController extends BaseController {
     public AjaxResult addJournal(ZJournal zJournal) {
         Integer accountId = ShiroAuthenticateUtils.getAccountId();
         zJournal.setAccountId(accountId);
+        zJournal.setTime(DateUtils.getTime());
         return AjaxResult.success(journalService.addJournal(zJournal));
     }
 
@@ -86,6 +86,7 @@ public class JournalController extends BaseController {
     public AjaxResult updateJournalById(ZJournal zJournal) {
         Integer accountId = ShiroAuthenticateUtils.getAccountId();
         zJournal.setAccountId(accountId);
+
         return AjaxResult.success(journalService.updateJournalById(zJournal));
     }
 
@@ -106,9 +107,10 @@ public class JournalController extends BaseController {
      */
     @ResponseBody
     @RequestMapping("/getJournals")
-    public AjaxResult selectJournalList() {
+    public TableDataInfo selectJournalList() {
         Integer accountId = ShiroAuthenticateUtils.getAccountId();
-        return AjaxResult.success(journalService.selectJournalListByAccountId(accountId));
+        startPage();
+        return getDataTable(journalService.selectJournalListByAccountId(accountId));
     }
 
     /**

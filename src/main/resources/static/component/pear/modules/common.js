@@ -86,7 +86,7 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
                 }
             }, 500);
         }
-        this.ajaxMsg = function (res, index,refresh) {
+        this.ajaxMsg = function (res, index, refresh) {
             if (index) {
                 top.layer.close(index);
             }
@@ -94,7 +94,7 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
                 layer.msg(res.msg, {icon: 1, time: 1000}, function () {
                     parent.layer.close(parent.layer.getFrameIndex(window.name));//关闭当前页
                 });
-                if (refresh){
+                if (refresh) {
                     $.modal.refreshIframe(400)
                 }
             } else {
@@ -221,62 +221,6 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
             });
         }
     };
-    $.ul = {
-        /**
-         * @Description [列表]
-         * @author xj
-         * @param options [参数]
-         * @return [返回值]
-         * @date 2021/5/4 17:10
-         */
-        ulInit: function (options) {
-            var opt = {
-                //元素
-                elem: '#layui-ul',
-                //数据
-                data: [{
-                    'logName': '日志1'
-                }, {
-                    'logName': '日志2'
-                }, {
-                    'logName': '日志3'
-                }, {
-                    'logName': '日志4'
-                }, {
-                    'logName': '日志5'
-                }],
-                templet: function (v) {
-                    return '<div class="layui-li">' + v.logName + '</div>';
-                },
-                //隔行换色
-                even: true,
-            };
-
-            layui.use(['laypage'], function () {
-                var laypage = layui.laypage
-                    , layer = layui.layer;
-            });
-
-
-            Object.assign(opt, options);
-
-            /**
-             * 初始化
-             */
-            function init() {
-                var $ul = $(opt.elem);
-                $ul.css('text-align', 'left');
-                opt.data.forEach(function (value, index, array) {
-                    $ul.append('<li style="padding: 5px">' + opt.templet(value) + '</li>');
-                });
-                if (opt.even) {
-                    $ul.find('li:odd').css('background', '#f2f2f2');
-                }
-            }
-
-            init();
-        }
-    }
     $.modal = {
         /**
          * @Description [弹出层]

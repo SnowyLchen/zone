@@ -22,7 +22,7 @@
         </div>
         <!--左边部分第二行-->
         <div class="layui-row">
-            <div class="layui-col-sm12">
+            <div class="layui-col-sm12" id="tab-table">
                 <table id="layui-table" lay-filter="layui-table"></table>
             </div>
         </div>
@@ -84,12 +84,52 @@
     var prefix = '/journal';
     $(function () {
         //初始化表格
-        $.table.tableInit();
+        $.table.tableInit({
+            cols: [
+                [
+                    {
+                        type: 'checkbox',
+                    },
+                    {
+                        field: 'title',
+                        align: 'left',
+                        // width: 900
+                    },
+                    {
+                        field: 'time',
+                        align: 'right',
+                    },
+                    {
+                        align: 'right',
+                        templet: '#oper'
+                    }
+                ]
+            ],
+            url: prefix+'/getJournals',
+        });
         //绑定页面事件
         bindEvent();
-        //初始化无序列表
-        $.ul.ulInit();
+        //初始化右侧表格
+        $.table.tableInit({
+            elem: '#layui-ul',
+            url: '/zCategories/list',
+            cols: [
+                [
+                    {
+                        field: 'cateName',
+                        align: 'left',
+                        // width: 900
+                    },
+                ]
+            ],
+            height: 350,
+            limit: 5,
+            page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                layout: ['count', 'prev', 'page', 'next'] //自定义分页布局
+            }
+        })
     });
+
 
     /**
      * @Description [事件绑定]
@@ -104,19 +144,68 @@
         });
         //日志管理
         $('#logManager').click(function () {
-            $.modal.openIframe('日志管理',prefix+'/template?url=/logManager');
+            $.modal.openIframe('日志管理', '/zCategories', 540, 563);
         })
         //切换到摘要/列表
         $('#tabTableType').click(function () {
             if ($(this).attr('tableType') == 'card') {
-                $(this).attr('tableType', 'table')
-                $.table.tableInit();
-                $('#layui-table').html('');
+                //卡片消失
+                $(this).attr('tableType', 'table');
+                $('#tab-table table *').remove();
+                $.table.tableInit({
+                    cols: [
+                        [
+                            {
+                                type: 'checkbox',
+                            },
+                            {
+                                field: 'title',
+                                align: 'left',
+                                // width: 900
+                            },
+                            {
+                                field: 'time',
+                                align: 'right',
+                            },
+                            {
+                                align: 'right',
+                                templet: '#oper'
+                            }
+                        ]
+                    ],
+                    url: prefix+'/getJournals',
+                });
                 $(this).text('切换到摘要');
             } else {
+                //表格消失
                 $(this).attr('tableType', 'card');
-                $('#layui-table').parent().find('div[lay-id=layui-table]').remove();
-                $.table.cardInit();
+                $.table.cardInit({
+                    url: prefix+'/getJournals',
+                    templet: function (item) {
+                        var ele = '<div class="project-list-item-body">';
+                        //标题
+                        ele += '<h2>' + item.title + '</h2>';
+                        //第二行
+                        ele += '<div class="layui-row project-list-item-desc">';
+                        //第二行左边部分
+                        ele += '<div class="layui-col-sm11"><span class="time">' + item.time + '</span></div>';
+                        //第二行右边部分
+                        ele += '<div class="layui-col-sm1">' +
+                            '<div class="layui-btn-group">\n' +
+                            '        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">\n' +
+                            '            <i class="layui-icon">&#xe642;</i>\n' +
+                            '        </button>\n' +
+                            '        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">\n' +
+                            '            <i class="layui-icon">&#xe640;</i>\n' +
+                            '        </button>\n' +
+                            '</div>' +
+                            '</div>';
+                        ele += '</div></div>';
+
+                        return ele;
+                    }
+                });
+                $('#tab-table>div').remove();
                 $(this).text('切换到列表');
             }
         })

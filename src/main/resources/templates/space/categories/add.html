@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <div th:include="include::header"></div>
+    <style>
+
+    </style>
+</head>
+<body style="padding: 10px">
+<form id="form-add" class="layui-form">
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">分类名称：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="cateName" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+</form>
+<div th:include="include::footer"></div>
+<script>
+    function submitHandler() {
+        $.post('/zCategories/add', $('#form-add').serialize(), function (result) {
+            if (result.data) {
+                return 0
+            } else {
+                return false;
+            }
+        });
+    }
+</script>
+</body>
+</html>
