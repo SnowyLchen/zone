@@ -5,33 +5,43 @@
     <title>Title</title>
     <div th:include="include::header"></div>
 </head>
+<style>
+    #addLogType {
+        margin: 10px 0 0 20px;
+    }
+
+    .layui-btn-xs {
+        border: 1px solid #C9C9C9 !important;
+    }
+</style>
 <body>
 <!--第一行-->
 <div class="layui-row">
     <div class="layui-col-sm12">
-        <button type="button" class="layui-btn" id="addLogType">新增</button>
+        <button type="button" class="pear-btn pear-btn-primary pear-btn-xs" id="addLogType">新增</button>
     </div>
 </div>
 <!--第二行-->
 <div class="layui-row">
     <div class="layui-col-sm12">
-        <table id="layui-table" lay-filter="layui-table"></table>
+        <table id="cateManage" lay-filter="cateManage"></table>
     </div>
 </div>
 <!--表格操作界面-->
 <script type="text/html" id="oper">
     <div class="layui-btn-group">
         <button type="button" class="layui-btn layui-btn-primary layui-btn-xs" onclick="edit({{d.cid}})">
-            <i class="layui-icon">&#xe642;</i>编辑
+            <i class="layui-icon">&#xe642;</i>
         </button>
         <button type="button" class="layui-btn layui-btn-primary layui-btn-xs" onclick="remove({{d.cid}})">
-            <i class="layui-icon">&#xe640;</i>删除
+            <i class="layui-icon">&#xe640;</i>
         </button>
     </div>
 </script>
 <div th:include="include::footer"></div>
 <script>
     var nn = $.table.tableInit({
+        elem: '#cateManage',
         url: '/zCategories/list',
         cols: [
             [
@@ -77,25 +87,26 @@
         });
     }
 
+    /**
+     * @Description [事件绑定]
+     * @author xj
+     * @return [返回值]
+     * @date 2021/5/4 19:04
+     */
+    function bindEvent() {
+        $('#addLogType').click(function () {
+            $.modal.openIframe('新增日志分类', '/zCategories/add', 461, 189, function (data) {
+                nn.reload();
+            });
+        });
+    }
+
+    function submitHandler() {
+    }
+
     $(function () {
 
-
         bindEvent();
-
-        /**
-         * @Description [事件绑定]
-         * @author xj
-         * @return [返回值]
-         * @date 2021/5/4 19:04
-         */
-        function bindEvent() {
-            $('#addLogType').click(function () {
-                $.modal.openIframe('新增日志分类', '/zCategories/add', 461, 189, function (data) {
-                    nn.reload();
-                });
-            });
-        }
-
 
     })
 </script>

@@ -41,10 +41,10 @@ public interface ZJournalMapper {
     /**
      * 查询某个用户日志
      *
-     * @param accountId
+     * @param journal
      * @return
      */
-    List<ZJournal> selectJournalListByAccountId(Integer accountId);
+    List<ZJournal> selectJournalListByAccountId(ZJournal journal);
 
     /**
      * 更新日志

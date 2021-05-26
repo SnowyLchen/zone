@@ -54,7 +54,7 @@ public interface IZJournalService {
      * @param accountId
      * @return
      */
-    List<ZJournal> selectJournalListByAccountId(Integer accountId);
+    List<ZJournal> selectJournalListByAccountId(ZJournal journal);
 
     /**
      * 更新日志

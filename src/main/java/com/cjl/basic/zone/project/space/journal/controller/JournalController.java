@@ -1,6 +1,7 @@
 package com.cjl.basic.zone.project.space.journal.controller;
 
 import com.cjl.basic.zone.common.utils.DateUtils;
+import com.cjl.basic.zone.common.utils.StringUtils;
 import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.framework.web.controller.BaseController;
 import com.cjl.basic.zone.framework.web.domain.AjaxResult;
@@ -43,8 +44,11 @@ public class JournalController extends BaseController {
      * @author xj
      * @date 2021/5/3 19:40
      */
-    @RequestMapping("template")
-    public String template(String url) {
+    @RequestMapping("/template")
+    public String template(String url, Integer id, ModelMap map) {
+        if (StringUtils.isNotNull(id)) {
+            map.put("journal", journalService.selectJournalById(id));
+        }
         return PREFIX_JOURNAL + url;
     }
 
@@ -86,7 +90,6 @@ public class JournalController extends BaseController {
     public AjaxResult updateJournalById(ZJournal zJournal) {
         Integer accountId = ShiroAuthenticateUtils.getAccountId();
         zJournal.setAccountId(accountId);
-
         return AjaxResult.success(journalService.updateJournalById(zJournal));
     }
 
@@ -107,10 +110,11 @@ public class JournalController extends BaseController {
      */
     @ResponseBody
     @RequestMapping("/getJournals")
-    public TableDataInfo selectJournalList() {
+    public TableDataInfo selectJournalList(ZJournal journal) {
         Integer accountId = ShiroAuthenticateUtils.getAccountId();
+        journal.setAccountId(accountId);
         startPage();
-        return getDataTable(journalService.selectJournalListByAccountId(accountId));
+        return getDataTable(journalService.selectJournalListByAccountId(journal));
     }
 
     /**

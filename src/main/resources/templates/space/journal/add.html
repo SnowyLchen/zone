@@ -64,10 +64,14 @@
     }
 
     function submitHandler() {
-        $.post(prefix + '/addJournal', $('#journal-add').serialize() + '&content=' + textAreaOpt.getContent(), function (result) {
-
+        $("#content").val(textAreaOpt.getContent());
+        $.post(prefix + '/addJournal', $('#journal-add').serialize(), function (result) {
+            if (result.code == 0) {
+                layer.msg(result.msg, {icon: 1, time: 1000});
+            } else {
+                layer.msg(result.msg, {icon: 2, time: 1000});
+            }
         });
-        return false;
     }
 </script>
 </body>

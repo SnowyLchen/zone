@@ -135,48 +135,76 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
          */
         tableInit: function (options) {
             var tableObj;
+            let table;
             layui.use(['table'], function () {
-                let table = layui.table;
+                table = layui.table;
                 var opt = {
-                    id: '#layui-table',
-                    //默认元素
-                    elem: '#layui-table',
-                    //列字段
-                    cols: [
-                        [
-                            {
-                                type: 'checkbox',
-                            },
-                            {
-                                field: 'titleName',
-                                align: 'left',
-                                // width: 900
-                            },
-                            {
-                                field: 'createTime',
-                                align: 'right',
-                            },
-                            {
-                                align: 'right',
-                                templet: '#oper'
-                            }
-                        ]
-                    ],
-                    url: '../../journal/data/table.json',
                     //分页
                     page: true,
                     //隔行变色
                     even: true,
                 };
                 Object.assign(opt, options);
+                debugger
                 tableObj = table.render(opt);
             });
             return {
                 //重载
                 reload: function () {
                     tableObj.reload();
+                },
+                getTable: function () {
+                    return table;
+                },
+                reloadOpt: function (opt) {
+                    Object.assign(options, opt);
+                    var result = {};
+                    if (result != null) {
+                        result.where = {};
+                    }
+                    result.where = options.where;
+                    tableObj.reload({
+                        where: result.where,
+                        page: {
+                            curr: 1
+                        },
+                        done: function () {
+                            result = this;
+                        }
+                    });
+                    return false;
                 }
             }
+        },
+        tableToolClick: function (table, event, callback) {
+            layui.use(['table'], function () {
+                table.getTable().on('tool(' + event + ')', function (obj) {
+                    if (callback) {
+                        callback(obj)
+                    }
+                })
+            });
+        },
+        tableClickSearch: function (table, event, filter) {
+            layui.use(['table'], function () {
+                var table1 = layui.table;
+                table1.on('tool(' + filter + ')', function (obj) {
+                    if (obj.event == event) {
+                        table.reloadOpt({
+                            where: {
+                                cateId: obj.data.cid
+                            }
+                        });
+                    }
+                });
+            });
+        },
+        tableInputSearch: function (table, val) {
+            table.reloadOpt({
+                where: {
+                    title: val
+                }
+            });
         },
         /**
          * 初始化表格（卡片）
@@ -233,47 +261,44 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
          * @return [返回值]
          * @date 2021/5/4 17:35
          */
-        openIframe: function (title, url, width, height, callbackFn, btnList) {
+        openIframe: function (title, url, width, height, callbackFn, btnList, full) {
             layui.use('layer', function () { //独立版的layer无需执行这一句
-                var $ = layui.jquery, layer = layui.layer; //独立版的layer无需执行这一句
+                var $ = layui.jquery, layer = layui.layer, toIndex; //独立版的layer无需执行这一句
                 var opt = {
-                    type: 2 //此处以iframe举例
-                    ,
-                    title: title || ''
-                    ,
-                    area: [(width || ($(document).width() * 0.8)) + 'px', (height || ($(document).height() * 0.8)) + 'px']
-                    ,
-                    shade: 0.3
-                    ,
-                    maxmin: true
-                    ,
-                    content: url
-                    ,
-                    btn: btnList ? btnList : btnList === null ? [] : ['确认', '关闭'] //只是为了演示
-                    ,
+                    type: 2,
+                    title: title || '',
+                    area: [(width || ($(document).width() * 0.8)) + 'px', (height || ($(document).height() * 0.8)) + 'px'],
+                    shade: 0.3,
+                    maxmin: true,
+                    content: url,
+                    btn: btnList ? btnList : btnList === null ? [] : ['确认', '关闭'],
                     yes: function () {
                         //回调iframe里面的submitHandler
                         var iframeWin = $('iframe')[0].contentWindow;
                         if (iframeWin.submitHandler) {
                             var data = iframeWin.submitHandler();
                             //当return false时，不会关闭弹窗
-                            if (data == false) {
+                            if (data==false) {
                                 return;
                             }
                             if (callbackFn) {
                                 callbackFn(data);
                             }
                         }
-                        layer.closeAll();
-                    }
-                    ,
+                        setTimeout(function () {
+                            layer.closeAll();
+                        }, 1000)
+                    },
                     btn2: function () {
                         layer.closeAll();
-                    }
-                    ,
+                    },
                     zIndex: layer.zIndex //重点1
                 };
-                layer.open(opt);
+                toIndex = layer.open(opt);
+                if (full) {
+                    //弹出层最大化
+                    layer.full(toIndex);
+                }
             });
         },
         refreshIframe: function (loading) {
@@ -281,7 +306,7 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
                 var tab = layui.tab;
                 tab.option = {
                     elem: 'spaceContent'
-                }
+                };
                 tab.refreshIframe(400, loading ? loading : 1000)
             })
         }
@@ -325,6 +350,25 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
             layui.use('notice', function () {
                 var notice = layui.notice;
                 $.notice.option(notice).info(msg);
+            })
+        },
+        successMsg: function (msg, callback) {
+            layui.use('popup', function () {
+                var popup = layui.popup;
+                popup.success(msg, callback);
+            })
+        },
+        errorMsg: function (msg, callback) {
+            layui.use('popup', function () {
+                var popup = layui.popup;
+                popup.failure(msg, callback);
+
+            })
+        },
+        warningMsg: function (msg, callback) {
+            layui.use('popup', function () {
+                var popup = layui.popup;
+                popup.warning(msg, callback);
             })
         }
     }

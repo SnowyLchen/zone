@@ -42,6 +42,10 @@ public class ZJournal extends BaseEntity implements Serializable {
      * 日志分类
      */
     private Integer cateId;
+    /**
+     * 分类名称
+     */
+    private String cateName;
 
     /**
      * 用户id

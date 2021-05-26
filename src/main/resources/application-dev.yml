@@ -64,8 +64,8 @@ spring:
     druid:
       # 主库数据源
       master:
-#        url: jdbc:mysql://39.102.117.87/tale?useUnicode=true&characterEncoding=utf8
-        url: jdbc:mysql://localhost/tale?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://39.102.117.87/tale?useUnicode=true&characterEncoding=utf8
+        #        url: jdbc:mysql://localhost/tale?useUnicode=true&characterEncoding=utf8
         username: root
         password: Cjl19980112!
       # 从库数据源
@@ -116,10 +116,10 @@ spring:
       # 热部署开关
       enabled: true
   redis:
-    host: 39.102.117.87
+    host: localhost
     port: 6379
     timeout: 30000
-    password: 123456
+    password:
     jedis:
       pool:
         max-wait: 30000

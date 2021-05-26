@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>打开日志</title>
+    <div th:include="include::header"></div>
+    <!--    <link th:href="@{/admin/css/other/spaceBoard.css}" rel="stylesheet"/>-->
+</head>
+<body class="pear-container">
+<!--<div class="layui-row layui-col-space12">-->
+<!--    <div class="layui-col-md2"></div>-->
+<!--    <div class="layui-col-md10">-->
+<!--        <div class="layui-card top-panel">-->
+<!--            <div class="layui-card-body" id="content-pane">-->
+<!--                <div th:utext="${journal.content}"></div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="layui-col-md2"></div>-->
+<!--</div>-->
+<div class="layui-row layui-col-space5">
+    <div class="layui-col-md2">
+    </div>
+    <div class="layui-col-md8">
+        <div class="layui-card top-panel">
+            <div class="layui-card-body" id="content-pane">
+                <div th:utext="${journal.content}"></div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-md2">
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<script>
+    layui.use(['common', 'util', 'layer', 'button', 'dragMove'], function () {
+        var $ = layui.jquery,
+            layer = layui.layer,
+            common = layui.common,
+            util = layui.util;
+        // 注册图片放大
+        $.dragMove.init('content-pane')
+    });
+</script>
+</body>
+</html>

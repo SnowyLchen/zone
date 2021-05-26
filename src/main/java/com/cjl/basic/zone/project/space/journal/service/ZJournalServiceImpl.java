@@ -49,8 +49,8 @@ public class ZJournalServiceImpl implements IZJournalService {
     }
 
     @Override
-    public List<ZJournal> selectJournalListByAccountId(Integer accountId) {
-        return journalMapper.selectJournalListByAccountId(accountId);
+    public List<ZJournal> selectJournalListByAccountId(ZJournal journal) {
+        return journalMapper.selectJournalListByAccountId(journal);
     }
 
     @Override

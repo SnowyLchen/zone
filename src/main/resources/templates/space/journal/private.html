@@ -1,10 +1,310 @@
-<!DOCTYPE html>
+<!DOCTYPE html >
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<style>
+    .catem {
+        position: relative;
+        left: 56%;
+        font-size: 12px;
+        cursor: pointer
+    }
+
+    .layui-table-view .layui-table td, .layui-table-view .layui-table th {
+        padding: 5px 0;
+        border: 1px solid #e6e6e6;
+    }
+
+    .layui-btn-xs {
+        border: 1px solid #C9C9C9 !important;
+    }
+
+    /*.layui-table-cell {*/
+    /*    cursor: pointer;*/
+    /*}*/
+</style>
 <body>
 
+<!--我的日志-->
+<div class="layui-row layui-col-space10">
+    <!--我的日志左边部分-->
+    <div class="layui-col-sm10">
+        <!--左边部分第一行-->
+        <div class="layui-row">
+            <div class="layui-col-sm12">
+                <button type="button" class="pear-btn pear-btn-primary" plain="" id="addLog">写日志</button>
+                <button type="button" class="pear-btn pear-btn-primary" plain="" id="tabTableType">切换到摘要</button>
+            </div>
+        </div>
+        <!--左边部分第二行-->
+        <div class="layui-row">
+            <div class="layui-col-sm12" id="tab-table">
+                <table id="journals" lay-filter="journals" lay-event="journals" style="width: 100%;"></table>
+            </div>
+        </div>
+    </div>
+    <!--我的日志右边部分-->
+    <div class="layui-col-sm2">
+        <div class="layui-bg-gray" style="padding: 10px;">
+            <!--右边部分第一行-->
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">日志分类
+                            <span id="clearLogManager" class="catem">清空</span>
+                            <span id="logManager" class="catem">管理</span>
+                        </div>
+                        <div class="layui-card-body" style="height: 300px!important;">
+                            <ul id="cateManage" lay-filter="cateManage"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--右边部分第二行-->
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">搜索日志</div>
+                        <div class="layui-card-body">
+                            <input type="text" name="title" id="title" autocomplete="off" placeholder="请输入关键字"
+                                   class="layui-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--右边部分第三行-->
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">评论审核</div>
+                        <div class="layui-card-body">
+                            56456
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--表格操作界面-->
+<script type="text/html" id="oper">
+    <div class="layui-btn-group">
+        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs" onclick="edit('{{d.jid}}')">
+            <i class="layui-icon">&#xe642;</i>
+        </button>
+        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs"
+                onclick="remove('{{d.jid}}','{{d.title}}')">
+            <i class="layui-icon">&#xe640;</i>
+        </button>
+    </div>
+</script>
+<script>
+    var prefix = '/journal';
+    var tableCard;
+    var tableCate;
+
+    function lookJournal() {
+        // 日志查看
+        $.table.tableToolClick(tableCard, 'journals', function (obj) {
+            let event = obj.event;
+            if (event == 'openTitle') {
+                $.modal.openIframe(obj.data.title, prefix + "/template?url=/openjournal&id=" + obj.data.jid, null, null, null, null, true)
+            } else {
+                console.log(event)
+            }
+        });
+    }
+
+    $(function () {
+        //初始化表格
+        tableCard = $.table.tableInit({
+            elem: '#journals',
+            cols: [
+                [
+                    {
+                        field: 'jid',
+                        hide: true
+                    },
+                    {
+                        field: 'title',
+                        align: 'left',
+                        cursor: 'pointer',
+                        event: 'openTitle'
+                        // width: 900
+                    },
+                    {
+                        field: 'cateName',
+                        align: 'right',
+                    },
+                    {
+                        field: 'time',
+                        align: 'right',
+                    },
+                    {
+                        align: 'right',
+                        templet: '#oper'
+                    }
+                ]
+            ],
+            done: function (res, ind) {
+                // debugger
+            },
+            url: prefix + '/getJournals?secret=1',
+        });
+        // 查看日志
+        lookJournal();
+        //绑定页面事件
+        bindEvent();
+        //初始化右侧表格
+        tableCate = $.table.tableInit({
+            elem: '#cateManage',
+            url: '/zCategories/list',
+            cols: [
+                [
+                    {
+                        field: 'cateName',
+                        align: 'left',
+                        cursor: 'pointer',
+                        event: 'cateSearch'
+                        // width: 900
+                    },
+                ]
+            ],
+            height: 350,
+            limit: 8,
+            page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                layout: ['prev', 'page', 'next'] //自定义分页布局
+            },
+            even: false
+        });
+        // 日志分类点击
+        $.table.tableClickSearch(tableCard, 'cateSearch', 'cateManage');
+        // 搜索
+        $("#title").bind("input propertychange", function () {
+                $.table.tableInputSearch(tableCard, $(this).val());
+            }
+        )
+    });
+
+
+    /**
+     * @Description [事件绑定]
+     * @author xj
+     * @return [返回值]
+     * @date 2021/5/3 18:28
+     */
+    function bindEvent() {
+        //写日志
+        $('#addLog').click(function () {
+            $.modal.openIframe('写日志', prefix + '/add', null, null, function (data) {
+                tableCard.reload();
+            });
+        });
+        //日志管理
+        $('#logManager').click(function () {
+            $.modal.openIframe('日志管理', '/zCategories', 540, 563, function (data) {
+                tableCate.reload();
+            });
+        });
+        //情况日志级联搜索
+        $('#clearLogManager').click(function () {
+            tableCard.reloadOpt({
+                where: null
+            });
+        });
+        //切换到摘要/列表
+        $('#tabTableType').click(function () {
+            if ($(this).attr('tableType') == 'card') {
+                //卡片消失
+                $(this).attr('tableType', 'table');
+                $('#tab-table table *').remove();
+                tableCard = $.table.tableInit({
+                    elem: '#journals',
+                    cols: [
+                        [
+                            {
+                                field: 'jid',
+                                hide: true
+                            },
+                            {
+                                field: 'title',
+                                align: 'left',
+                                cursor: 'pointer',
+                                event: 'openTitle'
+                                // width: 900
+                            },
+                            {
+                                field: 'cateName',
+                                align: 'right',
+                            },
+                            {
+                                field: 'time',
+                                align: 'right',
+                            },
+                            {
+                                align: 'right',
+                                templet: '#oper'
+                            }
+                        ]
+                    ],
+                    done: function (res, ind) {
+                        // debugger
+                    },
+                    url: prefix + '/getJournals?secret=1',
+                });
+                $(this).text('切换到摘要');
+            } else {
+                //表格消失
+                $(this).attr('tableType', 'card');
+                tableCard = $.table.cardInit({
+                    elem: '#journals',
+                    lineSize: 4,
+                    url: prefix + '/getJournals?secret=1',
+                    templet: function (item) {
+                        var ele = '<div class="project-list-item-body">';
+                        //标题
+                        ele += '<h2>' + item.title + '</h2>';
+                        //第二行
+                        ele += '<div class="layui-row project-list-item-desc">';
+                        //第二行左边部分
+                        ele += '<div class="layui-col-sm11"><span class="time">' + item.time + '</span></div>';
+                        //第二行右边部分
+                        ele += '<div class="layui-col-sm1">' +
+                            '<div class="layui-btn-group">\n' +
+                            '        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">\n' +
+                            '            <i class="layui-icon">&#xe642;</i>\n' +
+                            '        </button>\n' +
+                            '        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs">\n' +
+                            '            <i class="layui-icon">&#xe640;</i>\n' +
+                            '        </button>\n' +
+                            '</div>' +
+                            '</div>';
+                        ele += '</div></div>';
+
+                        return ele;
+                    }
+                });
+                $('#tab-table>div').remove();
+                $(this).text('切换到列表');
+            }
+        })
+    }
+
+
+    function remove(id, title) {
+        layer.confirm('确认删除' + title + '吗', function (index) {
+            $.post('/journal/deleteJournalById/' + id, {}, function (result) {
+                if (result.data) {
+                    layer.close(index);
+                    tableCard.reload();
+                }
+            });
+        });
+    }
+
+    function edit(id) {
+        $.modal.openIframe('修改日志', '/journal/template?url=/edit&id=' + id, null, null, function (data) {
+            tableCard.reload();
+        });
+    }
+</script>
 </body>
 </html>

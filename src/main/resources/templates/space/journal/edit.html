@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <div th:include="include::header"></div>
+</head>
+<body>
+<form id="journal-add" class="layui-form">
+    <input type="hidden" name="jId" th:value="${journal?.jId}">
+    <div class="layui-row">
+        <div class="layui-col-sm1">
+            <label for="title" class="layui-form-label">日志标题：</label>
+        </div>
+        <div class="layui-col-sm3">
+            <input type="text" name="title" id="title" placeholder="请输入日志标题" required autocomplete="off"
+                   class="layui-input" th:value="${journal?.title}">
+        </div>
+        <div class="layui-col-sm1">
+            <label class="layui-form-label">日志分类：</label>
+        </div>
+        <div class="layui-col-sm3">
+            <select name="cateId" th:with="dataList=${@zCategoriesService.selectZCategoriesList(null)}" required>
+                <option value="" selected="">请选择日志分类</option>
+                <option th:each="dict : ${dataList}" th:text="${dict.cateName}" th:value="${dict.cId}"
+                        th:selected="${dict.cId==journal?.cateId}"></option>
+            </select>
+        </div>
+        <div class="layui-col-sm1">
+            <label class="layui-form-label">设为私密:</label>
+        </div>
+        <div class="layui-col-sm3">
+            <input type="radio" name="secret" value="1" title="是" th:checked="${'1'==journal?.secret}">
+            <input type="radio" name="secret" value="0" title="否" th:checked="${'0'==journal?.secret}">
+        </div>
+    </div>
+
+    <div class="layui-row">
+        <div class="layui-col-sm12">
+            <textarea id="content" name="content" cols="30" rows="10"></textarea>
+        </div>
+    </div>
+</form>
+<div th:include="include::footer"></div>
+<script th:inline="javascript">
+    var prefix = '/journal';
+    var textAreaOpt;
+    $(function () {
+        layui.use(['tinymce', 'common', 'util', 'layer', 'button', 'dragMove'], function () {
+            var $ = layui.jquery,
+                layer = layui.layer,
+                common = layui.common,
+                tinymce = layui.tinymce,
+                util = layui.util;
+            var oldContent = [[${journal?.content}]];
+            // 初始化富文本
+            textAreaOpt = initTinymce(tinymce, $, util, layer, common, oldContent);
+        });
+    });
+
+
+    function initTinymce(tinymce, $, util, layer, common, oldContent) {
+        var opt = {};
+        var edit = tinymce.render({
+            elem: "#content",
+            height: 400,
+            menubar: false, //隐藏菜单栏
+        });
+        setTimeout(function () {
+            if (oldContent) {
+                edit.setContent(oldContent)
+            }
+        }, 500);
+        //获得 tinymce 富文本的内容,获得数据是 HTML 的字符串
+        opt.getContent = function () {
+            return edit.getContent();
+        };
+        return opt;
+    }
+
+    function submitHandler() {
+        $("#content").val(textAreaOpt.getContent());
+        $.post(prefix + '/updateJournal', $('#journal-add').serialize(), function (result) {
+            if (result.code == 0) {
+                $.notice.successMsg(result.msg)
+            } else {
+                $.notice.errorMsg(result.msg)
+            }
+        });
+    }
+</script>
+</body>
+</html>
