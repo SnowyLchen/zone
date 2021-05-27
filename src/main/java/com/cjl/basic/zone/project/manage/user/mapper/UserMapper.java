@@ -21,7 +21,7 @@ public interface UserMapper {
      * @return {@link List<User>}
      */
     List<User> selectUserList(User user);
-
+    List<User> selectUserListByAccountId(User user);
     /**
      * 查询用户信息根据ID
      *
@@ -152,4 +152,6 @@ public interface UserMapper {
      * @return
      */
     User checkRegisterExist(User user);
+
+
 }

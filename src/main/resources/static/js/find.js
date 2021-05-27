@@ -9,40 +9,11 @@ socket.onopen = function () {
     //socket.send("这是来自客户端的消息" + location.href + new Date());
 };
 
-
-function addAsk() {
-    var fromId = $("#friend").val();
-    var content = $("#content").val();
-    var type = $("#type").val();
-    var object = new Object();
-    if (type == "0") {
-        object["content"] = "申请添加你为好友";
-        object["uid"] = fromId;
-    } else {
-        object["content"] = "申请添加群";
-        object["fromGroup"] = fromId;
-
-    }
-    object["from"] = accountId;
-    object["remark"] = content;
-    object["type"] = type;
-    object["msgType"] = "addAsk";
-    var jsonData = JSON.stringify(object);
-    // 发送给websocket
-    // socket.send(jsonData);
-    console.log("提交")
-    closeCurrentIndex();
-}
-
-function closeCurrentIndex() {
-    layui.use(['layim', 'laypage'], function () {
-        var layim = layui.layim
-            , layer = layui.layer
-            , laytpl = layui.laytpl
-            , $ = layui.jquery
-            , laypage = layui.laypage;
-        // debugger
-        parent.layer.close(parent.layer.getFrameIndex(window.name))
-        //一些添加好友请求之类的交互参见文档
-    });
+/**
+ * 添加好友
+ */
+function addAsk(ts) {
+    var myBut = $(ts);
+    // 弹出添加好友验证界面
+    top.openFriend(myBut);
 }

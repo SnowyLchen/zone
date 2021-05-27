@@ -42,9 +42,18 @@
         group by lfg.id
         order by lfg.id
     </select>
-    <insert id="createGroup">
+    <insert id="createGroup" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
         insert into z_friend_groupname
         (account_id,group_name)
         values (#{accountId},#{groupname})
     </insert>
+    <delete id="removeFriendGroup">
+        delete from z_friend_groupname
+        where id=#{id}
+    </delete>
+    <update id="updateFriendGroup">
+        update z_friend_groupname set group_name=#{groupname}
+        where id=#{id}
+    </update>
 </mapper>

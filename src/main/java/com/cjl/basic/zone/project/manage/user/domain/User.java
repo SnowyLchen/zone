@@ -25,6 +25,10 @@ public class User extends BaseEntity {
      * 昵称
      */
     private String userName;
+    /**
+     * 是否通过好友验证
+     */
+    private String isValid;
 
     /**
      * 用户邮箱
@@ -105,6 +109,14 @@ public class User extends BaseEntity {
     private Date sendTime;
 
     private Long timeStamp;
+
+    public String getIsValid() {
+        return isValid;
+    }
+
+    public void setIsValid(String isValid) {
+        this.isValid = isValid;
+    }
 
     public String getSign() {
         return sign;

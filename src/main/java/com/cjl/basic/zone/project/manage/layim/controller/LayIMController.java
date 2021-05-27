@@ -3,6 +3,7 @@ package com.cjl.basic.zone.project.manage.layim.controller;
 import com.cjl.basic.zone.common.constant.SocketConstant;
 import com.cjl.basic.zone.common.utils.SpringRedisUtil;
 import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
+import com.cjl.basic.zone.framework.web.domain.AjaxResult;
 import com.cjl.basic.zone.project.manage.layim.entity.*;
 import com.cjl.basic.zone.project.manage.layim.service.ChatMsgService;
 import com.cjl.basic.zone.project.manage.layim.service.FriendsService;
@@ -240,7 +241,6 @@ public class LayIMController {
     @RequestMapping(value = "/init", method = RequestMethod.GET)
     @ResponseBody
     public InitImVo init() {
-//        String userId = (String) session.getAttribute("userId");
         Integer accountId = ShiroAuthenticateUtils.getAccountId();
         InitImVo initImVo = new InitImVo();
         //个人信息
@@ -269,5 +269,69 @@ public class LayIMController {
         initImVo.setData(imData);
         return initImVo;
     }
+
+    /**
+     * 添加好友分组
+     *
+     * @param friends
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/addFriendGroup")
+    public AjaxResult addFriendGroup(Friends friends) {
+        friends.setAccountId(ShiroAuthenticateUtils.getAccountId());
+        return AjaxResult.success(userService.addFriendGroup(friends));
+    }
+
+    /**
+     * 删除好友分组
+     *
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/removeFriendGroup/{id}")
+    public AjaxResult removeFriendGroup(@PathVariable Integer id) {
+        return AjaxResult.success(userService.removeFriendGroup(id));
+    }
+
+    /**
+     * 更新好友分组
+     *
+     * @param friends
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/updateFriendGroup")
+    public AjaxResult updateFriendGroup(Friends friends) {
+        friends.setAccountId(ShiroAuthenticateUtils.getAccountId());
+        return AjaxResult.success(userService.updateFriendGroup(friends));
+    }
+
+    /**
+     * 刷新好友列表
+     *
+     * @param friends
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/refreshFriendGroupList")
+    public AjaxResult refreshFriendGroupList(Friends friends) {
+        Integer accountId = ShiroAuthenticateUtils.getAccountId();
+        //好友列表
+        List<Mine> mineList = friendsService.getUserFriend(String.valueOf(accountId));
+        List<Friends> friendList = friendsService.getFriendGroupList(accountId);
+        for (Friends f : friendList) {
+            for (Mine mine : mineList) {
+                if (mine.getGroupId().toString().equals(f.getId())) {
+                    f.setGroupname(mine.getGName());
+                    f.setList(mineList);
+                    break;
+                }
+            }
+        }
+        return AjaxResult.success(friendList);
+    }
+
 
 }

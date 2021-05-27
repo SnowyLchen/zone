@@ -12,7 +12,7 @@ layui.use(['layim', 'laypage'], function () {
     var res = {
         code: 0
         , msg: ''
-        , uid: userid
+        , uid: accountId
         , data:""
     };
     console.log(res);

@@ -45,4 +45,8 @@ public interface FriendsMapper {
      * @return
      */
     List<Friends> getFriendGroupList(Integer accountId);
+
+    int removeFriendGroup(Integer id);
+
+    int updateFriendGroup(Friends friends);
 }

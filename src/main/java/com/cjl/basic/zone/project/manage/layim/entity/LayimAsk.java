@@ -23,6 +23,7 @@ public class LayimAsk implements Serializable {
     private String uid;
     private String from;
     private String fromGroup;
+    private String friendGroupId;
     private String content;
     private String remark;
     private Date createTime;

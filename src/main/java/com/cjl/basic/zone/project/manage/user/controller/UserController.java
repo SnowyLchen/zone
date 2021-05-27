@@ -1,8 +1,10 @@
 package com.cjl.basic.zone.project.manage.user.controller;
 
+import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.framework.web.controller.BaseController;
 import com.cjl.basic.zone.framework.web.domain.AjaxResult;
 import com.cjl.basic.zone.framework.web.page.TableDataInfo;
+import com.cjl.basic.zone.project.manage.layim.entity.Friends;
 import com.cjl.basic.zone.project.manage.user.domain.User;
 import com.cjl.basic.zone.project.manage.user.service.IUserService;
 import com.cjl.basic.zone.utils.StringUtils;
@@ -62,5 +64,13 @@ public class UserController extends BaseController {
     @RequestMapping("/removeUser/{id}")
     public AjaxResult removeRole(@PathVariable String id) {
         return AjaxResult.success(userService.deleteUserByIds(id));
+    }
+
+    @ResponseBody
+    @RequestMapping("/getUserList")
+    public TableDataInfo userList(User user) {
+        user.setAccountId(ShiroAuthenticateUtils.getAccountId());
+        startPage();
+        return getDataTable(userService.selectUserListByAccountId(user));
     }
 }

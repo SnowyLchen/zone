@@ -12,115 +12,380 @@
         var accountId = [[${accountId}]];
     </script>
     <style>
-        body .layim-chat-main {
+        body {
             height: auto;
+        }
+
+        .search {
+            width: 100%;
+            height: 50px;
+        }
+
+        .ml_10 {
+            margin-left: 10px;
+        }
+
+        .findFriend, .findGroup {
+            width: 100px;
+            letter-spacing: 6px;
+        }
+
+        .recordList {
+            padding: 0px;
+            min-height: 365px;
+        }
+
+        .recordList .demo-list .layui-card {
+            height: 100px;
+        }
+
+        .avatar {
+            width: 100px;
+            float: left;
+        }
+
+        .avatar img {
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            margin: 20px;
+        }
+
+        .units {
+            float: left;
+            font-size: 12px;
+            line-height: 20px;
+            padding-top: 16px;
+        }
+
+        .line {
+            padding: 0 10px;
+            color: #ccc;
+        }
+
+        .icons {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .addFriend {
+            background-color: #7ADDD4;
         }
     </style>
 </head>
+
 <body>
-<div style="margin: 15px;">
-    <div class="layui-fluid " style="">
-                <div class="layui-card">
-                    <div class="layui-card-body">
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">添加类型<span style="color: red;">*</span></label>
-                            <div class="layui-input-inline" style="width: 195px">
-                                <select id="type" name="type" lay-verify="required">
-                                    <option value>请选择添加类型</option>
-                                    <option value="0">好友</option>
-                                    <option value="1">群</option>
-                                </select>
+<div class="layui-card" style="margin-bottom:0px;">
+    <div class="layui-tab layui-tab-brief layadmin-latestData">
+        <ul class="layui-tab-title">
+            <li class="layui-this">找人</li>
+            <li>群聊</li>
+        </ul>
+        <div class="layui-tab-content" style="padding-bottom:0px;">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-form">
+                        <div class="search">
+                            <div class="layui-col-md4">
+                                <input type="text" id="searchKey1" placeholder="请输入账户名或手机号搜索" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                            <!--                            <div class="layui-col-md4 ml_10">-->
+                            <!--                                <select id="roleId" lay-verify="required" lay-filter="aihao">-->
+                            <!--                                    <option value="">请选择职位</option>-->
+                            <!--                                    <option value="1">超级管理员</option>-->
+                            <!--                                    <option value="2">项目经理</option>-->
+                            <!--                                    <option value="3">客服</option>-->
+                            <!--                                </select>-->
+                            <!--                            </div>-->
+                            <div class="layui-col-md2" style="margin-left:10px;">
+                                <button class="findFriend layui-btn">查找</button>
                             </div>
                         </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">id<span style="color: red;">*</span></label>
-                            <div class="layui-input-block">
-                                <input id="friend" placeholder="请输入id" type="text" class="layui-input" lay-verify="required"
-                                       required/>
-                            </div>
+                        <div class="recordList">
+                            <div id="friendList" class="layui-row layui-col-space10 demo-list"></div>
                         </div>
-
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">附加消息<span style="color: red;">*</span></label>
-                            <div class="layui-input-block">
-                                <textarea id="content" placeholder="请输入附加消息" class="layui-textarea"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="layui-form-item">
-                            <button class="layui-btn addLive" onclick="addAsk()">&emsp;添加&emsp;</button>
-                            <button class="layui-btn layui-btn-primary" type="button" id="backupPage">&emsp;返回&emsp;</button>
-                        </div>
-
                     </div>
                 </div>
-<!--        <textarea title="用户模版" id="LAY_Friend" >-->
-<!--    {{# layui.each(d.data, function(index, item){ }}-->
-<!--        <div class="layui-col-sm4 layui-col-md4 layui-col-lg2">-->
-<!--     <div class="layui-card">-->
-<!--        <div class="avatar">-->
-<!--            <img class="layadmin-homepage-pad-img" src="{{ item.avatar }}"/>-->
-<!--        </div>-->
-<!--        <div class="units">-->
-<!--            <p>{{ item.userName }}({{ item.userCode }})</p>-->
-<!--            <p>{{ item.roleNames }}</p>-->
-<!--            <p>-->
-<!--                {{# if(item.isValid == 0){ }}-->
-<!--                    <button userId="{{ item.userId }}" class="addFriend layui-btn layui-btn-xs"-->
-<!--                            style="background-color:#7ADDD4;">&nbsp;&nbsp;<strong>+</strong>&nbsp;&nbsp;好友&nbsp;&nbsp;</button>-->
-<!--                {{# } else { }}-->
-<!--                    <span class="c_red">已经是好友</span>-->
-<!--                {{# } }}-->
-<!--            </p>-->
-<!--        </div>-->
-<!--     </div>-->
-<!--    </div>-->
-<!--    {{# }); }}-->
-<!--</textarea>-->
+            </div>
+            <div class="layui-tab-item">
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-form">
+                        <div class="search">
+                            <div class="layui-col-md4">
+                                <input type="text" id="searchKey2" placeholder="请输入群名称搜索" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                            <div class="layui-col-md2 ml_10">
+                                <button class="findGroup layui-btn">查找</button>
+                            </div>
+                        </div>
+                        <div class="recordList">
+                            <div id="groupList" class="layui-row layui-col-space10 demo-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+
+<textarea title="用户模版" id="LAY_Friend" style="display:none;">
+			{{# layui.each(d.data, function(index, item){ }}
+				<div class="layui-col-sm4 layui-col-md4 layui-col-lg2">
+			        <div class="layui-card">
+			        	<div class="avatar">
+			          		<img class="layadmin-homepage-pad-img" src="{{ item.avatar }}"/>
+			        	</div>
+			        	<div class="units">
+				        	<p>{{ item.userName }}{{# if(item.status=='online'){ }}
+                                <span style="color: #3FDD86">在线</span>
+                                {{# }else{ }}
+                                离线
+                                {{# } }}
+                            </p>
+				        	<p>{{# if(item.sign ==null){ }}
+                                <span>这个人很懒，什么都没有留下。</span>
+                            {{# }else{ }}
+                                {{# if(item.sign.length>15){ }}
+                                {{item.sign.substring(0,15)}}...
+                                {{# }else{ }}
+                                {{item.sign}}
+                                {{# } }}
+                            {{# } }}
+                            </p>
+				        	<p>
+					        	{{# if(item.isValid == 0){ }}
+					        		<button username="{{ item.userName}}" accountId="{{item.accountId}}" avatar="{{item.avatar}}" class="addFriend layui-btn layui-btn-xs"
+                                            style="background-color:#7ADDD4;">&nbsp;&nbsp;<strong>+</strong>&nbsp;&nbsp;好友&nbsp;&nbsp;</button>
+					        	{{# } else { }}
+					        		<span class="c_red">已经是好友</span>
+					        	{{# } }}
+				        	</p>
+			        	</div>
+			        </div>
+		      	</div>
+		  	{{# }); }}
+		</textarea>
+
+<textarea title="群聊模版" id="LAY_Group" style="display:none;">
+			{{# layui.each(d.data, function(index, item){ }}
+				<div class="layui-col-sm4 layui-col-md4 layui-col-lg2">
+			        <div class="layui-card">
+			        	<div class="avatar">
+			          		<img class="layadmin-homepage-pad-img" src="{{ item.avatar }}"/>
+			        	</div>
+			        	<div class="units">
+			        		<p style="font-size: 14px;">{{ item.groupName }}</p>
+			        		<p><i class="layui-icon layui-icon-group icons"></i> {{ item.userCount }}<span class="line">|</span><i
+                                    class="layui-icon layui-icon-friends icons"></i>{{ item.userName }}</p>
+				        	<p>
+					        	{{# if(item.isJoin == 0){ }}
+					        		<button groupId="{{ item.groupId }}" class="addGroup layui-btn layui-btn-xs"
+                                            style="background-color:#7ADDD4;">&nbsp;&nbsp;<strong>+</strong>&nbsp;&nbsp;加群&nbsp;&nbsp;</button>
+					        	{{# } else { }}
+					        		<span class="c_red">已经是群成员</span>
+					        	{{# } }}
+				        	</p>
+			        	</div>
+			        </div>
+		      	</div>
+		  	{{# }); }}
+		</textarea>
 <div th:include="include::layIm"></div>
 <script type="application/javascript" th:src="@{/js/webSocket.js}"></script>
+<script type="application/javascript" th:src="@{/js/layuiim.js}"></script>
 <script type="application/javascript" th:src="@{/js/find.js}"></script>
-<script>
-    // $.ajax({
-    //     type: "get",
-    //     url: "../json/friend.json",
-    //     async: true,
-    //     data: data,
-    //     success: function (data) {
-    //         var json = data;
-    //         var list = json.data;
-    //         if (list != null) {
-    //             // 数据转化为html格式
-    //             var html = laytpl(LAY_Friend.value).render({
-    //                 data: list
-    //             });
-    //             control.html(html);
-    //         } else {
-    //             control.append('<div style="color:#ccc; margin:150px 350px;">没有找到符合搜索条件的用户</div>');
-    //         }
-    //     }
-    // });
-    // /**
-    //  * 添加好友
-    //  */
-    // $(document).on('click', '.addFriend', function() {
-    //     var myBut = $(this);
-    //     var userId = myBut.attr("userId");
-    //     // 弹出添加好友验证界面
-    //     layim.add({
-    //         type: 'friend'
-    //         ,username: user.username
-    //         ,avatar: user.avatar
-    //         ,submit: function(group, remark, index){
-    //             layer.msg('好友申请已发送，请等待对方确认', { icon: 1 });
-    //             // 修改按钮
-    //             myBut.parent().html('<span class="c_red">已经提交申请</span>');
-    //             // 在这里插入你的推送信息代码
-    //         }
-    //     });
-    // });
+<!--您的Layui代码start-->
+<script type="text/javascript">
+    var form, layer, laytpl, $;
+
+    layui.use(['laytpl', 'form', 'element', 'layim'], function (layim) {
+        form = layui.form;
+        layer = layui.layer;
+        laytpl = layui.laytpl;
+        $ = layui.jquery;
+        /**
+         * 添加好友
+         */
+        $(document).on('click', '.addFriend', function () {
+            addAsk(this);
+        });
+        /**
+         * 加入群聊
+         */
+        $(document).on('click', '.addGroup', function () {
+            var myBut = $(this);
+            var groupId = myBut.attr("groupId");
+
+            layer.msg('申请已发送，请等待管理员确认', {icon: 1});
+            // 修改按钮
+            myBut.parent().html('<span class="c_red">已经提交申请</span>');
+
+            // 弹出加入群聊验证界面
+            /*layim.add({
+        type: 'group'
+        ,username: group.groupName
+        ,avatar: group.avatar
+        ,submit: function(a, remark, index){
+            // 推送一个消息
+            var msg = {
+                    type: "addMsgbox",
+                    sendType: 2,
+                    fromId: loginUserId,
+                    toId: group.userId,
+                    groupId: group.groupId,
+                    remark: remark
+                }
+            websocket.send(JSON.stringify({
+                        type: 'chatMsgbox' // 随便定义，用于在服务端区分消息类型
+                        ,data: msg
+                  }));
+        }
+    });*/
+        });
+        /**
+         * 查找用户按钮点击事件
+         */
+        $(document).on('click', '.findFriend', function () {
+            bindingFriend();
+        });
+        /**
+         * 查找群聊按钮点击事件
+         */
+        $(document).on('click', '.findGroup', function () {
+            bindingGroup();
+        });
+
+        // 初始化用户群聊信息
+        bindingFriend();
+        bindingGroup();
+    });
+
+    function checkMobile(s) {
+        var length = s.length;
+        if (length == 11 && /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/.test(s)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function checkChinese(s) {
+        var ret = true;
+        for (var i = 0; i < s.length; i++)           //遍历每一个文本字符
+            ret = ret && (s.charCodeAt(i) >= 10000);//判断文本字符的unicode值
+        return ret;
+    }
+
+    /**
+     * 重新绑定用户列表
+     */
+    function bindingFriend() {
+        var key = $("#searchKey1").val();
+        var data = {};
+        if (key) {
+            if (checkMobile(key)) {
+                data.phonenumber = key;
+            } else if (checkChinese(key)) {
+                data.userName = key;
+            } else {
+                data.loginName = key;
+            }
+        }
+        var control = $('#friendList');
+        control.empty();
+        var config = {
+            url: '/user/getUserList',
+            type: 'get',
+            data: data,
+            dataType: 'json',
+            async: false,
+            success: function (res) {
+                var list = res.data;
+                if (list != null && list.length > 0) {
+                    // 数据转化为html格式
+                    var html = laytpl(LAY_Friend.value).render({
+                        data: list
+                    });
+                    control.html(html);
+                } else {
+                    control.append('<div style="color:#000000; margin:150px 350px;">没有找到符合搜索条件的用户</div>');
+                }
+            }
+        };
+        $.ajax(config);
+    }
+
+    /**
+     * 重新绑定群聊列表
+     */
+    function bindingGroup() {
+        layer.msg('开始绑定群聊列表');
+        var control = $('#groupList');
+        control.empty();
+        var json = {
+            "code": 0,
+            "count": null,
+            "data": [
+                {
+                    "avatar": "http://tva2.sinaimg.cn/crop.0.0.199.199.180/005Zseqhjw1eplix1brxxj305k05kjrf.jpg",
+                    "groupId": 1,
+                    "groupName": "IM群聊",
+                    "isJoin": 0,
+                    "userCount": 15,
+                    "userId": 1,
+                    "userName": "小升"
+                }, {
+                    "avatar": "http://tva1.sinaimg.cn/crop.0.0.200.200.50/006q8Q6bjw8f20zsdem2mj305k05kdfw.jpg",
+                    "groupId": 18,
+                    "groupName": "热血三角裤",
+                    "isJoin": 1,
+                    "userCount": 2,
+                    "userId": 1,
+                    "userName": "小升"
+                }
+            ],
+            "msg": "操作成功！"
+        };
+        var list = json.data;
+        if (list != null) {
+            // 数据转化为html格式
+            var html = laytpl(LAY_Group.value).render({
+                data: list
+            });
+            control.html(html);
+        } else {
+            control.append('<div style="color:#ccc; margin:150px 350px;">没有找到符合搜索条件的群聊</div>');
+        }
+
+
+        /*var data = {
+                searchKey: $("#searchKey2").val()
+            };
+        $.ajax({
+            type: "get",
+            url: "../json/group.json",
+            async: true,// 异步为true
+            data: data,
+            success: function (data) {
+                var json = data;
+                var list = json.data;
+                if(list != null){
+                    // 数据转化为html格式
+                    var html = laytpl(LAY_Group.value).render({
+                        data: list
+                    });
+                    control.html(html);
+                }else{
+                    control.append('<div style="color:#ccc; margin:150px 350px;">没有找到符合搜索条件的群聊</div>');
+                }
+            }
+        });*/
+    }
+
+
 </script>
 </body>
 </html>

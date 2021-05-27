@@ -1,5 +1,6 @@
 package com.cjl.basic.zone.project.manage.user.service;
 
+import com.cjl.basic.zone.project.manage.layim.entity.Friends;
 import com.cjl.basic.zone.project.manage.layim.entity.Mine;
 import com.cjl.basic.zone.project.manage.user.domain.User;
 
@@ -18,12 +19,21 @@ public interface IUserService {
     List<User> selectUserList(User user);
 
     /**
+     * 查询好友列表
+     *
+     * @param user 用户信息
+     * @return 用户信息集合信息
+     */
+    List<User> selectUserListByAccountId(User user);
+
+    /**
      * 通过用户ID查询用户
      *
      * @param accountId 用户ID
      * @return 用户对象信息
      */
     User selectUserById(Integer accountId);
+
     /**
      * 通过用户ID查询用户Socket
      *
@@ -48,15 +58,6 @@ public interface IUserService {
      * @param mfrsId    企业id
      */
     boolean checkIsQuit(String loginName, Long mfrsId);
-
-    /**
-     * 企业是否存在该账号
-     *
-     * @param loginName 登录名
-     * @param mfrsId    企业id
-     * @return {@link Boolean}
-     */
-    boolean checkLoginNameUnique(String loginName, Long mfrsId);
 
 
     /**
@@ -165,4 +166,28 @@ public interface IUserService {
      * @return
      */
     User checkRegisterExist(User user);
+
+    /**
+     * 添加好友分组
+     *
+     * @param friends
+     * @return
+     */
+    Friends addFriendGroup(Friends friends);
+
+    /**
+     * 删除分组
+     *
+     * @param id
+     * @return
+     */
+    int removeFriendGroup(Integer id);
+
+    /**
+     * 更新分组
+     *
+     * @param friends
+     * @return
+     */
+    int updateFriendGroup(Friends friends);
 }

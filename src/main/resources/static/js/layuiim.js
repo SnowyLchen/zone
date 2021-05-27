@@ -115,7 +115,7 @@ layui.use(['layim', 'jquery', 'yaml'], function (layim) {
         } else if (jObject.msgType == "addFriend") {
             var user = jObject.data;
             if (user == "0") {
-                //同意后，将好友追加到主面板
+                //同意后，将好友追加到主面板 todo 此处groupId需要动态获取
                 layim.addList({
                     type: 'friend'
                     , username: user.username
@@ -190,54 +190,98 @@ layui.use(['layim', 'jquery', 'yaml'], function (layim) {
     layim.on('contextmenu', function (res) {
         console.log(res)
     });
+    // 好友验证
+    top.openFriend = function (el) {
+        var username = el.attr("username");
+        var toId = el.attr("accountId");
+        var avatar = el.attr("avatar");
+        var idx = layim.add({
+            type: 'friend'
+            , username: username
+            , avatar: avatar
+            , submit: function (group, remark, index) {
+                layer.msg('好友申请已发送，请等待对方确认', {icon: 1});
+                // 修改按钮
+                el.parent().html('<span class="c_red">已经提交申请</span>');
+                var content = $("#content").val();
+                var object = {};
+                object["content"] = "申请添加你为好友";
+                object["uid"] = toId;
+                object["from"] = accountId;
+                object["remark"] = content;
+                object["friendGroupId"] = group;
+                object["type"] = 0;
+                object["msgType"] = "addAsk";
+                var jsonData = JSON.stringify(object);
+                console.log(jsonData)
+                socket.send(jsonData);
+                closeCurrentIndex();
+            }
+        });
 
-    // 从数据库查找出所有群聊，依次遍历添加
-    // var imGroup = {
-    //     "id": 1,
-    //     "groupname": "我的好友2"
-    // };
-    // // 往主面板添加分组
-    // addFriendGroup(imGroup);
-    // // 更新缓存
-    // var cacheFriend = layim.cache().friend;
-    // cacheFriend.push(imGroup);
-    // layim.cache().friend = cacheFriend;
-    // // 往主面板添加分组
-    // var addFriendGroup = function (friendGroup) {
-    //     // 下面是自己手动把分组添加到列表中
-    //     var friendList_ul = document.getElementsByClassName("layim-list-friend")[0];
-    //     var li = document.createElement("li");
-    //     friendList_ul.appendChild(li);
-    //     var h5 = document.createElement("h5");
-    //     li.appendChild(h5);
-    //     h5.setAttribute("layim-event", "spread");
-    //     h5.setAttribute("lay-type", "false");
-    //     h5.setAttribute("groupid", friendGroup.id);
-    //     var i = document.createElement("i");
-    //     h5.appendChild(i);
-    //     i.setAttribute("class", "layui-icon");
-    //     i.innerText = '      ';
-    //     var span = document.createElement("span");
-    //     h5.appendChild(span);
-    //     span.innerText = friendGroup.groupname;
-    //     var em = document.createElement("em");
-    //     h5.appendChild(em);
-    //     var span1 = document.createElement("span");
-    //     em.appendChild(span1);
-    //     span1.innerText = '(';
-    //     var cite = document.createElement("cite");
-    //     em.appendChild(cite);
-    //     cite.setAttribute("class", "layim-count");
-    //     cite.innerText = ' 0';
-    //     var span2 = document.createElement("span");
-    //     em.appendChild(span2);
-    //     span2.innerText = ')';
-    //     var ul = document.createElement("ul");
-    //     li.appendChild(ul);
-    //     ul.setAttribute("class", "layui-layim-list");
-    //     var li2 = document.createElement("li");
-    //     ul.appendChild(li2);
-    //     li2.setAttribute("class", "layim-null");
-    //     li2.innerText = '该分组下暂无好友';
-    // };
+        function closeCurrentIndex() {
+            parent.layer.close(layer.index - 1)
+        }
+
+    };
+    // 往主面板添加分组
+    top.addFriendGroup = function (friendGroup) {
+        // 下面是自己手动把分组添加到列表中
+        var friendList_ul = document.getElementsByClassName("layim-list-friend")[0];
+        var li = document.createElement("li");
+        friendList_ul.appendChild(li);
+        var h5 = document.createElement("h5");
+        li.appendChild(h5);
+        h5.setAttribute("layim-event", "spread");
+        h5.setAttribute("lay-type", "false");
+        h5.setAttribute("groupid", friendGroup.id);
+        var i = document.createElement("i");
+        h5.appendChild(i);
+        i.setAttribute("class", "layui-icon");
+        i.innerText = '';
+        var span = document.createElement("span");
+        span.setAttribute("id", "group" + friendGroup.id);
+        h5.appendChild(span);
+        span.innerText = friendGroup.groupname;
+        var em = document.createElement("em");
+        h5.appendChild(em);
+        var span1 = document.createElement("span");
+        em.appendChild(span1);
+        span1.innerText = '(';
+        var cite = document.createElement("cite");
+        em.appendChild(cite);
+        cite.setAttribute("class", "layim-count");
+        cite.innerText = ' 0';
+        var span2 = document.createElement("span");
+        em.appendChild(span2);
+        span2.innerText = ')';
+        var ul = document.createElement("ul");
+        li.appendChild(ul);
+        ul.setAttribute("class", "layui-layim-list");
+        var li2 = document.createElement("li");
+        ul.appendChild(li2);
+        li2.setAttribute("class", "layim-null");
+        li2.innerText = '该分组下暂无好友';
+        // friendGroup.list.forEach(item=>{
+        //     top.addFriendList(item)
+        // })
+    };
+    // 往分组添加好友
+    top.addFriendList = function (friend) {
+        var opt = {
+            type: 'friend',
+            accountId: friend.id,
+            id: friend.id,
+            username: friend.username,
+            avatar: friend.avatar,
+            groupid: friend.groupId,
+            groupIndex: friend.groupId,
+            sign: friend.sign,
+            status: friend.status
+        };
+        // 先移除好友，再添加好友
+        console.log(opt)
+        layim.removeList(opt);
+        layim.addList(opt)
+    };
 });

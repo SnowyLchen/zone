@@ -59,9 +59,11 @@
         c.prototype.notice = function (i) {
             return J(i), this
         },
+        // 新增好友
         c.prototype.add = function (i) {
             return M(i), this
         },
+        // 移至好友列表
         c.prototype.setFriendGroup = function (i) {
             return M(i, "setGroup"), this
         },
@@ -95,8 +97,8 @@
                 };
             return i = i || {},
                 i.item = i.item || "d." + i.type,
-                ["{{# var length = 0; layui.each(" + i.item + ", function(i, data){ length++; }}",
-                    '<li layim-event="chat" data-type="' + i.type + '" data-index="{{ ' + (i.index || "i") + ' }}" class="layim-' + ("history" === i.type ? "{{i}}" : i.type + "{{data.id}}") + ' {{ data.status === "offline" ? "layim-list-gray" : "" }}"><img src="{{ data.avatar }}"><span>',
+                ["{{# var length = 0; layui.each(" + i.item + ", function(i, data){ length++;}}",
+                    '<li layim-event="chat" data-type="' + i.type + '" data-item="{{data.accountId}}//{{data.username}}//{{data.status}}//{{data.avatar}}" data-index="{{ ' + (i.index || "i") + ' }}" class="layim-' + ("history" === i.type ? "{{i}}" : i.type + "{{data.id}}") + ' {{ data.status === "offline" ? "layim-list-gray" : "" }}"><img src="{{ data.avatar }}"><span>',
                     '{{# if(data.status === "online"){ }}',
                     '<span class="layui-icon layim-status-online"  lay-type="show">&#xe617;</span>',
                     '{{# } else if(data.status === "hide") { }}',
@@ -135,7 +137,7 @@
             "</ul>",
             '<ul class="layui-unselect layim-tab-content {{# if(d.base.isfriend){ }}layui-show{{# } }} layim-list-friend">',
             '{{# layui.each(d.friend, function(index, item){ var spread = d.local["spread"+index]; }}',
-            "<li>", '<h5 layim-event="spread" lay-type="{{ spread }}"><i class="layui-icon">{{# if(spread === "true"){ }}&#xe61a;{{# } else {  }}&#xe602;{{# } }}</i><span>{{ item.groupname||"未命名分组"+index }}</span><em>(<cite class="layim-count"> {{ (item.list||[]).length }}</cite>)</em></h5>',
+            "<li>", '<h5 layim-event="spread" lay-type="{{ spread }}" groupid="{{item.id}}"><i class="layui-icon">{{# if(spread === "true"){ }}&#xe61a;{{# } else {  }}&#xe602;{{# } }}</i><span id="group{{item.id}}">{{ item.groupname||"未命名分组"+index }}</span><em>(<cite class="layim-count"> {{ (item.list||[]).length }}</cite>)</em></h5>',
             '<ul class="layui-layim-list {{# if(spread === "true"){ }}', " layui-show", '{{# } }}">',
             u({
                 type: "friend",
@@ -147,7 +149,7 @@
             '<li><ul class="layui-layim-list layui-show"><li class="layim-null">暂无联系人</li></ul>',
             "{{# } }}",
             "</ul>",
-            '<ul class="layui-unselect layim-tab-content {{# if(!d.base.isfriend && d.base.isgroup){ }}layui-show{{# } }}">',
+            '<ul class="layui-unselect layim-tab-content {{# if(!d.base.isfriend && d.base.isgroup){ }}layui-show{{# } }} layim-list-group">',
             "<li>", '<ul class="layui-layim-list layui-show layim-list-group">',
             u({type: "group"}),
             "</ul>",
@@ -388,7 +390,7 @@
             i = i || {};
             var a = e("#layui-layim-chat"),
                 l = {data: i, base: j.base, local: j.local};
-            debugger
+
             if (!i.id) return t.msg("非法用户");
             if (a[0]) {
                 var s = w.find(".layim-chat-list"), o = s.find(".layim-chatlist-" + i.type + i.id),

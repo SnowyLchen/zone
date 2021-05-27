@@ -48,6 +48,11 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public List<User> selectUserListByAccountId(User user) {
+        return userMapper.selectUserListByAccountId(user);
+    }
+
+    @Override
     public User selectUserById(Integer accountId) {
         return userMapper.selectUserById(accountId);
     }
@@ -82,12 +87,6 @@ public class UserServiceImpl implements IUserService {
     public boolean checkIsQuit(String loginName, Long mfrsId) {
         return userMapper.checkLoginNameUniqueInMfrs(loginName, mfrsId.intValue()) <= 0;
     }
-
-    @Override
-    public boolean checkLoginNameUnique(String loginName, Long mfrsId) {
-        return checkIsQuit(loginName, mfrsId);
-    }
-
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -201,10 +200,11 @@ public class UserServiceImpl implements IUserService {
             setAccountId(accountId);
         }}), "新增用户默认菜单失败");
         // 新增用户默认分组
-        InsertOrUpdateUtils.requireGreaterThanI(friendsService.createGroup(new Friends() {{
+        Friends f = friendsService.createGroup(new Friends() {{
             setAccountId(accountId);
             setGroupname("我的好友");
-        }}), "新增用户默认分组失败");
+        }});
+        InsertOrUpdateUtils.requireGreaterThanI(f != null ? 1 : 0, "新增用户默认分组失败");
         return u;
     }
 
@@ -245,6 +245,21 @@ public class UserServiceImpl implements IUserService {
     @Override
     public User checkRegisterExist(User user) {
         return userMapper.checkRegisterExist(user);
+    }
+
+    @Override
+    public Friends addFriendGroup(Friends friends) {
+        return friendsService.createGroup(friends);
+    }
+
+    @Override
+    public int removeFriendGroup(Integer id) {
+        return friendsService.removeFriendGroup(id);
+    }
+
+    @Override
+    public int updateFriendGroup(Friends friends) {
+        return friendsService.updateFriendGroup(friends);
     }
 
     @Override

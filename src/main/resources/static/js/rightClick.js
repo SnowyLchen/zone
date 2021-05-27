@@ -31,12 +31,17 @@ layui.use('layim', function (layim) {
         $('.layim-list-friend li ul li').removeAttr("style", "");
         // 标注为选中
         othis.css({'background-color': 'rgba(0,0,0,.05)'});
-        var mineId = $(this).data('mineid');
+        var item = $(this).data('item').split('//'),
+            mineId = item[0],
+            u_name = item[1],
+            u_status = item[2],
+            u_avatar = item[3];
+
         var uid = Date.now().toString(36);
         var space_icon = '  ';
         var space_text = '      ';
         var html = [
-            '<ul id="contextmenu_' + uid + '" data-id="' + mineId + '" data-index="' + mineId + '" data-mold="1">',
+            '<ul id="contextmenu_' + uid + '" data-id="' + mineId + '" data-index="' + mineId + '" data-username="' + u_name + '" data-status="' + u_status + '" data-avatar="' + u_avatar + '" data-mold="1">',
             '<li data-type="menuChat"><i class="layui-icon" ></i>' + space_icon + '发送即时消息</li>',
             '<li data-type="menuProfile"><i class="layui-icon"></i>' + space_icon + '查看资料</li>',
             '<li data-type="menuHistory"><i class="layui-icon" ></i>' + space_icon + '消息记录</li>',
@@ -115,21 +120,151 @@ layui.use('layim', function (layim) {
 
     // 绑定右击菜单中选项的点击事件
     var active = {
+        //发送即时消息
         menuChat: function () {
-            /*发送即时消息*/
             var mineId = $(this).parent().data('id');
+            var username = $(this).parent().data('username');
+            var status = $(this).parent().data('status');
+            var avatar = $(this).parent().data('avatar');
             var moldId = $(this).parent().data('mold');
-            console.log(mineId);
             layim.chat({
                 type: moldId == 1 ? "friend" : "group",
-                name: '小焕',
-                avatar: '好友头像，实际应用动态绑定',
+                name: username,
+                avatar: avatar,
                 id: mineId,
-                status: '好友当前离线状态'
+                status: status
             });
         },
+        // 查看资料
+        menuProfile: function () {
+            debugger
+        },
+        // 添加分组
+        menuInsert: function () {
+            var li = '<li id="removeLi"><h5 layim-event="spread" lay-type="undefined"><i class="layui-icon"></i><span id="newGroup" contenteditable="">新分组</span></h5></li>'
+            $(".layim-list-friend").append(li);
+            setTimeout(function () {
+                // var t = $("#newGroup").val();
+                // $("#newGroup").val("").focus().val(t);
+                keepLastIndex("newGroup")
+            }, 500);
+            if ($('#newGroup').parent().attr('lay-type')) {
+                $("#newGroup").css('outline', '0');
+            }
+            $("#newGroup").on('blur', function () {
+                // 获取分组名称
+                var gname = $("#newGroup").text();
+                // 删除预设分组
+                $("#removeLi").remove();
+                // 发送添加分组请求到后台
+                groupBlur($, layim, {
+                    groupname: gname
+                }, 'addFriendGroup', '添加分组');
+            })
+        },
+        refreshFriendsGroupList: function () {
+            // 获取好友分组
+            $.ajax({
+                url: '/layim/refreshFriendGroupList',
+                dataType: 'json',
+                type: 'get',
+                success: function (res) {
+                    if (res.code == '0') {
+                        layim.cache().friend = [];
+                        var friendCache = layim.cache().friend;
+                        $(".layim-list-friend").empty();
+                        var friends = [];
+                        $.each(res.data, function (idx, item) {
+                            var g = {
+                                "id": item.id,
+                                "groupname": item.groupname,
+                                'accountId': item.accountId,
+                                list: []
+                            };
+                            console.log("aaa=" + item.list)
+                            // 往主面板添加分组
+                            top.addFriendGroup(g);
+                            // 更新缓存
+                            friendCache.push(g)
+                            friends.push({
+                                list: item.list
+                            })
+                        });
+                        layim.cache().friend = friendCache;
+                        // 在添加好友
+                        if (friends.length > 0) {
+                            $.each(friends, function (idx, item) {
+                                if (item.list != null) {
+                                    item.list.forEach(it => {
+                                        top.addFriendList(it);
+                                    });
+                                }
+                            })
+                        }
+                    } else {
+                        layer.msg('刷新失败', {icon: 2});
+                    }
+                }
+            });
+        },
+        // 创建群聊
+        createGroup: function () {
+            layer.alert("创建群聊")
+        },
+        // 删除分组
+        menuRemove: function () {
+            var id = $(this).parent().data('id');
+            console.log(id)
+            layer.confirm('确定删除该分组吗?', {icon: 3, title: '提示'}, function (index) {
+                $.ajax({
+                    url: '/layim/removeFriendGroup/' + id,
+                    dataType: 'json',
+                    type: 'post',
+                    success: function (res) {
+                        if (res.code == '0') {
+                            layer.msg('删除成功', {icon: 1});
+                            active.refreshFriendsGroupList();
+                        } else {
+                            layer.msg('删除失败', {icon: 2});
+                        }
+                    }
+                });
+                layer.close(index);
+            });
+        },
+        // 重命名
+        menuRename: function () {
+            var id = $(this).parent().data('id');
+            $("#group" + id).attr("contenteditable", "");
+            $("#group" + id).css('outline', '0');
+            keepLastIndex("group" + id);
+            $("#group" + id).on('blur', function () {
+                // 获取分组名称
+                var gname = $("#group" + id).text();
+                // 删除预设分组
+                $("#removeLi").remove();
+                // 发送添加分组请求到后台
+                groupBlur($, layim, {
+                    groupname: gname,
+                    id: id
+                }, 'updateFriendGroup', '分组重命名');
+            });
+            // $.ajax({
+            //     url: '/layim/removeFriendGroup/' + id,
+            //     dataType: 'json',
+            //     type: 'post',
+            //     success: function (res) {
+            //         if (res.code == '0') {
+            //             layer.msg('删除成功', {icon: 1});
+            //             active.refreshFriendsGroupList();
+            //         } else {
+            //             layer.msg('删除失败', {icon: 2});
+            //         }
+            //     }
+            // });
+        },
+        // 消息记录
         menuHistory: function () {
-            /*消息记录*/
             var mineId = $(this).parent().data('id');
             var moldId = $(this).parent().data('mold');
             console.log(mineId);
@@ -167,7 +302,7 @@ layui.use('layim', function (layim) {
         // ].join('');
         var html = [
             '<ul id="contextmenu_' + uid + '">',
-            '<li data-type="menuReset"><i class="layui-icon" ></i>' + space_icon + '刷新好友列表</li>',
+            '<li data-type="refreshFriendsGroupList"><i class="layui-icon" ></i>' + space_icon + '刷新好友列表</li>',
             '<li data-type="menuInsert">' + space_text + '添加分组</li></ul>',
         ].join('');
 
@@ -217,13 +352,13 @@ layui.use('layim', function (layim) {
         e.stopPropagation();
         var othis = $(this);
         if (othis.hasClass('layim-null')) return;
-        var groupId = othis.data('groupid');
+        var groupId = othis.attr('groupid');
         var uid = Date.now().toString(36);
         var space_icon = '&nbsp;&nbsp;';
         var space_text = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         var html = [
             '<ul id="contextmenu_' + uid + '" data-id="' + groupId + '" data-index="' + groupId + '">',
-            '<li data-type="menuReset"><i class="layui-icon" >&#xe669;</i>' + space_icon + '刷新好友列表</li>',
+            '<li data-type="refreshFriendsGroupList"><i class="layui-icon" >&#xe669;</i>' + space_icon + '刷新好友列表</li>',
             // '<li data-type="menuOnline"><i class="layui-icon">&#x1005;</i>'+space_icon+'显示在线好友</li>',
             '<li data-type="menuInsert">' + space_text + '添加分组</li>',
             '<li data-type="menuRename">' + space_text + '重命名</li>',
@@ -321,7 +456,7 @@ layui.use('layim', function (layim) {
             var html = [
                 '<ul id="contextmenu_' + uid + '">',
                 '<li data-type="menuResetGroup"><i class="layui-icon" >&#xe669;</i>' + space_icon + '刷新群聊列表</li>',
-                '<li data-type="menuInsertGroup"&gt;' + space_text + '创建群聊</li></ul>',
+                '<li data-type="createGroup"&gt;' + space_text + '创建群聊</li></ul>',
             ].join('');
             layer.tips(html, othis, {
                 tips: 1
@@ -357,4 +492,102 @@ layui.use('layim', function (layim) {
             });
         });
     });
+
+    /* 绑定群聊空白地方右击事件 */
+    $('body').on('mousedown', '.layim-list-group', function (e) {
+        // 清空所有右击弹框
+        emptyTips();
+        if (3 != e.which) {
+            return;
+        }
+        // 不再派发事件
+        e.stopPropagation();
+
+        var othis = $(this);
+        if (othis.hasClass('layim-null')) return;
+
+        var uid = Date.now().toString(36);
+        var space_icon = '  ';
+        var space_text = '      ';
+        // var html = [
+        //     '<ul id="contextmenu_' + uid + '" data-id="' + 1 + '" data-index="' + 1 + '">',
+        //     '<li data-type="menuReset"><i class="layui-icon" >&#xe669;</i>'+space_icon+'刷新好友列表</li>',
+        //     '<li data-type="menuInsert">'+space_text+'添加分组</li>',
+        //     '<li data-type="menuRename">'+space_text+'重命名</li>',
+        //     '<li data-type="menuRemove" data-mold="1">'+space_text+'删除分组</li></ul>',
+        // ].join('');
+        var html = [
+            '<ul id="contextmenu_' + uid + '">',
+            '<li data-type="createGroup">' + space_text + '创建群聊</li></ul>',
+        ].join('');
+
+        layer.tips(html, othis, {
+            tips: 1
+            , time: 0
+            , shift: 5
+            , fix: true
+            , skin: 'ayui-box layui-layim-contextmenu'
+            , success: function (layero) {
+                var liCount = (html.split('</li>')).length;
+                var stopmp = function (e) {
+                    stope(e);
+                };
+                layero.off('mousedowm', stopmp).on('mousedowm', stopmp);
+                var layerobj = $('#contextmenu_' + uid).parents('.layui-layim-contextmenu');
+                var top = e.pageY;
+                var left = e.pageX;
+                var screenWidth = window.screen.width;
+                // 根据实体情况调整位置
+                if (screenWidth - left > 150) {
+                    left = left - 30;
+                } else if (screenWidth - left < 110) {
+                    left = left - 180;
+                } else {
+                    left = left - 130;
+                }
+                if (top > 816) {
+                    top = top - 140;
+                } else {
+                    top = top - 60;
+                }
+                layerobj.css({'width': '150px', 'left': left + 'px', 'top': top + 'px'});
+                $('.layui-layim-contextmenu li').css({'padding-left': '18px'});
+            }
+        });
+    });
+
+    /**
+     * 分组重命名
+     * @param $
+     * @param layim
+     * @param data
+     * @param url
+     * @param msg
+     */
+    function groupBlur($, layim, data, url, msg) {
+        $.ajax({
+            url: '/layim/' + url,
+            data: data,
+            dataType: 'json',
+            type: 'post',
+            success: function (res) {
+                if (res.code == '0') {
+                    layer.msg(msg + '成功', {icon: 1});
+                    active.refreshFriendsGroupList()
+                } else {
+                    layer.msg(msg + '失败', {icon: 2});
+                }
+            }
+        })
+    }
 });
+
+function keepLastIndex(obj) {
+    var esrc = document.getElementById(obj);
+    var range = document.createRange();
+    range.selectNodeContents(esrc);
+    range.collapse(false);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+}

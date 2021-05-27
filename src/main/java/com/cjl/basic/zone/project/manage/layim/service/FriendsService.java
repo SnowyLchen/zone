@@ -44,5 +44,21 @@ public interface FriendsService {
      * @param friends
      * @return
      */
-    int createGroup(Friends friends);
+    Friends createGroup(Friends friends);
+
+    /**
+     * 删除分组
+     *
+     * @param id
+     * @return
+     */
+    int removeFriendGroup(Integer id);
+
+    /**
+     * 更新分组
+     *
+     * @param friends
+     * @return
+     */
+    int updateFriendGroup(Friends friends);
 }

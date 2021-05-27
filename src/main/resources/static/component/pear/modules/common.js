@@ -145,7 +145,7 @@ layui.define(['jquery', 'element', 'table'], function (exports) {
                     even: true,
                 };
                 Object.assign(opt, options);
-                debugger
+
                 tableObj = table.render(opt);
             });
             return {

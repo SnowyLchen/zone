@@ -8,6 +8,7 @@
         <id column="account_id" jdbcType="INTEGER" property="accountId"/>
         <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
         <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="isValid" jdbcType="VARCHAR" property="isValid"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="phonenumber" jdbcType="VARCHAR" property="phonenumber"/>
         <result column="sex" jdbcType="CHAR" property="sex"/>
@@ -90,6 +91,45 @@
                 and sex = #{sex,jdbcType=CHAR}
             </if>
         </where>
+    </select>
+    <select id="selectUserListByAccountId" resultMap="UserResultMap">
+        select account_id,
+        user_name,
+        email,
+        home_url,
+        login_time,
+        activated,
+        logged,
+        user_type,
+        login_name,
+        phonenumber,
+        del_flag,
+        sex,
+        avatar,
+        if(account_id in (select f_user_id
+        from z_friend
+        where user_id = #{accountId}), 1, 0) isValid,
+        create_time,
+        update_time,
+        sign,
+        status
+        from z_users
+        <where>
+            del_flag = 0 AND account_id!=#{accountId} AND account_id!=1
+            <if test="loginName != null">
+                and login_name like concat('%',#{loginName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="userName != null">
+                and user_name =like concat('%', #{userName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="email != null">
+                and email = #{email,jdbcType=VARCHAR}
+            </if>
+            <if test="phonenumber != null">
+                and phonenumber = #{phonenumber,jdbcType=VARCHAR}
+            </if>
+        </where>
+        limit 20
     </select>
 
     <update id="updateUser" parameterType="com.cjl.basic.zone.project.manage.user.domain.User">
