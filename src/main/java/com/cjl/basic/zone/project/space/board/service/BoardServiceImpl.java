@@ -24,8 +24,14 @@ public class BoardServiceImpl implements IBoardService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int insertMessage(ZMessageBoard messageBoard) {
+        InsertOrUpdateUtils.addInsertAttr(messageBoard);
+        return messageBoardMapper.insertMessage(messageBoard);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int addOwner(ZMessageBoard messageBoard) {
         InsertOrUpdateUtils.addInsertAttr(messageBoard);
         List<ZMessageBoard> owner = selectOwnerMessageBoard(messageBoard.getAccountId());
         if (owner.size() > 0) {
@@ -59,5 +65,10 @@ public class BoardServiceImpl implements IBoardService {
     @Override
     public List<ZMessageBoard> selectOwnerMessageBoard(Integer accountId) {
         return messageBoardMapper.selectOwnerMessageBoard(accountId);
+    }
+
+    @Override
+    public int removeMessage(Integer id) {
+        return messageBoardMapper.removeMessage(id);
     }
 }

@@ -45,4 +45,11 @@ public interface ZMessageBoardMapper {
      * @return
      */
     List<ZMessageBoard> selectOwnerMessageBoard(Integer accountId);
+
+    /**
+     * 删除留言
+     * @param id
+     * @return
+     */
+    int removeMessage(Integer id);
 }

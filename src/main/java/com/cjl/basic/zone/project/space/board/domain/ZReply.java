@@ -1,9 +1,9 @@
 package com.cjl.basic.zone.project.space.board.domain;
 
 import com.cjl.basic.zone.framework.web.domain.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -12,7 +12,7 @@ import java.util.Date;
  * @author
  */
 @Data
-public class ZReply extends BaseEntity implements Serializable {
+public class ZReply extends BaseEntity {
     private Integer rId;
 
     /**
@@ -35,6 +35,7 @@ public class ZReply extends BaseEntity implements Serializable {
     /**
      * 回复时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
     /**

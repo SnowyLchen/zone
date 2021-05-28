@@ -1,6 +1,8 @@
 package com.cjl.basic.zone.project.space.board.domain;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.cjl.basic.zone.framework.web.domain.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -13,7 +15,7 @@ import java.util.List;
  * @author
  */
 @Data
-public class ZMessageBoard extends BaseEntity implements Serializable {
+public class ZMessageBoard extends BaseEntity {
     private Integer mbId;
 
     /**
@@ -42,6 +44,7 @@ public class ZMessageBoard extends BaseEntity implements Serializable {
     /**
      * 留言时间
      */
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     /**
      * 留言回复

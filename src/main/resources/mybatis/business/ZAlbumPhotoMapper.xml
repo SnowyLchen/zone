@@ -33,10 +33,15 @@
         where p_id = #{pId,jdbcType=INTEGER}
     </select>
     <select id="selectPhotoByAccountId" parameterType="java.lang.Integer" resultMap="photoMap">
-        select
-        <include refid="Base_Column_List"/>
-        from z_photo
-        where p_id = #{pId,jdbcType=INTEGER}
+       select  zp.p_id,
+               zp.`path`,
+               zp.`name`,
+               zp.suffix,
+               zp.create_time,
+               zp.del_flag
+        from z_photo zp
+        left join z_album za on zp.a_id = za.a_id and del_flag=0
+        where account_id = #{accountId}
     </select>
     <select id="selectPhotoByAlbum" parameterType="java.lang.Integer" resultMap="photoMap">
         select zp.p_id,

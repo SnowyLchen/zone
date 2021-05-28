@@ -32,6 +32,7 @@ public class AlbumPhotoController extends BaseController {
     public String album(ModelMap mmap) {
         User user = ShiroAuthenticateUtils.getUserByToken();
         mmap.put("user", user);
+        mmap.put("photos", albumPhotoService.selectPhotoByAccountId(ShiroAuthenticateUtils.getAccountId()));
         return "space/album/album";
     }
 

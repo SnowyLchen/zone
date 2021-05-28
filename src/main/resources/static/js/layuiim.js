@@ -180,7 +180,10 @@ layui.use(['layim', 'jquery', 'yaml'], function (layim) {
     });
     layim.on('sign', function (value) {
         console.log(value); //获得新的签名
-
+        $.post('/user/editUser',{
+            accountId:accountId,
+            sign:value
+        })
         //此时，你就可以通过Ajax将新的签名同步到数据库中了。
     });
     layim.on('setSkin', function (filename, src) {

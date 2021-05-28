@@ -98,4 +98,8 @@
             </if>
         </trim>
     </insert>
+    <delete id="removeMessage">
+        update z_reply set del_flag=1
+        where r_id=#{id}
+    </delete>
 </mapper>

@@ -44,7 +44,7 @@ public class ZAlbumPhotoServiceImpl implements IZAlbumPhotoService {
     }
 
     @Override
-    public ZPhoto selectPhotoByAccountId(Integer accountId) {
+    public  List<ZPhoto> selectPhotoByAccountId(Integer accountId) {
         return albumPhotoMapper.selectPhotoByAccountId(accountId);
     }
 

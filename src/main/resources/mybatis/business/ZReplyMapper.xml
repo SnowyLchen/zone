@@ -29,7 +29,7 @@
            zr.mb_id
     from z_reply zr
              left join z_users zu on zr.account_id = zu.account_id
-    where mb_id = #{mbId}
+    where mb_id = #{mbId} and zr.del_flag=0
     order by create_time
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

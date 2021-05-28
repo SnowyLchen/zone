@@ -85,13 +85,16 @@
                                                         [[${rp.createTime}]] [[${rp.userName}]] 对 [[${rp.repliedUserName}]] 说：
                                                     </span>
                                                     <span th:text="${rp?.message}"></span>
-                                                     <a href="javascript:void(0)" th:id="${item?.mbId}" style="margin-left: 15px;" th:if="${rp?.accountId == user?.accountId}"
-                                                        onclick="delete(this)">  <i class="layui-icon">&#xe640;</i></a>
+                                                     <a href="javascript:void(0)" th:id="'r'+${rp?.rId}"
+                                                        style="margin-left: 15px;"
+                                                        th:if="${rp?.accountId == user?.accountId}"
+                                                        onclick="deleteMsg(this)">  <i
+                                                             class="layui-icon">&#xe640;</i></a>
                                                     <br>
                                                 </span>
                                             </p>
                                             <p class="reply">
-                                                <a href="javascript:void(0)" th:id="${item?.mbId}"
+                                                <a href="javascript:void(0)" th:id="'reply'+${item?.mbId}"
                                                    th:data-accountId="${item?.comeAccountId}"
                                                    onclick="reply(this)">回复</a>
                                             </p>
@@ -211,7 +214,7 @@
         // 将第一次主人寄语加载到div中
         $("#editMessage").append(messageValue);
         // 注册图片放大
-        $.dragMove.init('board')
+        $.dragMove.init('board');
         // 注册编辑按钮
         editButton($, content, tinymce, util, layer, common);
         // 回复按钮
@@ -229,12 +232,15 @@
                     type: 'post',
                     data: {
                         message: desc,
-                        mbId: mbId,
+                        mbId: mbId.split("reply")[1],
                         repliedAccountId: accountId
                     }
                 }, function (res) {
                     if (res.code != 0) {
                         $.notice.errorNotice(res.msg);
+                    } else {
+                        $("#mesBoard").remove();
+                        $.modal.refreshIframe(400)
                     }
                 })
             },
@@ -258,6 +264,21 @@
         $("[name=mbId]").val($this.id);
         $("[name=accountId]").val($this.dataset["accountid"]);
         $('#' + $this.id).hide();
+    }
+
+    function deleteMsg($this) {
+        var rId = $this.id.split("r")[1];
+        // debugger
+        var idd = layer.confirm('确定删除该此条回复吗?', {icon: 3, title: '提示'}, function (index) {
+            $.post("/board/removeMessage/" + rId, {}, function (res) {
+                if (res.code == 0) {
+                    $($this).parent().remove()
+                    layer.msg("删除成功")
+                } else {
+                    layer.msg("删除失败")
+                }
+            })
+        });
     }
 
 </script>

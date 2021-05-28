@@ -57,6 +57,16 @@ public class BoardController {
         zMessageBoard.setAccountId(accountId);
         return AjaxResult.success(boardService.insertMessage(zMessageBoard));
     }
+    /**
+     * 新增留言
+     *
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/removeMessage/{id}")
+    public AjaxResult removeMessage(@PathVariable Integer id) {
+        return AjaxResult.success(boardService.removeMessage(id));
+    }
 
     /**
      * 回复留言
@@ -82,7 +92,7 @@ public class BoardController {
         Integer accountId = ShiroAuthenticateUtils.getAccountId();
         zMessageBoard.setAccountId(accountId);
         zMessageBoard.setComeAccountId(accountId);
-        return AjaxResult.success(boardService.insertMessage(zMessageBoard));
+        return AjaxResult.success(boardService.addOwner(zMessageBoard));
     }
 
 }

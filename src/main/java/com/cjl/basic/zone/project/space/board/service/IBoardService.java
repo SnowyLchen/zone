@@ -25,9 +25,17 @@ public interface IBoardService {
      */
     int insertMessage(ZMessageBoard record);
 
+    /**
+     * 新增主人寄语
+     *
+     * @param record
+     * @return
+     */
+    int addOwner(ZMessageBoard record);
+
 
     /**
-     * 新增留言
+     * 新增回复
      *
      * @param record
      * @return
@@ -58,5 +66,11 @@ public interface IBoardService {
      */
     List<ZMessageBoard> selectOwnerMessageBoard(Integer accountId);
 
-
+    /**
+     * 删除留言
+     *
+     * @param id
+     * @return
+     */
+    int removeMessage(Integer id);
 }

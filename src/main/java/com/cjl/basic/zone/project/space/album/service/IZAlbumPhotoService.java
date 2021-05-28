@@ -40,7 +40,7 @@ public interface IZAlbumPhotoService {
      * @param accountId
      * @return
      */
-    ZPhoto selectPhotoByAccountId(Integer accountId);
+    List<ZPhoto> selectPhotoByAccountId(Integer accountId);
 
     /**
      * 按相册查询照片
