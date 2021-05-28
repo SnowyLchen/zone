@@ -86,4 +86,9 @@ public class FriendsServiceImpl implements FriendsService {
     public int updateFriendGroup(Friends friends) {
         return friendsMapper.updateFriendGroup(friends);
     }
+
+    @Override
+    public int updateFriendToGroup(Friend friends) {
+        return friendsMapper.updateFriendToGroup(friends);
+    }
 }

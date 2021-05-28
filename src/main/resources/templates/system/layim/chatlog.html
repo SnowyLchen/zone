@@ -9,7 +9,7 @@
     <div th:include="include::header"></div>
     <script th:inline="javascript">
         var basePath = [[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]];
-        var userid = [[${session.userId}]];
+        var accountId = [[${accountId}]];
     </script>
     <style>
         body .layim-chat-main {

@@ -106,7 +106,7 @@
         $.table.tableToolClick(tableCard, 'journals', function (obj) {
             let event = obj.event;
             if (event == 'openTitle') {
-                $.modal.openIframe(obj.data.title, prefix + "/template?url=/openjournal&id=" + obj.data.jid, null, null, null, null, true)
+                $.modal.openIframe(obj.data.title, prefix + "/template?url=/openjournal&id=" + obj.data.jid, null, null, null, null, false)
             } else {
                 console.log(event)
             }

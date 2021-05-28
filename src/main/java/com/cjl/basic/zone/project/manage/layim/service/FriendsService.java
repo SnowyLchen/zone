@@ -61,4 +61,12 @@ public interface FriendsService {
      * @return
      */
     int updateFriendGroup(Friends friends);
+
+    /**
+     * 移动好友至其他分组
+     *
+     * @param friends
+     * @return
+     */
+    int updateFriendToGroup(Friend friends);
 }

@@ -1,5 +1,6 @@
 package com.cjl.basic.zone.project.manage.user.service;
 
+import com.cjl.basic.zone.project.manage.layim.entity.Friend;
 import com.cjl.basic.zone.project.manage.layim.entity.Friends;
 import com.cjl.basic.zone.project.manage.layim.entity.Mine;
 import com.cjl.basic.zone.project.manage.user.domain.User;
@@ -190,4 +191,12 @@ public interface IUserService {
      * @return
      */
     int updateFriendGroup(Friends friends);
+
+    /**
+     * 移动好友至其他分组
+     *
+     * @param friends
+     * @return
+     */
+    int updateFriendToGroup(Friend friends);
 }

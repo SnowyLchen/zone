@@ -56,4 +56,9 @@
         update z_friend_groupname set group_name=#{groupname}
         where id=#{id}
     </update>
+    <update id="updateFriendToGroup">
+        update z_friend set f_group_id=#{gId}
+        where user_id=#{uid}
+        and f_user_id=#{fid}
+    </update>
 </mapper>

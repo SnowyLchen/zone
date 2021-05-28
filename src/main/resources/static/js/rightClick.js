@@ -35,18 +35,18 @@ layui.use('layim', function (layim) {
             mineId = item[0],
             u_name = item[1],
             u_status = item[2],
-            u_avatar = item[3];
+            u_avatar = item[3],
+            sign = item[4];
 
         var uid = Date.now().toString(36);
         var space_icon = '  ';
         var space_text = '      ';
         var html = [
-            '<ul id="contextmenu_' + uid + '" data-id="' + mineId + '" data-index="' + mineId + '" data-username="' + u_name + '" data-status="' + u_status + '" data-avatar="' + u_avatar + '" data-mold="1">',
+            '<ul id="contextmenu_' + uid + '" data-id="' + mineId + '" data-index="' + mineId + '" data-username="' + u_name + '" data-sign="' + sign + '" data-status="' + u_status + '" data-avatar="' + u_avatar + '" data-mold="1">',
             '<li data-type="menuChat"><i class="layui-icon" ></i>' + space_icon + '发送即时消息</li>',
-            '<li data-type="menuProfile"><i class="layui-icon"></i>' + space_icon + '查看资料</li>',
-            '<li data-type="menuHistory"><i class="layui-icon" ></i>' + space_icon + '消息记录</li>',
-            '<li data-type="menuDelete">' + space_text + '删除好友</li>',
-            '<li data-type="menuMoveto">' + space_text + '移动至</li></ul>'
+            '<li data-type="intoSpace"><i class="layui-icon" >&#xe68e;</i>' + space_icon + '进入空间</li>',
+            '<li data-type="menuDelete"><i class="layui-icon" ></i>' + space_text + '删除好友</li>',
+            '<li data-type="menuMoveto"><i class="layui-icon" >&#xe66b;</i>' + space_text + '移动至</li></ul>'
         ].join('');
         layer.tips(html, othis, {
             tips: 1
@@ -138,6 +138,48 @@ layui.use('layim', function (layim) {
         // 查看资料
         menuProfile: function () {
             debugger
+        },
+        intoSpace: function () {
+            window.open("http://localhost:8000/index")
+        },
+        // 移动分组
+        menuMoveto: function () {
+            var mineId = $(this).parent().data('id');
+            var username = $(this).parent().data('username');
+            var avatar = $(this).parent().data('avatar');
+            var sign = $(this).parent().data('sign');
+            var status = $(this).parent().data('status');
+            layim.setFriendGroup({
+                title: '移动至',
+                type: 'friend',
+                username: username,
+                avatar: avatar,
+                group: layim.cache().friend,
+                submit: function (group, index) {
+                    var friend = {
+                        id: mineId,
+                        username: username,
+                        avatar: avatar,
+                        groupId: group,
+                        sign: sign,
+                        status: status
+                    };
+                    top.addFriendList(friend);
+                    // 同步到数据库
+                    $.post('/layim/updateFriendToGroup', {
+                        fid: mineId,
+                        gId: group
+                    }, function (res) {
+                        if (res.code == '0') {
+                            layer.msg('移动成功', {icon: 1});
+                            // active.refreshFriendsGroupList();
+                        } else {
+                            layer.msg('移动失败', {icon: 2});
+                        }
+                        parent.layer.close(layer.index - 1)
+                    })
+                }
+            })
         },
         // 添加分组
         menuInsert: function () {

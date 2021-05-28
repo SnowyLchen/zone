@@ -8,6 +8,7 @@ import com.cjl.basic.zone.common.utils.InsertOrUpdateUtils;
 import com.cjl.basic.zone.common.utils.StringUtils;
 import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.framework.shiro.service.PasswordService;
+import com.cjl.basic.zone.project.manage.layim.entity.Friend;
 import com.cjl.basic.zone.project.manage.layim.entity.Friends;
 import com.cjl.basic.zone.project.manage.layim.entity.Mine;
 import com.cjl.basic.zone.project.manage.layim.service.FriendsService;
@@ -260,6 +261,11 @@ public class UserServiceImpl implements IUserService {
     @Override
     public int updateFriendGroup(Friends friends) {
         return friendsService.updateFriendGroup(friends);
+    }
+
+    @Override
+    public int updateFriendToGroup(Friend friends) {
+        return friendsService.updateFriendToGroup(friends);
     }
 
     @Override

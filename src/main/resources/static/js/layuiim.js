@@ -262,9 +262,6 @@ layui.use(['layim', 'jquery', 'yaml'], function (layim) {
         ul.appendChild(li2);
         li2.setAttribute("class", "layim-null");
         li2.innerText = '该分组下暂无好友';
-        // friendGroup.list.forEach(item=>{
-        //     top.addFriendList(item)
-        // })
     };
     // 往分组添加好友
     top.addFriendList = function (friend) {
@@ -280,7 +277,6 @@ layui.use(['layim', 'jquery', 'yaml'], function (layim) {
             status: friend.status
         };
         // 先移除好友，再添加好友
-        console.log(opt)
         layim.removeList(opt);
         layim.addList(opt)
     };

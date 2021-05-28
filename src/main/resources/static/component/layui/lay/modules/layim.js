@@ -98,7 +98,7 @@
             return i = i || {},
                 i.item = i.item || "d." + i.type,
                 ["{{# var length = 0; layui.each(" + i.item + ", function(i, data){ length++;}}",
-                    '<li layim-event="chat" data-type="' + i.type + '" data-item="{{data.accountId}}//{{data.username}}//{{data.status}}//{{data.avatar}}" data-index="{{ ' + (i.index || "i") + ' }}" class="layim-' + ("history" === i.type ? "{{i}}" : i.type + "{{data.id}}") + ' {{ data.status === "offline" ? "layim-list-gray" : "" }}"><img src="{{ data.avatar }}"><span>',
+                    '<li layim-event="chat" data-type="' + i.type + '" data-item="{{data.accountId}}//{{data.username}}//{{data.status}}//{{data.avatar}}}//{{data.sign}}" data-index="{{ ' + (i.index || "i") + ' }}" class="layim-' + ("history" === i.type ? "{{i}}" : i.type + "{{data.id}}") + ' {{ data.status === "offline" ? "layim-list-gray" : "" }}"><img src="{{ data.avatar }}"><span>',
                     '{{# if(data.status === "online"){ }}',
                     '<span class="layui-icon layim-status-online"  lay-type="show">&#xe617;</span>',
                     '{{# } else if(data.status === "hide") { }}',

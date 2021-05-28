@@ -61,7 +61,8 @@ public class LayIMController {
     }
 
     @GetMapping("/chat/log")
-    public String toChatLog() {
+    public String toChatLog(ModelMap map) {
+        map.put("accountId", ShiroAuthenticateUtils.getAccountId());
         return "system/layim/chatlog";
     }
 
@@ -72,7 +73,8 @@ public class LayIMController {
     }
 
     @GetMapping("/add/ask")
-    public String addAsk() {
+    public String addAsk(ModelMap map) {
+        map.put("accountId", ShiroAuthenticateUtils.getAccountId());
         return "system/layim/msgbox";
     }
 
@@ -245,18 +247,7 @@ public class LayIMController {
         InitImVo initImVo = new InitImVo();
         //个人信息
         Mine user = userService.selectMineById(accountId);
-        //好友列表
-        List<Mine> mineList = friendsService.getUserFriend(String.valueOf(accountId));
-        List<Friends> friendList = friendsService.getFriendGroupList(accountId);
-        for (Friends f : friendList) {
-            for (Mine mine : mineList) {
-                if (mine.getGroupId().toString().equals(f.getId())) {
-                    f.setGroupname(mine.getGName());
-                    f.setList(mineList);
-                    break;
-                }
-            }
-        }
+        List<Friends> friendList = getFriendsList(accountId);
         //群组信息
         List<Groups> groupsList = groupsService.getUserGroups(String.valueOf(accountId));
         //Data数据
@@ -309,6 +300,19 @@ public class LayIMController {
     }
 
     /**
+     * 移动好友至其他分组
+     *
+     * @param friends
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/updateFriendToGroup")
+    public AjaxResult updateFriendToGroup(Friend friends) {
+        friends.setUid(ShiroAuthenticateUtils.getAccountId().toString());
+        return AjaxResult.success(userService.updateFriendToGroup(friends));
+    }
+
+    /**
      * 刷新好友列表
      *
      * @param friends
@@ -318,19 +322,24 @@ public class LayIMController {
     @RequestMapping("/refreshFriendGroupList")
     public AjaxResult refreshFriendGroupList(Friends friends) {
         Integer accountId = ShiroAuthenticateUtils.getAccountId();
+        List<Friends> friendList = getFriendsList(accountId);
+        return AjaxResult.success(friendList);
+    }
+
+    private List<Friends> getFriendsList(Integer accountId) {
         //好友列表
         List<Mine> mineList = friendsService.getUserFriend(String.valueOf(accountId));
         List<Friends> friendList = friendsService.getFriendGroupList(accountId);
         for (Friends f : friendList) {
+            List<Mine> mines = new ArrayList<>();
             for (Mine mine : mineList) {
                 if (mine.getGroupId().toString().equals(f.getId())) {
-                    f.setGroupname(mine.getGName());
-                    f.setList(mineList);
-                    break;
+                    mines.add(mine);
                 }
             }
+            f.setList(mines);
         }
-        return AjaxResult.success(friendList);
+        return friendList;
     }
 
 
