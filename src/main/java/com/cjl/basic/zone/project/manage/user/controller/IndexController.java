@@ -4,13 +4,19 @@ import com.cjl.basic.zone.common.utils.StringUtils;
 import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.framework.config.ZoneConfig;
 import com.cjl.basic.zone.framework.web.controller.BaseController;
+import com.cjl.basic.zone.framework.web.domain.AjaxResult;
 import com.cjl.basic.zone.project.manage.menu.domain.ZMenuTree;
 import com.cjl.basic.zone.project.manage.menu.service.IMenuService;
 import com.cjl.basic.zone.project.manage.user.domain.User;
+import com.cjl.basic.zone.project.manage.user.domain.Visitor;
+import com.cjl.basic.zone.project.manage.user.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
@@ -29,18 +35,33 @@ public class IndexController extends BaseController {
     @Autowired
     private IMenuService menuService;
 
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @Value("${application.cache.prefix}")
+    private String prefix;
+
+
     /**
      * 系统首页
      */
     @GetMapping("/index")
-    public String index(ModelMap mmap, HttpServletResponse response) {
+    public String index(ModelMap mmap, HttpServletResponse response, String isVisitor) {
         User user = ShiroAuthenticateUtils.getUserByToken();
         mmap.put("user", user);
+        if (StringUtils.isNotNull(isVisitor)) {
+            redisTemplate.opsForValue().set(prefix + "visitor_" + isVisitor, isVisitor);
+            mmap.put("isVisitor", new Visitor() {{
+                setCurrentAccount(userService.selectUserById(Integer.valueOf(isVisitor.split("_")[0])));
+                setToAccount(userService.selectUserById(Integer.valueOf(isVisitor.split("_")[1])));
+            }});
+        }
         mmap.put("accountId", ShiroAuthenticateUtils.getAccountId());
         mmap.put("copyrightYear", zoneConfig.getCopyrightYear());
         //当前用户是游客，需要获取当前的用户状态
-        final String visitor = "visitor";
-//            mmap.put("userstate", userService.loginGetUser(user.getLoginName()));
         if (StringUtils.isEmpty(user.getHomeUrl())) {
             return "error/404";
         }
@@ -98,5 +119,17 @@ public class IndexController extends BaseController {
     @GetMapping("/space")
     public String space(ModelMap mmap) {
         return "system/space";
+    }
+
+    /**
+     * 返回我的空间
+     */
+    @ResponseBody
+    @PostMapping("/backToSpace")
+    public AjaxResult backToSpace(String key) {
+        if (StringUtils.isNotNull(key)) {
+            redisTemplate.delete(prefix + key);
+        }
+        return toAjax(1);
     }
 }

@@ -62,7 +62,6 @@
             <div class="layui-card-header">个人资料</div>
             <div class="layui-card-body" style="height: 120px;text-align: left">
                 <div class="layui-row">
-
                     <div class="layui-col-xs8 layui-col-md4">
                         &nbsp;
                     </div>
@@ -82,7 +81,7 @@
         </div>
     </div>
     <div class="layui-col-xs6 layui-col-md6">
-        <div class="layui-card">
+        <div class="layui-card isVisitor">
             <div class="layui-card-header" style="padding-top: 5px">
                 <input class="layui-input" type="text" placeholder="说点什么吧" autocomplete="off" readonly
                        id="showActiveContent">
@@ -118,7 +117,8 @@
             <div class="layui-card-body">
                 <div class="layui-row layui-col-space5">
                     <div class="layui-col-xs4 layui-col-md4 top-panel-tips">
-                        <button class="pear-btn pear-btn-primary" plain="签到中" id="signIn" load> 签到</button>
+                        <button class="pear-btn pear-btn-primary isVisitor" plain="签到中" id="signIn" load> 签到</button>
+                        <button class="pear-btn pear-btn-danger" style="display: none" id="signStatus"> 今天暂未签到</button>
                     </div>
                     <div class="layui-col-xs8 layui-col-md8 top-panel-number" style="color: #28333E;" id="signTimes">
                         0
@@ -143,6 +143,10 @@
     var photoTimes = [[${photoTimes}]];
     var msgTimes = [[${msgTimes}]];
     var dynamicTimes = [[${dynamicTimes}]];
+    var item = localStorage.getItem("isVisitor");
+    if (item != null && item != 'null') {
+        $('#signStatus').show();
+    }
 
     function initDate(laydate, common) {
         var data = [];
@@ -181,31 +185,38 @@
     }
 
     function initNumber(count) {
-        count.up("signTimes", {
-            time: signTimes ? parseInt(signTimes) * 150 : 0,
-            num: signTimes,
-            bit: 0,
-            regulator: 50
-        })
-        count.up("photoTimes", {
-            time: photoTimes ? parseInt(photoTimes) * 150 : 0,
-            num: photoTimes,
-            bit: 0,
-            regulator: 50
-        })
-
-        count.up("msgTimes", {
-            time: msgTimes ? parseInt(msgTimes) * 150 : 0,
-            num: msgTimes,
-            bit: 0,
-            regulator: 50
-        })
-        count.up("dynamicTimes", {
-            time: dynamicTimes ? parseInt(dynamicTimes) * 150 : 0,
-            num: dynamicTimes,
-            bit: 0,
-            regulator: 50
-        })
+        if (signTimes != null && parseInt(signTimes) > 0) {
+            count.up("signTimes", {
+                time: signTimes ? parseInt(signTimes) * 150 : 0,
+                num: signTimes,
+                bit: 0,
+                regulator: 50
+            })
+        }
+        if (photoTimes != null && parseInt(photoTimes) > 0) {
+            count.up("photoTimes", {
+                time: photoTimes ? parseInt(photoTimes) * 150 : 0,
+                num: photoTimes,
+                bit: 0,
+                regulator: 50
+            })
+        }
+        if (msgTimes != null && parseInt(msgTimes) > 0) {
+            count.up("msgTimes", {
+                time: msgTimes ? parseInt(msgTimes) * 150 : 0,
+                num: msgTimes,
+                bit: 0,
+                regulator: 50
+            })
+        }
+        if (dynamicTimes != null && parseInt(dynamicTimes) > 0) {
+            count.up("dynamicTimes", {
+                time: dynamicTimes ? parseInt(dynamicTimes) * 150 : 0,
+                num: dynamicTimes,
+                bit: 0,
+                regulator: 50
+            })
+        }
     }
 
     function initTinymce(tinymce, $, util, layer, common, notice) {
@@ -282,6 +293,8 @@
         $("#signIn").addClass('pear-btn pear-btn-success')
         $("#signIn").attr('disabled', true);
         $("#signIn").text('今日已签到');
+        $("#signStatus").text('今日已签到');
+        $("#signStatus").attr('class','pear-btn pear-btn-success');
     }
 
     function signIn(button, notice, common) {

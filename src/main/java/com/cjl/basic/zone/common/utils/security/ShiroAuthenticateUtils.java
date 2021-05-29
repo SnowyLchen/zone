@@ -13,7 +13,12 @@ import com.cjl.basic.zone.project.manage.user.service.IUserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * shiro 工具类
@@ -25,13 +30,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class ShiroAuthenticateUtils {
     private static ShiroRedisCache shiroRedisCache;
+    private static RedisTemplate<String, Object> redisTemplate;
+    private static IUserService userService;
+
+    private static String prefix;
 
     /**
      * 在构造函数中注入参数
      */
     @Autowired
-    public void init(ShiroRedisCacheManager shiroRedisCacheManager) {
+    public void init(ShiroRedisCacheManager shiroRedisCacheManager, RedisTemplate<String, Object> redisTemplate, @Value("${application.cache.prefix}") String prefix, IUserService userService) {
         ShiroAuthenticateUtils.shiroRedisCache = shiroRedisCacheManager.getCache(null);
+        ShiroAuthenticateUtils.redisTemplate = redisTemplate;
+        ShiroAuthenticateUtils.prefix = prefix;
+        ShiroAuthenticateUtils.userService = userService;
     }
 
 
@@ -159,7 +171,31 @@ public class ShiroAuthenticateUtils {
      * @return User
      */
     public static User getUserByToken() {
+        if (getIsVisitor()) {
+            return getToAccount();
+        }
         return (User) getSubject().getPrincipal();
+    }
+
+    private static boolean getIsVisitor() {
+        User user = (User) getSubject().getPrincipal();
+        String key = prefix + "visitor_" + user.getAccountId() + "_*";
+        if (redisTemplate.hasKey(key) == null) {
+            return false;
+        }
+        Set<String> keys = redisTemplate.keys(key);
+        return keys != null && keys.size() > 0;
+    }
+
+    /**
+     * 获取被访问者信息
+     *
+     * @return User
+     */
+    public static User getToAccount() {
+        User user = (User) getSubject().getPrincipal();
+        Integer accountId = Integer.valueOf(Objects.requireNonNull(redisTemplate.keys(prefix + "visitor_" + user.getAccountId() + "_*"), "没查到访问人信息").iterator().next().split("_")[2]);
+        return userService.selectUserById(accountId);
     }
 
     /**

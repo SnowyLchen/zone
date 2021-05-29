@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 
@@ -92,7 +93,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int updateUser(User u) {
-        InsertOrUpdateUtils.addUpdateAttr(u);
+        u.setUpdateTime(new Date());
         return InsertOrUpdateUtils.requireGreaterThanI(userMapper.updateUser(u), "修改用户信息失败");
     }
 

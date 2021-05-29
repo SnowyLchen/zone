@@ -27,6 +27,7 @@
             width: 10px;
             height: 20px
         }
+
         body, html {
             height: 100%;
             background-color: #fff;
@@ -63,7 +64,7 @@
                     <div class="layui-row layui-col-space12">
                         <div class="layui-col-sm12">
                             <div class="layui-row">
-                                <div class="layui-col-sm12">
+                                <div class="layui-col-sm12 isVisitor">
                                     <button type="button" class="pear-btn pear-btn-primary" plain="" id="uploadPic">
                                         上传照片
                                     </button>
@@ -73,6 +74,8 @@
                                 </div>
                             </div>
                             <div class="layui-row">
+                                <div style="text-align: center" hidden="hidden" id="albumNothing"><img
+                                        th:src="@{/admin/images/albumNothing.jpg}"></div>
                                 <div class="layui-col-sm12">
                                     <table id="album-table" lay-filter="album-table" style="width: 100%"></table>
                                 </div>
@@ -81,7 +84,8 @@
                     </div>
                 </div>
                 <div class="layui-tab-item" id="photos">
-                    <div style="text-align: center" hidden="hidden" id="nothing"><img th:src="@{/admin/images/nothing.jpg}"></div>
+                    <div style="text-align: center" hidden="hidden" id="nothing"><img
+                            th:src="@{/admin/images/nothing.jpg}"></div>
                     <article class="jq22-container">
                         <div class="content">
                             <div class="chroma-gallery mygallery">
@@ -155,20 +159,25 @@
         initCard(cardTable, MODULE_PATH);
         // 注册点击事件
         btnClick($, MODULE_PATH);
-       $("#pho").click(function () {
-           $(".mygallery").chromaGallery
-           ({
-               color: '#000',
-               gridMargin: 20,
-               maxColumns: 10,
-               dof: true,
-               screenOpacity: 0.8
-           });
-           var photos = '[[${photos}]]';
-           if (photos && photos == '[]') {
-               $("#nothing").show()
-           }
-       })
+        $("#pho").click(function () {
+            $(".mygallery").chromaGallery
+            ({
+                color: '#000',
+                gridMargin: 20,
+                maxColumns: 10,
+                dof: true,
+                screenOpacity: 0.8
+            });
+            var photos = '[[${photos}]]';
+            if (photos && photos == '[]') {
+                $("#nothing").show()
+            }
+        })
+        var albums = '[[${albums}]]';
+        if (albums && albums == '[]') {
+            $("#albumNothing").show()
+            $("#album-table").hide()
+        }
     })
 </script>
 </body>

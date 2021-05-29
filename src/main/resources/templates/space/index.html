@@ -18,6 +18,8 @@
         var basePath = [[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]];
         var accountId = [[${accountId}]];
         var username = [[${user.userName}]];
+        var isVisitor = [[${isVisitor}]];
+        localStorage.setItem('isVisitor',JSON.stringify(isVisitor))
     </script>
     <!-- 头 部 结 束 -->
 </head>
@@ -53,8 +55,10 @@
 
         // 加载头部
         $('#header').load('header')
-        //加载layIm
-        $('#layIm').load('layim/login')
+        if (isVisitor == null) {
+            //加载layIm
+            $('#layIm').load('layim/login')
+        }
     })
     layui.use(['admin', 'jquery', "convert"], function () {
         var admin = layui.admin,

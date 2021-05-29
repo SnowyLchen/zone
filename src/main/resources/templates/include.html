@@ -8,7 +8,7 @@
 <div th:fragment="header">
     <!-- 依 赖 样 式 -->
     <link th:href="@{/component/pear/css/pear.css}" rel="stylesheet"/>
-<!--    <link th:href="@{/component/pear/css/pear-module/cardTable.css}" rel="stylesheet"/>-->
+    <!--    <link th:href="@{/component/pear/css/pear-module/cardTable.css}" rel="stylesheet"/>-->
     <!-- 加 载 样 式-->
     <link th:href="@{/admin/css/load.css}" rel="stylesheet"/>
     <!-- 布 局 样 式 -->
@@ -27,6 +27,21 @@
     <script th:src="@{/component/layui/layui.js}"></script>
     <script th:src="@{/component/pear/pear.js}"></script>
     <script th:src="@{/component/pear/modules/common.js}"></script>
+    <script>
+        // 访客
+        var item = localStorage.getItem("isVisitor");
+        if (item != null && item != 'null') {
+            $(".isVisitor").hide()
+        }
+        window.onunload = function () {
+            if (item != null && item != 'null') {
+                localStorage.removeItem("isVisitor");
+                $.post("/backToSpace", {
+                    key: 'visitor_' + isVisitor.currentAccount.accountId + '_' + isVisitor.toAccount.accountId
+                });
+            }
+        }
+    </script>
 </div>
 </body>
 </html>

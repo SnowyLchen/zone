@@ -29,7 +29,7 @@
     <div class="layui-col-sm10">
         <!--左边部分第一行-->
         <div class="layui-row">
-            <div class="layui-col-sm12">
+            <div class="layui-col-sm12 isVisitor">
                 <button type="button" class="pear-btn pear-btn-primary" plain="" id="addLog">写日志</button>
                 <button type="button" class="pear-btn pear-btn-primary" plain="" id="tabTableType">切换到摘要</button>
             </div>
@@ -50,7 +50,7 @@
                     <div class="layui-card">
                         <div class="layui-card-header">日志分类
                             <span id="clearLogManager" class="catem">清空</span>
-                            <span id="logManager" class="catem">管理</span>
+                            <span id="logManager" class="catem isVisitor">管理</span>
                         </div>
                         <div class="layui-card-body" style="height: 300px!important;">
                             <ul id="cateManage" lay-filter="cateManage"></ul>
@@ -95,6 +95,13 @@
             <i class="layui-icon">&#xe640;</i>
         </button>
     </div>
+</script>
+<script>
+    // 访客
+    var item = localStorage.getItem("isVisitor");
+    if (item != null && item != 'null') {
+        $(".isVisitor").hide()
+    }
 </script>
 <script>
     var prefix = '/journal';

@@ -7,6 +7,11 @@
     <div th:include="include::header"></div>
     <!-- 主 题 更 换 -->
     <style id="pearadmin-bg-color"></style>
+    <script th:inline="javascript">
+        var isVisitor = JSON.parse(localStorage.getItem('isVisitor'))
+        console.log(isVisitor)
+
+    </script>
     <!-- 头 部 结 束 -->
 </head>
 <!-- 结 构 代 码 -->
@@ -24,8 +29,9 @@
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item layui-hide-xs"><a href="#"
                                                         class="fullScreen layui-icon layui-icon-screen-full"></a></li>
-            <li class="layui-nav-item layui-hide-xs"><a href="http://www.pearadmin.com"
-                                                        class="layui-icon layui-icon-website"></a></li>
+            <li class="layui-nav-item layui-hide-xs back">
+
+            </li>
             <li class="layui-nav-item">
                 <!-- 头 像 -->
                 <a href="javascript:;">
@@ -33,9 +39,8 @@
                     [[${user?.userName}]]
                 </a>
                 <!-- 功 能 菜 单 -->
-                <dl class="layui-nav-child">
-                    <dd><a user-menu-url="profiles" user-menu-id="5555" user-menu-title="基本资料">基本资料</a>
-                    </dd>
+                <dl class="layui-nav-child isVisitor">
+                    <dd><a user-menu-url="profiles" user-menu-id="5555" user-menu-title="基本资料">基本资料</a></dd>
                     <dd><a href="logout">注销登录</a></dd>
                 </dl>
             </li>
@@ -53,5 +58,24 @@
     <div class="loader"></div>
 </div>
 <!--<div th:include="include::footer"></div>-->
+<script>
+    window.onload = function () {
+        var item = localStorage.getItem("isVisitor");
+        if (item != null && item != 'null') {
+            $(".back").append('  <a href="javascript:void(0)">返回我的空间</a>')
+            $(".isVisitor").remove()
+            $('.back').click(function () {
+                localStorage.removeItem("isVisitor");
+                $.post("/backToSpace", {
+                    key: 'visitor_' + isVisitor.currentAccount.accountId + '_' + isVisitor.toAccount.accountId
+                }, function (res) {
+                    if (res.code == '0') {
+                        top.location.href = 'http://localhost:8000/index';
+                    }
+                })
+            })
+        }
+    };
+</script>
 </body>
 </html>

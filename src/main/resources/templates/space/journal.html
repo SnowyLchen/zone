@@ -27,8 +27,8 @@
     <div class="layui-card-body">
         <div class="layui-tab layui-tab-brief">
             <ul class="layui-tab-title">
-                <li class="layui-this" data-url="/mylog">我的日志</li>
-                <li data-url="/private">私密日志</li>
+                <li class="layui-this" data-url="/mylog">日志</li>
+                <li data-url="/private" class="isVisitor">私密日志</li>
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show"></div>
@@ -36,6 +36,7 @@
         </div>
     </div>
 </div>
+<div th:include="include::footer"></div>
 <script>
 
     $(function () {

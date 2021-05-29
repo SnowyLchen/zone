@@ -1,5 +1,6 @@
 package com.cjl.basic.zone.project.space.categories.controller;
 
+import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.framework.web.controller.BaseController;
 import com.cjl.basic.zone.framework.web.domain.AjaxResult;
 import com.cjl.basic.zone.framework.web.page.TableDataInfo;
@@ -48,8 +49,9 @@ public class ZCategoriesController extends BaseController {
      */
     @GetMapping("list")
     @ResponseBody
-    public TableDataInfo list(ZCategories zCategories) throws IllegalAccessException, InstantiationException {
+    public TableDataInfo list(ZCategories zCategories) {
         startPage();
+        zCategories.setAccountId(ShiroAuthenticateUtils.getAccountId());
         return getDataTable(zCategoriesService.selectZCategoriesList(zCategories));
     }
 
