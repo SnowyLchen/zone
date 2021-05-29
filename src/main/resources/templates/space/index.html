@@ -17,7 +17,7 @@
     <script th:inline="javascript">
         var basePath = [[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]];
         var accountId = [[${accountId}]];
-        console.log('accountId=' + accountId)
+        var username = [[${user.userName}]];
     </script>
     <!-- 头 部 结 束 -->
 </head>

@@ -46,13 +46,13 @@
             </div>
             <div class="layui-card-body">
                 <div class="layui-row layui-col-space5">
-                    <div class="layui-col-xs8 layui-col-md4 top-panel-number" style="color: #28333E;" id="value1">
+                    <div class="layui-col-xs8 layui-col-md4 top-panel-number" style="color: #28333E;" id="photoTimes">
                         0
                     </div>
-                    <div class="layui-col-xs8 layui-col-md4 top-panel-number" style="color: #28333E;" id="value3">
+                    <div class="layui-col-xs8 layui-col-md4 top-panel-number" style="color: #28333E;" id="msgTimes">
                         0
                     </div>
-                    <div class="layui-col-xs4 layui-col-md4 top-panel-number" style="color: red;" id="value4">
+                    <div class="layui-col-xs4 layui-col-md4 top-panel-number" style="color: red;" id="dynamicTimes">
                         0
                     </div>
                 </div>
@@ -140,6 +140,9 @@
 <script th:src="@{component/layui/lay/modules/laydate.js}"></script>
 <script>
     var signTimes = [[${signTimes}]];
+    var photoTimes = [[${photoTimes}]];
+    var msgTimes = [[${msgTimes}]];
+    var dynamicTimes = [[${dynamicTimes}]];
 
     function initDate(laydate, common) {
         var data = [];
@@ -184,31 +187,23 @@
             bit: 0,
             regulator: 50
         })
-        count.up("value1", {
-            time: 4000,
-            num: 10,
+        count.up("photoTimes", {
+            time: photoTimes ? parseInt(photoTimes) * 150 : 0,
+            num: photoTimes,
             bit: 0,
             regulator: 50
         })
 
-        count.up("value2", {
-            time: 4000,
-            num: 10,
+        count.up("msgTimes", {
+            time: msgTimes ? parseInt(msgTimes) * 150 : 0,
+            num: msgTimes,
             bit: 0,
             regulator: 50
         })
-
-        count.up("value3", {
-            time: 4000,
-            num: 10,
+        count.up("dynamicTimes", {
+            time: dynamicTimes ? parseInt(dynamicTimes) * 150 : 0,
+            num: dynamicTimes,
             bit: 0,
-            regulator: 50
-        })
-
-        count.up("value4", {
-            time: 4000,
-            bit: 0,
-            num: 20,
             regulator: 50
         })
     }

@@ -36,7 +36,7 @@ layui.use(['layim', 'jquery', 'yaml'], function (layim) {
         }]
         , isAudio: true
         , isVideo: true
-        , title: "我的WebIM" //自定义主面板最小化时的标题
+        , title: username //自定义主面板最小化时的标题
         , voice: "default.wav"  //新消息提醒音频
         , notice: false //是否开启桌面消息提醒，默认false
         // ,msgbox: layui.cache.dir + 'css/modules/layim/html/msgbox.html' //消息盒子页面地址，若不开启，剔除该项即可

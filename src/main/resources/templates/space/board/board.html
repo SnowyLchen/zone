@@ -268,7 +268,6 @@
 
     function deleteMsg($this) {
         var rId = $this.id.split("r")[1];
-        // debugger
         var idd = layer.confirm('确定删除该此条回复吗?', {icon: 3, title: '提示'}, function (index) {
             $.post("/board/removeMessage/" + rId, {}, function (res) {
                 if (res.code == 0) {
