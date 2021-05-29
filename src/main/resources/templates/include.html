@@ -33,12 +33,27 @@
         if (item != null && item != 'null') {
             $(".isVisitor").hide()
         }
+        // window.addEventListener("beforeunload", function(event) {
+        //     event.returnValue = "我在这写点东西...";
+        //     navigator.sendBeacon('/backToSpace',new FormData());
+        // });
         window.onunload = function () {
+
             if (item != null && item != 'null') {
                 localStorage.removeItem("isVisitor");
-                $.post("/backToSpace", {
-                    key: 'visitor_' + isVisitor.currentAccount.accountId + '_' + isVisitor.toAccount.accountId
-                });
+                // $.post("/backToSpace", {
+                //     key: 'visitor_' + isVisitor.currentAccount.accountId + '_' + isVisitor.toAccount.accountId
+                // });
+                var fd = new FormData();
+                fd.append('key', 'visitor_' + isVisitor.currentAccount.accountId + '_' + isVisitor.toAccount.accountId)
+                navigator.sendBeacon('/backToSpace', fd);
+                // $(window).on('unload', function() {
+                //     $.ajax({
+                //         type: 'POST',
+                //         url: '/backToSpace',
+                //         async: false
+                //     });
+                // });
             }
         }
     </script>
