@@ -122,6 +122,14 @@ public class IndexController extends BaseController {
     }
 
     /**
+     * 音乐播放器
+     */
+    @GetMapping("/music")
+    public String music(ModelMap mmap) {
+        return "space/music";
+    }
+
+    /**
      * 返回我的空间
      */
     @ResponseBody

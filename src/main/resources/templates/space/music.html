@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>音乐播放器</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <!--    <link rel="apple-touch-icon"-->
+    <!--          href="https://www.17sucai.com/preview/1676752/2020-02-05/%E9%9F%B3%E4%B9%90%E6%92%AD%E6%94%BE%E5%99%A8/favicon.ico">-->
+    <style>
+        #lzxLrc {
+            height: 300px !important;
+            width: 25.5% !important;
+        }
+
+        #lzxPlayer {
+            bottom: 330px !important;
+        }
+
+        .status {
+            color: rgb(255, 255, 255) !important;
+        }
+
+        #ilt {
+            z-index: 100 !important;
+        }
+    </style>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/music/player.css}">
+    <link th:href="@{/assets/css/music/font-awesome.css}" rel="stylesheet" type="text/css">
+</head>
+<body style="background-size: cover; --player-width:310px; --cover-width:110px;">
+
+
+<script th:src="@{/assets/js/music/jquery.js}"></script>
+<script th:src="@{/assets/js/music/bootstrap.min.js}"></script>
+
+<!--涉及外调ajax和网易音乐接口-->
+<script id="ilt" th:src="@{/assets/js/music/player.js}" key="2e086053d2f44e79a489e38085e9edb6"></script>
+<div id="lzxPlayer" class="playing show" style="background: rgba(140, 119, 121, 0.8);">
+    <div class="player">
+        <canvas class="blur-img" width="365" height="155" id="canvas">您的浏览器不支持canvas，请更换高级版的浏览器！</canvas>
+        <div class="blur-img">
+            <img th:src="@{/assets/js/music/music_background.jpg}" class="blur" style="top: 0; display: inline;"></div>
+        <div class="infos" style="color: rgb(255, 255, 255);">
+            <div class="songstyle">
+                <span>
+                    <i class="fa fa-music"></i>
+                    <span class="song"><span title="心做し（Cover GUMI）">心做し（Cove...</span></span>
+                </span>
+                <span style="float: right;">
+                    <i class="fa fa-clock-o"></i>
+                    <span class="time">01:18 / 04:28</span></span>
+            </div>
+            <div class="artiststyle">
+                <i class="fa fa-user"></i>
+                <span class="artist"><span title="双笙">双笙</span></span>
+                <span class="moshi"><i class="loop fa fa-retweet"></i> 顺序播放</span>
+            </div>
+            <div class="artiststyle">
+                <i class="fa fa-folder"></i>
+                <span class="artist1"><span title="心做し">心做し</span></span>
+                <span class="geci"><i class="fa fa-check-circle"></i> 歌词开启</span>
+            </div>
+        </div>
+        <div class="control" style="color: rgb(255, 255, 255);">
+            <span style="float:left">
+                <i class="loop fa fa-retweet current" title="顺序播放"></i>
+                <i class="prev fa fa-backward" title="上一首"></i>
+            </span>
+            <span style="float:right">
+                <i class="next fa fa-forward" title="下一首"></i>
+                <i class="random fa fa-random" title="随机播放"></i>
+            </span>
+        </div>
+        <div class="status"
+             style="background-image: linear-gradient(90deg, rgb(108, 105, 113) 50%, transparent 50%, transparent), linear-gradient(194.546deg, rgb(129, 195, 0) 50%, rgb(108, 105, 113) 50%, rgb(108, 105, 113));">
+            <b>
+                <i class="play fa fa-play" title="播放"></i>
+                <i class="pause fa fa-pause" title="暂停"></i>
+            </b>
+            <div id="div1" class="note" style="color: rgb(255, 255, 255);">
+                <i class="fa fa-music" aria-hidden="true"></i>
+            </div>
+            <div id="div2" class="note" style="color: rgb(255, 255, 255);">
+                <i class="fa fa-music" aria-hidden="true"></i>
+            </div>
+            <div id="div3" class="note" style="color: rgb(255, 255, 255);">
+                <i class="fa fa-music" aria-hidden="true"></i>
+            </div>
+        </div>
+        <div class="musicbottom">
+            <div class="rate">
+                <div class="progress">
+                    <div class="rate-buffered" style="width: 80.83%;"></div>
+                    <div class="rate-on" style="width: 29.0405%;">
+                        <div class="drag"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="icons">
+                <div class="switch-playlist">
+                    <i class="fa fa-bars" title="播放列表"></i>
+                </div>
+                <div class="switch-ksclrc">
+                    <i class="fa fa-toggle-on" title="关闭歌词"></i>
+                </div>
+                <div class="switch-down" style="display: block; right: 65px;"><a class="down"><i
+                        class="fa fa-cloud-download" title="从网易音乐下载：心做し（Cover GUMI） - 双笙"></i></a></div>
+                <div class="new-volume">
+                    <i class="volumeup fa fa-volume-up" title="音量"></i>
+                    <div class="volume-controls" style="">
+                        <div class="slider" data-direction="vertical">
+                            <div class="progress2" style="height: 80%;">
+                                <div class="drag" id="volume-drag"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cover coverplay"><img th:src="@{/assets/js/music/music_background.jpg}"></div>
+    </div>
+    <div class="playlist">
+        <div class="playlist-bd">
+            <div class="album-list">
+                <div class="musicheader">IT技术宅 - 专辑列表</div>
+                <div class="list mCustomScrollbar _mCS_2">
+                    <div class="mCustomScrollBox mCS-light" id="mCSB_2"
+                         style="position:relative; height:100%; overflow:hidden; max-width:100%;">
+                        <div class="mCSB_container mCS_no_scrollbar" style="position:relative; top:0;">
+                            <ul>
+                                <li class="current"><i class="fa fa-angle-right"></i><span class="index">1</span><span
+                                        class="artist">当前播放 &gt; </span>《我喜欢》 - zing
+                                </li>
+                                <li><i class="fa fa-angle-right"></i><span class="index">2</span><span
+                                        class="artist"></span>《英文歌单》 - zing
+                                </li>
+                                <li><i class="fa fa-angle-right"></i><span class="index">3</span><span
+                                        class="artist"></span>《网易热歌榜》 - zing
+                                </li>
+                                <li><i class="fa fa-angle-right"></i><span class="index">4</span><span
+                                        class="artist"></span>《回忆杀》 - zing
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="mCSB_scrollTools" style="position: absolute; display: none;">
+                            <div class="mCSB_draggerContainer">
+                                <div class="mCSB_dragger" style="position: absolute; top: 0px;"
+                                     oncontextmenu="return false;">
+                                    <div class="mCSB_dragger_bar" style="position:relative;"></div>
+                                </div>
+                                <div class="mCSB_draggerRail"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="song-list">
+                <div class="musicheader">
+                    <i class="fa fa-angle-right"></i>
+                    <span></span>
+                </div>
+                <div class="list mCustomScrollbar _mCS_1">
+                    <div class="mCustomScrollBox mCS-light" id="mCSB_1"
+                         style="position:relative; height:100%; overflow:hidden; max-width:100%;">
+                        <div class="mCSB_container mCS_no_scrollbar" style="position:relative; top:0;">
+                            <ul></ul>
+                        </div>
+                        <div class="mCSB_scrollTools" style="position: absolute; display: none;">
+                            <div class="mCSB_draggerContainer">
+                                <div class="mCSB_dragger" style="position: absolute; top: 0px;"
+                                     oncontextmenu="return false;">
+                                    <div class="mCSB_dragger_bar" style="position:relative;"></div>
+                                </div>
+                                <div class="mCSB_draggerRail"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="switch-player" style="background: rgba(140, 119, 121, 0.3);">
+        <i class="fa fa-angle-right" style="margin-top: 20px;"></i>
+    </div>
+</div>
+<div id="lzxTips" class="" style="background: rgba(140, 119, 121, 0.6);">开始从网易音乐播放 - 心做し（Cover GUMI）</div>
+
+<script>
+    $(function () {
+        $('.random').click()
+        var i = 0;
+        var interval = setInterval(function () {
+            if (i == 0) {
+                $('.switch-player').click()
+                i++
+            } else {
+                window.clearInterval(interval)
+            }
+        }, 10000)
+    })
+</script>
+</body>
+</html>

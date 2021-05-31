@@ -19,7 +19,7 @@
         var accountId = [[${accountId}]];
         var username = [[${user.userName}]];
         var isVisitor = [[${isVisitor}]];
-        localStorage.setItem('isVisitor',JSON.stringify(isVisitor))
+        localStorage.setItem('isVisitor', JSON.stringify(isVisitor))
     </script>
     <!-- 头 部 结 束 -->
 </head>
@@ -31,6 +31,8 @@
     <div id="header" class="header"></div>
     <!--    加载layim-->
     <div id="layIm" class="layIm"></div>
+    <!--    音乐播放器-->
+    <div id="music" class="music"></div>
     <!-- 视 图 页 面 -->
     <div class="layui-body">
         <!-- 内 容 页 面 -->
@@ -55,6 +57,7 @@
 
         // 加载头部
         $('#header').load('header')
+        $('#music').load('music')
         if (isVisitor == null) {
             //加载layIm
             $('#layIm').load('layim/login')
