@@ -57,7 +57,9 @@
                                 <div class="form-box">
                                     <div class="volume">
                                         主人寄语
-                                        <button class="pear-btn pear-btn-warming pear-btn-xs isVisitor" id="edit" load>编辑</button>
+                                        <button class="pear-btn pear-btn-warming pear-btn-xs isVisitor" id="edit" load>
+                                            编辑
+                                        </button>
                                     </div>
                                     <div class="form" th:if="${#lists.size(owner) ==0 or owner[0].message==''}"
                                          id="firstMessage">
@@ -107,8 +109,11 @@
                 </div>
             </div>
         </div>
+        <iframe id="comment" src="/board/operator/comment" hidden="hidden" frameborder="0" width="100%"
+                height="796px"></iframe>
     </div>
 </div>
+
 <script type="text/html" id="message-toolbar">
     <textarea name="" id="message" cols="30" rows="10"></textarea>
     <div class="layui-form-item" style="margin-top: 10px">
@@ -149,6 +154,13 @@
 </script>
 <div th:include="include::footer"></div>
 <script th:inline="javascript">
+    $(function () {
+        var item = localStorage.getItem("isVisitor");
+        if (item != null && item != 'null') {
+            $("#comment").show()
+        }
+    });
+
     function initTinymce(tinymce, $, util, layer, common, oldContent) {
         var edit = tinymce.render({
             elem: "#message",
@@ -280,6 +292,43 @@
         });
     }
 
+    //点击发表按扭，发表内容
+    $("span.submit").click(function () {
+        let txt = $(".message").html(); //获取输入框内容
+        if (!txt) {
+            $('.message').focus(); //自动获取焦点
+            return;
+        }
+        let obj = {
+            msg: txt
+        };
+        debugger
+        innerHTMl([obj]) //渲染当前输入框内容
+        $('.message').html('') // 清空输入框
+
+    });
+
+    //渲染html
+    function innerHTMl(List) {
+        List = List || []
+        List.forEach(item => {
+            let str =
+                `<div class='msgBox'>
+					<div class="headUrl">
+						<img src='images/tx.jpg' width='50' height='50'>
+						<div>
+							<span class="title">木林森里没有木</span>
+							<span class="time">2018-01-01</span>
+						</div>
+						<a class="del">删除</a>
+					</div>
+					<div class='msgTxt'>
+						${item.msg}
+					</div>
+				</div>`
+            $(".cont").prepend(str);
+        })
+    }
 </script>
 </body>
 </html>

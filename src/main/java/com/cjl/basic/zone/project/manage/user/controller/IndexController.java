@@ -134,7 +134,11 @@ public class IndexController extends BaseController {
      */
     @ResponseBody
     @PostMapping("/backToSpace")
-    public AjaxResult backToSpace(String key) {
+    public AjaxResult backToSpace(String key, String url) {
+//        // 若是刷新，则不清除
+//        if (StringUtils.isNotNull(url) && url.contains("isVisitor")) {
+//            return toAjax(1);
+//        }
         if (StringUtils.isNotNull(key)) {
             redisTemplate.delete(prefix + key);
         }
