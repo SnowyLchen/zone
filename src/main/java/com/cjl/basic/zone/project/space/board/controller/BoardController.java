@@ -1,5 +1,8 @@
 package com.cjl.basic.zone.project.space.board.controller;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.cjl.basic.zone.common.utils.security.ShiroAuthenticateUtils;
 import com.cjl.basic.zone.framework.web.domain.AjaxResult;
 import com.cjl.basic.zone.project.manage.user.domain.User;
@@ -32,7 +35,7 @@ public class BoardController {
         User user = ShiroAuthenticateUtils.getUserByToken();
         mmap.put("user", user);
         mmap.put("owner", boardService.selectOwnerMessageBoard(user.getAccountId()));
-        mmap.put("message", boardService.selectMessageBoardList(user.getAccountId()));
+        mmap.put("message", JSONArray.parseArray(JSONObject.toJSONString(boardService.selectMessageBoardList(user.getAccountId()), SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue)));
         return "space/board/board";
     }
 
