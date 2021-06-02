@@ -199,6 +199,16 @@ public class ShiroAuthenticateUtils {
     }
 
     /**
+     * 获取访问者信息
+     *
+     * @return User
+     */
+    public static User getAccount() {
+        User user = (User) getSubject().getPrincipal();
+        return user;
+    }
+
+    /**
      * 获取当前账号ID
      *
      * @return 账号ID

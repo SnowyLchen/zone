@@ -49,6 +49,7 @@
                and mb.come_account_id != #{accountId}
          ) mess
              left join z_users zu on zu.account_id = mess.come_account_id and zu.del_flag = 0
+        order by mess.create_time desc
     </select>
     <select id="selectOwnerMessageBoard" resultMap="boardMap">
         select

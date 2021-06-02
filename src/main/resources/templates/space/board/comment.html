@@ -14,7 +14,7 @@
             width: 1000px;
             height: 170px;
             background: #fff;
-            margin: 42px 0 0 484px;
+            margin: 42px auto 0 auto;
             border-radius: 5px;
         }
 
@@ -182,7 +182,7 @@
     <div class="message" contenteditable="true"></div>
     <div class="But">
         <img th:src="@{/assets/img/expression/bba_thumb.gif}" class="bq">
-        <span class="submit">发表</span>
+        <span class="submit">留言</span>
         <!--face begin-->
         <div class="face">
             <ul>
@@ -267,8 +267,8 @@
 <div th:include="include::footer"></div>
 <script type="text/javascript">
     //从缓存中获取数据并渲染
-    let msgBoxList = JSON.parse(window.localStorage.getItem('msgBoxList')) || [];
-    innerHTMl(msgBoxList)
+    // let msgBoxList = JSON.parse(window.localStorage.getItem('msgBoxList')) || [];
+    // innerHTMl(msgBoxList)
 
     //点击小图片，显示表情
     $(".bq").click(function (e) {
@@ -286,7 +286,9 @@
         let simg = $(this).find("img").clone();
         $(".message").append(simg); //将表情添加到输入框
     });
-
+    $("span.submit").click(function () {
+        top.message($(".message"));
+    });
 
     // $("span.submit").click(function () {
     //     let txt = $(".message").html(); //获取输入框内容

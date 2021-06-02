@@ -53,10 +53,19 @@ public class BoardController {
     @ResponseBody
     @RequestMapping("/addMessage")
     public AjaxResult addMessage(ZMessageBoard zMessageBoard) {
-        Integer accountId = ShiroAuthenticateUtils.getAccountId();
-        zMessageBoard.setAccountId(accountId);
+        // 访问者
+        User account = ShiroAuthenticateUtils.getAccount();
+        // 被访问者
+        User toAccount = ShiroAuthenticateUtils.getToAccount();
+        zMessageBoard.setAccountId(toAccount.getAccountId());
+        zMessageBoard.setUserName(toAccount.getUserName());
+        zMessageBoard.setAvatar(toAccount.getAvatar());
+        zMessageBoard.setComeAccountId(account.getAccountId());
+        zMessageBoard.setComeUserName(account.getUserName());
+        zMessageBoard.setComeAvatar(account.getAvatar());
         return AjaxResult.success(boardService.insertMessage(zMessageBoard));
     }
+
     /**
      * 新增留言
      *

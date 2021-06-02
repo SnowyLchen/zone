@@ -48,7 +48,7 @@ public class User extends BaseEntity {
     /**
      * 头像路径
      */
-    private Integer avatar;
+    private String avatar;
 
     /**
      * 密码
@@ -256,11 +256,11 @@ public class User extends BaseEntity {
         this.sex = sex;
     }
 
-    public Integer getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(Integer avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 

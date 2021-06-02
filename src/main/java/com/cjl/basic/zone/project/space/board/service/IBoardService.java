@@ -23,7 +23,7 @@ public interface IBoardService {
      * @param record
      * @return
      */
-    int insertMessage(ZMessageBoard record);
+    ZMessageBoard insertMessage(ZMessageBoard record);
 
     /**
      * 新增主人寄语

@@ -24,9 +24,10 @@ public class BoardServiceImpl implements IBoardService {
     }
 
     @Override
-    public int insertMessage(ZMessageBoard messageBoard) {
+    public ZMessageBoard insertMessage(ZMessageBoard messageBoard) {
         InsertOrUpdateUtils.addInsertAttr(messageBoard);
-        return messageBoardMapper.insertMessage(messageBoard);
+        messageBoardMapper.insertMessage(messageBoard);
+        return messageBoard;
     }
 
     @Override

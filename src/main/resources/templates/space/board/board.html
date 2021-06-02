@@ -16,6 +16,11 @@
         height: 150px;
     }
 
+    .img img {
+        width: 40px;
+        height: 40px;
+    }
+
     .form img {
         width: 100%;
         height: 100%;
@@ -74,7 +79,7 @@
                                 <div class="list-cont">
                                     <div class="cont" th:each="item:${message}">
                                         <div class="img">
-                                            <img th:src="${item?.avatar}" alt="">
+<!--                                            <img th:src="${item?.avatar}" alt="">-->
                                         </div>
                                         <div class="text">
                                             <p class="tit"><span class="name" th:text="${item?.comeUserName}"></span>
@@ -293,40 +298,59 @@
     }
 
     //点击发表按扭，发表内容
-    $("span.submit").click(function () {
-        let txt = $(".message").html(); //获取输入框内容
+    top.message = function ($message) {
+        debugger
+        let txt = $message.html(); //获取输入框内容
         if (!txt) {
-            $('.message').focus(); //自动获取焦点
+            $message.focus(); //自动获取焦点
             return;
         }
-        let obj = {
-            msg: txt
+        let data = {
+            avatar: '',
+            comeUserName: "",
+            message: txt,
+            comeAccountId: null,
+            mbId: null
         };
-        debugger
-        innerHTMl([obj]) //渲染当前输入框内容
-        $('.message').html('') // 清空输入框
-
-    });
+        $.post('/board/addMessage', data, function (res) {
+            if (res.code == 0) {
+                var d = res.data;
+                $.notice.successNotice("留言成功");
+                data.avatar = d.avatar;
+                data.comeUserName = d.comeUserName;
+                data.createTime = d.createTime;
+                data.comeAccountId = d.comeAccountId;
+                data.mbId = d.mbId;
+                innerHTMl([data])//渲染当前输入框内容
+                $message.html('') // 清空输入框
+            } else {
+                $.notice.errorNotice("留言失败")
+            }
+        });
+    };
 
     //渲染html
     function innerHTMl(List) {
         List = List || []
         List.forEach(item => {
             let str =
-                `<div class='msgBox'>
-					<div class="headUrl">
-						<img src='images/tx.jpg' width='50' height='50'>
-						<div>
-							<span class="title">木林森里没有木</span>
-							<span class="time">2018-01-01</span>
-						</div>
-						<a class="del">删除</a>
-					</div>
-					<div class='msgTxt'>
-						${item.msg}
-					</div>
-				</div>`
-            $(".cont").prepend(str);
+                `<div class="cont">
+                    <div class="img">
+                        <img src="${item.avatar}" alt="">
+                    </div>
+                    <div class="text">
+                        <p class="tit"><span class="name">${item.comeUserName}</span>
+                            <span class="data">${item.createTime}</span>
+                        </p>
+                        <p class="ct">${item.message}</p>
+                         <p class="reply">
+                            <a href="javascript:void(0)" id="'reply${item.mbId}"
+                               data-accountId="${item.comeAccountId}"
+                               onclick="reply(this)">回复</a>
+                        </p>
+                    </div>
+                </div>`
+            $(".list-cont").prepend(str);
         })
     }
 </script>
