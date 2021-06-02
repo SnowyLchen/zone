@@ -8,9 +8,8 @@
     <!-- 主 题 更 换 -->
     <style id="pearadmin-bg-color"></style>
     <script th:inline="javascript">
+        var basePath = [[${#httpServletRequest.getScheme() + "://" + #httpServletRequest.getServerName() + ":" + #httpServletRequest.getServerPort() + #httpServletRequest.getContextPath()}]];
         var isVisitor = JSON.parse(localStorage.getItem('isVisitor'))
-        console.log(isVisitor)
-
     </script>
     <!-- 头 部 结 束 -->
 </head>
@@ -40,7 +39,8 @@
                 </a>
                 <!-- 功 能 菜 单 -->
                 <dl class="layui-nav-child isVisitor">
-                    <dd><a user-menu-url="profiles" user-menu-id="5555" user-menu-title="基本资料">基本资料</a></dd>
+<!--                    <dd><span id="profiles" user-menu-url="profiles" user-menu-id="5555"  user-menu-title="基本资料" data-url="profiles" data-title="基本资料">基本资料</span></dd>-->
+                    <dd><a id="profiles" user-menu-url="profiles" user-menu-id="5555" user-menu-title="基本资料">基本资料</a></dd>
                     <dd><a href="logout">注销登录</a></dd>
                 </dl>
             </li>
@@ -70,12 +70,15 @@
                     key: 'visitor_' + isVisitor.currentAccount.accountId + '_' + isVisitor.toAccount.accountId
                 }, function (res) {
                     if (res.code == '0') {
-                        top.location.href = 'http://localhost:8000/index';
+                        top.location.href = basePath + '/index';
                     }
                 })
             })
         }
     };
+    // $("#profiles").click(function () {
+    //     debugger
+    // })
 </script>
 </body>
 </html>

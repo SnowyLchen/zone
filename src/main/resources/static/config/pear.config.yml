@@ -15,27 +15,29 @@ menu:
   ## 是否开启多系统菜单模式
   control: true
   ## 默认选中的菜单项
-  select: "10000"
+  select: "1"
   spaceSelect: "15"
   ## 是否开启异步菜单，true 时 data 属性设置为菜单数据，false 时为 json 文件或后端接口
   async: true
 ## 视图内容配置
-tab: 
-  ## 是否开启多选项卡
-  muiltTab: true
+tab:
   ## 切换选项卡时，是否刷新页面状态
   keepState: true
   ## 最大可打开的选项卡数量
   tabMax: "30"
   ## 默认选项卡数据
   index: 
-    id: "10000" ## 标识 ID , 建议与菜单项中的 ID 一致
+    id: "15" ## 标识 ID , 建议与菜单项中的 ID 一致
     href: "homePage" ## 页面地址
     title: "首页" ## 标题
+    ## 是否开启多选项卡
+    muiltTab: true
   space:
     id: "15"
     href: "/home"
     title: "主页"
+    ## 前台个人空间是否开启多选项卡
+    muiltTab: false
 ## 主题配置
 theme: 
   ## 默认主题色，对应 colors 配置中的 ID 标识

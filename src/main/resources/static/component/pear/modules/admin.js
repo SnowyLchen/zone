@@ -65,13 +65,13 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                     });
                 } else {
                     sideMenu = pearMenu.render({
-                        elem: 'content',
+                        elem: 'spaceContent',
                         role: param.role,
                         async: param.menu.async !== undefined ? param.menu.async : true,
                         theme: "dark-theme",
                         height: '100%',
                         control: param.menu.control ? 'control' : false, // control
-                        defaultMenu: 0,
+                        defaultMenu: 15,
                         accordion: param.menu.accordion,
                         url: param.menu.data,
                         data: param.menu.data, //async为false时，传入菜单数组
@@ -103,7 +103,7 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                         refreshA.removeClass("layui-icon-loading");
                     }, 600)
                 })
-                if (param.tab.muiltTab) {
+                if (param.tab.index.muiltTab || param.tab.space.muiltTab) {
                     var config = {};
                     if (param.role == '1') {
                         config = {
@@ -125,7 +125,14 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                                 close: false
                             }]
                         }
-
+                        bodyTab = pearTab.render(config);
+                        bodyTab.click(function (id) {
+                            if (!param.tab.keepState) {
+                                bodyTab.refresh(false);
+                            }
+                            bodyTab.positionTab();
+                            sideMenu.selectItem(id);
+                        })
                     } else {
                         config = {
                             elem: 'spaceContent',
@@ -146,17 +153,9 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                             }]
                         }
                     }
-                    bodyTab = pearTab.render(config);
-                    bodyTab.click(function (id) {
-                        if (!param.tab.keepState) {
-                            bodyTab.refresh(false);
-                        }
-                        bodyTab.positionTab();
-                        sideMenu.selectItem(id);
-                    })
-
                     sideMenu.click(param.role, function (dom, data) {
                         if (param.role != '1') {
+                            // 其它角色
                             bodyFrame = pearFrame.render({
                                 elem: 'spaceContent',
                                 title: data.menuPath,
@@ -166,6 +165,7 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                             });
                             bodyFrame.changePage(data.menuUrl, data.menuPath, true);
                         } else {
+                            // 超级管理员角色
                             bodyTab.addTabOnly({
                                 id: data.menuId,
                                 title: data.menuTitle,
@@ -309,7 +309,7 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
         });
 
         body.on("click", '[user-menu-id]', function () {
-            if (config.tab.muiltTab) {
+            if (config.tab.space.muiltTab) {
                 bodyTab.addTabOnly({
                     id: $(this).attr("user-menu-id"),
                     title: $(this).attr("user-menu-title"),
@@ -318,7 +318,7 @@ layui.define(['table', 'jquery', 'element', 'yaml', 'form', 'tab', 'menu', 'fram
                     close: true
                 }, 300);
             } else {
-                bodyFrame.changePage($(this).attr("user-menu-url"), "", true);
+                bodyFrame.changePage($(this).attr("user-menu-url"), $(this).attr("user-menu-title"), true);
             }
         });
 

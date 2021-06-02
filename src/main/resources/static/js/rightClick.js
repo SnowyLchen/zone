@@ -140,7 +140,7 @@ layui.use('layim', function (layim) {
             debugger
         },
         intoSpace: function () {
-            top.location.href="http://localhost:8000/index?isVisitor=" + accountId + "_" + $(this).parent().data("id")
+            top.location.href = basePath + "/index?isVisitor=" + accountId + "_" + $(this).parent().data("id")
         },
         // 移动分组
         menuMoveto: function () {
