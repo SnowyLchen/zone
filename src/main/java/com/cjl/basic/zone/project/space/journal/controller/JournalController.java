@@ -22,8 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping("/journal")
 public class JournalController extends BaseController {
-    private static final String PREFIX = "/space";
-    private static final String PREFIX_JOURNAL = "/space/journal";
+    private static final String PREFIX = "space";
+    private static final String PREFIX_JOURNAL = "space/journal";
     @Autowired
     private IZJournalService journalService;
 

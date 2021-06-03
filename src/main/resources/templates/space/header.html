@@ -34,7 +34,7 @@
             <li class="layui-nav-item">
                 <!-- 头 像 -->
                 <a href="javascript:;">
-                    <img src="" class="layui-nav-img">
+                    <img th:src="${user?.avatar}" class="layui-nav-img">
                     [[${user?.userName}]]
                 </a>
                 <!-- 功 能 菜 单 -->
@@ -76,9 +76,6 @@
             })
         }
     };
-    // $("#profiles").click(function () {
-    //     debugger
-    // })
 </script>
 </body>
 </html>

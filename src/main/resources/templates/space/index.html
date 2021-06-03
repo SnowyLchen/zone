@@ -50,7 +50,7 @@
 </body>
 <div th:include="include::footer"></div>
 <!-- 框 架 初 始 化 -->
-<script>
+<script th:inline="javascript">
     $(function () {
         // $('.layui-body').css('left', '9%')
         $('.layui-body').css('left', '0px')
@@ -66,11 +66,14 @@
     layui.use(['admin', 'jquery', "convert"], function () {
         var admin = layui.admin,
             $ = layui.jquery,
-            convert = layui.convert;
-        var image = new Image();
-        image.src = "admin/images/avatar.jpg";
-        image.onload = function () {
-            $(".layui-nav-img").attr("src", convert.imageToBase64(image));
+            convert = layui.convert, avatar;
+        avatar = [[${user?.avatar}]];
+        if (avatar == '' || avatar == null) {
+            var image = new Image();
+            image.src = "admin/images/avatar.jpg";
+            image.onload = function () {
+                $(".layui-nav-img").attr("src", convert.imageToBase64(image));
+            }
         }
         // 重新设置配置文件读取路径，默认为同级目录下的 pear.config.json
         admin.setConfigPath("config/pear.config.yml");
