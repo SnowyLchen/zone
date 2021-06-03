@@ -112,6 +112,8 @@ public class IndexController extends BaseController {
     public String profiles(ModelMap mmap) {
         String loginName = ShiroAuthenticateUtils.getUserByToken().getLoginName();
         if (loginName != null && !loginName.equals("admin")) {
+            User user = ShiroAuthenticateUtils.getUserByToken();
+            mmap.put("user", user);
             return "space/profiles";
         }
         return "system/person";
