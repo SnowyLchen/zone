@@ -1,0 +1,229 @@
+# 项目相关配置
+zone:
+  # 名称
+  name: 个人空间
+  # 版本
+  version: 1.0.0
+  # 版权年份
+  copyrightYear: 2021
+  # 文件上传路径
+  profile: D:/imgUpload/
+  # 文件读取路径
+  profileUrl: /imgUpload/
+  # 获取ip地址开关
+  addressEnabled: true
+  reloadImgUrl: http://39.102.117.87:65400
+
+# 开发环境配置
+server:
+  # 服务端口
+  port: 9998
+  servlet:
+    # 项目contextPath
+    context-path: /
+  tomcat:
+    # tomcat的URI编码
+    uri-encoding: UTF-8
+    # tomcat最大线程数，默认为200
+    max-threads: 800
+    # Tomcat启动初始化的线程数，默认值25
+    min-spare-threads: 30
+
+# 日志配置
+logging:
+  level:
+    com.cjl.basic.zone: debug
+    org.springframework: WARN
+    org.spring.springboot.dao: debug
+
+# 用户配置
+user:
+  password:
+    # 密码错误{maxRetryCount}次锁定10分钟
+    expire: 10
+    maxRetryCount: 25
+
+# Spring配置
+spring:
+  # 模板引擎
+  thymeleaf:
+    mode: HTML
+    encoding: utf-8
+    # 禁用缓存oper_log
+    cache: false
+  # 资源信息
+  messages:
+    # 国际化资源文件路径
+    basename: i18n/messages
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    druid:
+      # 主库数据源
+      master:
+        url: jdbc:mysql://172.27.198.228/tale?useUnicode=true&characterEncoding=utf8
+        username: root
+        password: Cjl19980112!
+      # 从库数据源
+      slave:
+        # 从数据源开关/默认关闭
+        enabled: false
+        url:
+        username:
+        password:
+      # 初始连接数
+      initial-size: 10
+      # 最大连接池数量
+      max-active: 100
+      # 最小连接池数量
+      min-idle: 10
+      # 配置获取连接等待超时的时间
+      max-wait: 60000
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /monitor/druid/*
+      filter:
+        stat:
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: false
+        wall:
+          config:
+            multi-statement-allow: true
+  # 文件上传
+  servlet:
+    multipart:
+      max-file-size:  30MB
+      max-request-size:  30MB
+  # 服务模块
+  devtools:
+    restart:
+      # 热部署开关
+      enabled: true
+  redis:
+    host: 172.27.198.228
+    port: 6379
+    timeout: 30000
+    password: 123456
+    jedis:
+      pool:
+        max-wait: 30000
+        max-active: 100
+        max-idle: 20
+        min-idle: 0
+# MyBatis
+mybatis:
+  # 搜索指定包别名
+  typeAliasesPackage: com.cjl.basic.zone.project
+  # 配置mapper的扫描，找到所有的mapper.xml映射文件
+  mapperLocations: classpath:mybatis/**/*Mapper.xml
+  # 加载全局的配置文件
+  configLocation: classpath:mybatis/mybatis-config.xml
+
+# PageHelper分页插件
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+# Shiro
+shiro:
+  jwt-secret: "!QAZ2wsx"
+  user:
+    # 登录地址
+    loginUrl: /login
+    # 权限认证失败地址
+    unauthorizedUrl: /unauth
+    # 首页地址
+    indexUrl: /
+    # 验证码开关
+    captchaEnabled: false
+    # 验证码类型 math 数组计算 char 字符
+    captchaType: math
+  cookie:
+    # 设置Cookie的域名 默认空，即当前访问的域名
+    domain:
+    # 设置cookie的有效访问路径
+    path: /
+    # 设置HttpOnly属性
+    httpOnly: true
+    # 设置Cookie的过期时间，单位天
+    maxAge: 30
+
+# 防止XSS攻击
+xss:
+  # 过滤开关
+  enabled: true
+  # 排除链接（多个用逗号分隔）
+  excludes: /system/notice/*
+  # 匹配链接
+  urlPatterns: /system/*,/monitor/*,/tool/*
+
+zx-ftp:
+  #最大数
+  maxTotal: 3
+  #最小空闲
+  minIdle: 3
+  #最大空闲
+  maxIdle: 3
+  #最大等待时间
+  maxWait: 5
+  #池对象耗尽之后是否阻塞,maxWait<0时一直等待
+  blockWhenExhausted: true
+  #取对象是验证
+  testOnBorrow: true
+  #回收验证
+  testOnReturn: true
+  #创建时验证
+  testOnCreate: true
+  #空闲验证
+  testWhileIdle: true
+  #后进先出
+  lifo: false
+
+  #FTP连接属性配置
+  #ip
+  host: 172.27.198.228
+  #端口
+  port: 60021
+  #登录名
+  username: cjl
+  #密码
+  password: cjl19980112
+  #连接是否为主动模式
+  passiveMode: true
+  #编码
+  encoding: UTF-8
+  #超时时间
+  clientTimeout: 5000
+  #线程数
+  threadNum: 1
+  #文件传送类型
+  #0=ASCII_FILE_TYPE（ASCII格式） 1=EBCDIC_FILE_TYPE 2=LOCAL_FILE_TYPE（二进制文件）
+  transferFileType: 2
+  #是否重命名
+  renameUploaded: true
+  #重新连接时间
+  retryTimes: 50
+  #缓存大小
+  bufferSize: 1024
+
+application:
+  cache:
+    prefix: "zone:"
+
