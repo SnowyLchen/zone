@@ -35,7 +35,9 @@ public class BoardController {
         User user = ShiroAuthenticateUtils.getUserByToken();
         User account = ShiroAuthenticateUtils.getAccount();
         mmap.put("user", user);
-        mmap.put("account", account);
+        if (!user.getAccountId().equals(account.getAccountId())) {
+            mmap.put("account", account);
+        }
         mmap.put("owner", boardService.selectOwnerMessageBoard(user.getAccountId()));
         mmap.put("message", JSONArray.parseArray(JSONObject.toJSONString(boardService.selectMessageBoardList(user.getAccountId()), SerializerFeature.WriteDateUseDateFormat, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue)));
         return "space/board/board";

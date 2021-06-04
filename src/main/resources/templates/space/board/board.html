@@ -100,7 +100,7 @@
                                                              class="layui-icon isVisitor">&#xe640;</i></a>
                                                      <a href="javascript:void(0)" th:id="'r'+${rp?.rId}"
                                                         style="margin-left: 15px;"
-                                                        th:if="${rp?.accountId == account?.accountId}"
+                                                        th:if="${account!=null?rp?.accountId == account?.accountId:false}"
                                                         onclick="deleteMsg(this)">  <i
                                                              class="layui-icon ">&#xe640;</i></a>
                                                     <br>
