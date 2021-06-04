@@ -59,6 +59,7 @@ layui.use(['form', 'layer', 'upload', 'laydate', "convert"], function () {
                 }
             }
         });
+        top.layer.close(index)
         return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
     });
 

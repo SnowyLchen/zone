@@ -27,7 +27,7 @@
         <div class="layui-col-md3 layui-col-xs12 user_right" style="margin-bottom: 40px;">
             <div class="layui-upload-list" title="我要换一个头像" style="margin: 72px 0;">
                 <img class="layui-upload-img layui-circle userFaceBtn userAvatar" id="userFace">
-                <input type="hidden" name="avatar" id="avatar">
+                <input type="hidden" name="avatar" id="avatar" th:value="${user?.avatar}">
             </div>
         </div>
         <div class="layui-col-md8 layui-col-xs12" style="width: 22.666667%;margin-top: 72px;">

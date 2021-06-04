@@ -50,7 +50,7 @@ public class IndexController extends BaseController {
      */
     @GetMapping("/index")
     public String index(ModelMap mmap, HttpServletResponse response, String isVisitor) {
-        User user = ShiroAuthenticateUtils.getUserByToken();
+        User user = userService.selectUserById(ShiroAuthenticateUtils.getAccountId());
         mmap.put("user", user);
         if (StringUtils.isNotNull(isVisitor)) {
             redisTemplate.opsForValue().set(prefix + "visitor_" + isVisitor, isVisitor);
@@ -112,7 +112,7 @@ public class IndexController extends BaseController {
     public String profiles(ModelMap mmap) {
         String loginName = ShiroAuthenticateUtils.getUserByToken().getLoginName();
         if (loginName != null && !loginName.equals("admin")) {
-            User user = ShiroAuthenticateUtils.getUserByToken();
+            User user = userService.selectUserById(ShiroAuthenticateUtils.getAccountId());
             mmap.put("user", user);
             return "space/profiles";
         }
