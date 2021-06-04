@@ -87,7 +87,8 @@
                                             </p>
                                             <p class="ct" th:text="${item?.message}"></p>
                                             <p class="replyMessage" th:if="${#lists.size(item?.replies)>0}">
-                                                <span th:each="rp:${item?.replies}">
+                                            <hr class="layui-border-green" th:if="${#lists.size(item?.replies)>0}">
+                                            <span th:each="rp:${item?.replies}">
                                                     <span class="message_title">
                                                         [[${rp.createTime}]] [[${rp.userName}]] 对 [[${rp.repliedUserName}]] 说：
                                                     </span>
@@ -96,7 +97,12 @@
                                                         style="margin-left: 15px;"
                                                         th:if="${rp?.accountId == user?.accountId}"
                                                         onclick="deleteMsg(this)">  <i
-                                                             class="layui-icon">&#xe640;</i></a>
+                                                             class="layui-icon isVisitor">&#xe640;</i></a>
+                                                     <a href="javascript:void(0)" th:id="'r'+${rp?.rId}"
+                                                        style="margin-left: 15px;"
+                                                        th:if="${rp?.accountId == account?.accountId}"
+                                                        onclick="deleteMsg(this)">  <i
+                                                             class="layui-icon ">&#xe640;</i></a>
                                                     <br>
                                                 </span>
                                             </p>
@@ -250,7 +256,7 @@
                     data: {
                         message: desc,
                         mbId: mbId.split("reply")[1],
-                        repliedAccountId: accountId
+                        accountId: accountId
                     }
                 }, function (res) {
                     if (res.code != 0) {

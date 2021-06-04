@@ -34,11 +34,24 @@
             $(".isVisitor").hide()
         }
         window.addEventListener('beforeunload', function (event) {
-            if (item != null && item != 'null') {
+            var isRefresh = $.local.get("isRefresh");
+            debugger
+            if ((item != null && item != 'null') && !isRefresh === true) {
                 localStorage.removeItem("isVisitor");
                 var fd = new FormData();
                 fd.append('key', 'visitor_' + isVisitor.currentAccount.accountId + '_' + isVisitor.toAccount.accountId)
                 navigator.sendBeacon('/backToSpace', fd);
+                sleep(800)
+            }
+
+            function sleep(numberMillis) {
+                var now = new Date();
+                var exitTime = now.getTime() + numberMillis;
+                while (true) {
+                    now = new Date();
+                    if (now.getTime() > exitTime)
+                        return;
+                }
             }
         }, true);
         //

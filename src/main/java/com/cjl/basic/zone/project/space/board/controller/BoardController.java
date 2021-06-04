@@ -33,9 +33,11 @@ public class BoardController {
     @GetMapping()
     public String board(ModelMap mmap) {
         User user = ShiroAuthenticateUtils.getUserByToken();
+        User account = ShiroAuthenticateUtils.getAccount();
         mmap.put("user", user);
+        mmap.put("account", account);
         mmap.put("owner", boardService.selectOwnerMessageBoard(user.getAccountId()));
-        mmap.put("message", JSONArray.parseArray(JSONObject.toJSONString(boardService.selectMessageBoardList(user.getAccountId()), SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue)));
+        mmap.put("message", JSONArray.parseArray(JSONObject.toJSONString(boardService.selectMessageBoardList(user.getAccountId()), SerializerFeature.WriteDateUseDateFormat, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue)));
         return "space/board/board";
     }
 
@@ -89,7 +91,7 @@ public class BoardController {
     @RequestMapping("/replyMessage")
     public AjaxResult replyMessage(ZReply reply) {
         Integer accountId = ShiroAuthenticateUtils.getAccountId();
-        reply.setAccountId(accountId);
+        reply.setRepliedAccountId(accountId);
         return AjaxResult.success(boardService.insertReplyMessage(reply));
     }
 
