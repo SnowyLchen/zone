@@ -64,7 +64,7 @@ spring:
     druid:
       # 主库数据源
       master:
-        url: jdbc:mysql://10.0.16.15/tale?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://10.0.16.15/tale?useUnicode=true&characterEncoding=utf8&useSSL=false
         username: root
         password: Cjl19980112!
       # 从库数据源
@@ -118,7 +118,7 @@ spring:
     host: 10.0.16.15
     port: 6379
     timeout: 30000
-    password: 123456
+    password: cjl19980112
     jedis:
       pool:
         max-wait: 30000
