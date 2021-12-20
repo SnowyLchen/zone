@@ -64,9 +64,10 @@ spring:
     druid:
       # 主库数据源
       master:
-        url: jdbc:mysql://localhost/tale?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://150.158.80.116/tale?useUnicode=true&characterEncoding=utf8
+        #        url: jdbc:mysql://localhost/tale?useUnicode=true&characterEncoding=utf8
         username: root
-        password: cjl19980112
+        password: Cjl19980112!
       # 从库数据源
       slave:
         # 从数据源开关/默认关闭
@@ -115,10 +116,10 @@ spring:
       # 热部署开关
       enabled: true
   redis:
-    host: 192.168.1.194
+    host: 150.158.80.116
     port: 6379
     timeout: 30000
-    password: 123456
+    password: cjl19980112
     jedis:
       pool:
         max-wait: 30000
@@ -198,7 +199,8 @@ zx-ftp:
 
   #FTP连接属性配置
   #ip
-  host: 39.102.117.87
+  #  host: 39.105.42.13
+  host: 150.158.80.116
   #端口
   port: 60021
   #登录名

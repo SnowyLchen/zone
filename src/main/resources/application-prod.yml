@@ -64,7 +64,7 @@ spring:
     druid:
       # 主库数据源
       master:
-        url: jdbc:mysql://172.27.198.228/tale?useUnicode=true&characterEncoding=utf8
+        url: jdbc:mysql://10.0.16.15/tale?useUnicode=true&characterEncoding=utf8
         username: root
         password: Cjl19980112!
       # 从库数据源
@@ -115,7 +115,7 @@ spring:
       # 热部署开关
       enabled: true
   redis:
-    host: 172.27.198.228
+    host: 10.0.16.15
     port: 6379
     timeout: 30000
     password: 123456
@@ -198,9 +198,9 @@ zx-ftp:
 
   #FTP连接属性配置
   #ip
-  host: 172.27.198.228
+  host: 10.0.16.15
   #端口
-  port: 60021
+  port: 21
   #登录名
   username: cjl
   #密码
